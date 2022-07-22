@@ -1,13 +1,19 @@
-import React from 'react'
-import EmptyLayout from '../components/Layout/empty'
+import Meta from "../components/Shared/Meta";
+import type { NextPage } from "next";
 
-type Props = {}
-
-const Page404 = (props: Props) => {
+const NotFound: NextPage = () => {
     return (
-        <div>Page404</div>
-    )
-}
+        <>
+            <Meta
+                title="404 Not Found"
+                description="404 Not Found"
+                image="/not-found.png"
+            />
+            <div className="flex justify-center items-center h-screen">
+                <img src="/not-found.png" alt="" />
+            </div>
+        </>
+    );
+};
 
-Page404.Layout = EmptyLayout
-export default Page404
+export default NotFound;
