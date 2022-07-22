@@ -108,3 +108,10 @@ body {
   padding: 20px 68px 80px;
 
 }
+
+.errors{
+  color: red;
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 7px;
+}

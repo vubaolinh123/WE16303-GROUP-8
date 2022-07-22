@@ -12,7 +12,7 @@ type TypeInputs = {
   password: string
 }
 
-const SignInPage: NextPage<TypeInputs> = () => {
+const SignUpPage: NextPage<TypeInputs> = () => {
   const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>()
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     console.log(data)
@@ -35,7 +35,7 @@ const SignInPage: NextPage<TypeInputs> = () => {
             <div>
               <div className="login-form">
                 <div className="login-form-main d-flex flex-row m-0">
-                  <h2>Đăng nhập</h2>
+                  <h2>Đăng ký</h2>
                   <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
                       <input {...register('email', {required: true})} className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" type="text" placeholder="Email hoặc số điện thoại"/>
@@ -81,4 +81,4 @@ const SignInPage: NextPage<TypeInputs> = () => {
   )
 }
 
-export default SignInPage
+export default SignUpPage
