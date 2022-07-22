@@ -1,9 +1,10 @@
 import React from 'react'
+import LayoutAdmin from '../../components/Layout/admin'
+import { LayoutProps } from '../../models/layout'
 
 type Props = {}
 
-const AdminDashbroad = (props: Props) => {
-
+const AdminDashbroad = (props: LayoutProps) => {
 
     return (
         <div>
@@ -11,5 +12,7 @@ const AdminDashbroad = (props: Props) => {
         </div>
     )
 }
+
+AdminDashbroad.Layout = LayoutAdmin
 
 export default AdminDashbroad
