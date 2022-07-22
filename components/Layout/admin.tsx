@@ -7,7 +7,7 @@ const LayoutAdmin = ({ children }: LayoutProps) => {
         <div>
             <div>admin</div>
             {children}
-        </div>
+        </div>  
     )
 }
 
