@@ -1,15 +1,15 @@
-import { LayoutProps } from 'antd'
 import React from 'react'
 import LayoutAdmin from '../../../components/Layout/admin'
+import { LayoutProps } from '../../../models/layout'
 
 type Props = {}
 
-const CategoryAdmin = (props: LayoutProps) => {
+const Category = (props: LayoutProps) => {
   return (
-    <div>CategoryAdmin</div>
+    <div>Category</div>
   )
 }
 
-CategoryAdmin.Layout = LayoutAdmin
+Category.Layout = LayoutAdmin
 
-export default CategoryAdmin
+export default Category
