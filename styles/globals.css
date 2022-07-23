@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  @apply m-0 text-gray-200 min-h-screen overflow-x-hidden;
+  --tw-bg-opacity: 1 !important;
+    background-color: rgb(42 42 42 / var(--tw-bg-opacity)) !important;
+}
+
+.scrolled .navbar {
+  @apply !bg-black;
+}
+
+.bg-dark-darken{
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(26 26 26 / var(--tw-bg-opacity)) !important;
+}
+
+.bg-dark-lighten{
+   --tw-bg-opacity: 1 !important;
+    background-color: rgb(42 42 42 / var(--tw-bg-opacity)) !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --swiper-theme-color: #ff0000 !important;
+}
+
+#nprogress .bar {
+  background: #ff0000 !important;
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #ff0000, 0 0 5px #ff0000 !important;
+}
+
+.multiline-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mask-image {
+  mask-image: linear-gradient(rgba(0, 0, 0, 1), transparent);
+}
+
+.rounded-btn {
+  @apply w-8 h-8 rounded-full text-center inline-flex justify-center items-center;
+  --tw-bg-opacity: 1 !important;
+    background-color: rgb(42 42 42 / var(--tw-bg-opacity)) !important;
+}
