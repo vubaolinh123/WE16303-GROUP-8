@@ -34,7 +34,7 @@ const SignInPage: NextPage<TypeInputs> = () => {
           <Image
             src="https://assets.nflxext.com/ffe/siteui/vlv3/3a073c5f-0160-4d85-9a42-6f59aa4b64b9/3242af29-8ec6-41c7-890e-5bd7393e2047/VN-vi-20220718-popsignuptwoweeks-perspective_alpha_website_large.jpg"
             opacity={0.5}
-            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-screen"
+            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] h-screen"
             alt=""
           />
           <div className="login-body">
