@@ -1,6 +1,6 @@
-import { LayoutProps } from 'antd'
 import React from 'react'
 import LayoutAdmin from '../../../components/Layout/admin'
+import { LayoutProps } from '../../../models/layout'
 
 type Props = {}
 

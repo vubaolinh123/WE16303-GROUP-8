@@ -5,12 +5,9 @@ import { LayoutProps } from '../../models/layout'
 type Props = {}
 
 const AdminDashbroad = (props: LayoutProps) => {
-
-    return (
-        <div>
-            AdminDashbroad
-        </div>
-    )
+  return (
+    <div>AdminDashbroad</div>
+  )
 }
 
 AdminDashbroad.Layout = LayoutAdmin
