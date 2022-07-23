@@ -1,11 +1,11 @@
 import { NextPage } from 'next'
-import React from 'react'
+import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import Button from '../components/Shared/Button'
-import { FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
 
 type TypeInputs = {
   email: string,
@@ -13,10 +13,16 @@ type TypeInputs = {
 }
 
 const SignInPage: NextPage<TypeInputs> = () => {
-  const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>()
+  const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     console.log(data)
   }
+  // handle password eye
+  const [passwordEye, setPasswordEye] = useState(false);
+
+  const handlePasswordClick = () => {
+    setPasswordEye(!passwordEye);
+  };
   return (
     <>
         <Meta
@@ -38,15 +44,40 @@ const SignInPage: NextPage<TypeInputs> = () => {
                   <h2>Đăng nhập</h2>
                   <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
-                      <input {...register('email', {required: true})} className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" type="text" placeholder="Email hoặc số điện thoại"/>
-                      {/* {errors.email && <span className='errors'>Email không được để trống.</span>} */}
-                      {errors.email && errors.email.type === "required" && <span className='errors'>Email không được để trống.</span>}
+                        <input 
+                            className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" 
+                            type="text" placeholder="Email"
+                            {...register('email', {required: {value: true, message: "Email không được để trống"},
+                            pattern: {
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: "Email không đúng định dạng"
+                            }
+                            })}
+                        />
+                        {errors.email && <span className='errors'>{errors.email.message}</span>}
                     </div>
-                    <div className="mb-6">
-                      <input {...register('password', {required: true, minLength: 8})} className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" type="password" placeholder="Mật khẩu"/>
-                      {errors.password && errors.password.type === "required"  && <span className='errors'>Vui lòng kiểm tra lại mật khẩu.</span>}
-                      {errors.password && errors.password.type === "minLength"  && <span className='errors'>Mật khẩu ít nhất 8 kí tự.</span>}
+
+                    <div className="mb-4 relative">
+                        <input  
+                            className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"                        
+                            type={passwordEye === false ? "password" : "text"}
+                            placeholder="Mật khẩu"
+                            {...register('password', 
+                            {required: {value: true, message: "Vui lòng kiểm tra lại mật khẩu"}, 
+                            minLength: {value: 6, message: "Mật khẩu phải có ít nhất 6 ký tự."},
+                            maxLength: {value: 100, message: "Mật khẩu không quá 100 ký tự."}
+                            })}
+                        />
+                        {errors.password && <span className='errors'>{errors.password.message}</span>}
+                        <div className="text-2xl absolute top-[10px] right-3">
+                            {passwordEye === false ? (
+                                <FaEyeSlash onClick={handlePasswordClick} />
+                            ) : (
+                                <FaEye onClick={handlePasswordClick} />
+                            )}
+                        </div>                      
                     </div>
+
                     <div className="flex items-center justify-between">
                       <button className="bg-[#e50914] text-white font-bold w-full py-3 px-4 rounded">
                         Đăng nhập

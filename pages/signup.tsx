@@ -1,22 +1,41 @@
 import { NextPage } from 'next'
-import React from 'react'
+import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import Button from '../components/Shared/Button'
-import { FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
+import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
 
 type TypeInputs = {
-  email: string,
-  password: string
+    name: string,
+    email: string,
+    password: string,
+    birthday: string,
+    confirmPassword: string
 }
 
 const SignUpPage: NextPage<TypeInputs> = () => {
-  const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>()
+  const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
-    console.log(data)
+    const namSinh = (new Date(data.birthday)).getFullYear();
+    const tuoi = 2022 - namSinh
+    console.log({...data, age: tuoi})
   }
+  // handle password eye
+  const [passwordEye, setPasswordEye] = useState(false);
+
+  const handlePasswordClick = () => {
+    setPasswordEye(!passwordEye);
+  };
+  // handle confirm password eye
+  const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
+
+  const handleConfirmPasswordClick = () => {
+    setConfirmPasswordEye(!confirmPasswordEye);
+  };
+
+  const password = watch('password')
   return (
     <>
         <Meta
@@ -38,40 +57,89 @@ const SignUpPage: NextPage<TypeInputs> = () => {
                   <h2>Đăng ký</h2>
                   <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
-                      <input {...register('email', {required: true})} className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" type="text" placeholder="Email hoặc số điện thoại"/>
-                      {/* {errors.email && <span className='errors'>Email không được để trống.</span>} */}
-                      {errors.email && errors.email.type === "required" && <span className='errors'>Email không được để trống.</span>}
+                        <input 
+                            className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" 
+                            type="text" placeholder="Họ tên"
+                            {...register('name', {required: {value: true, message: "Họ tên không được để trống"},
+                            minLength: {value: 6, message: "Họ tên phải có ít nhất 6 ký tự."},
+                            maxLength: {value: 100, message: "Họ tên không quá 100 ký tự."}
+                            })} 
+                        />
+                        {errors.name && <span className='errors'>{errors.name.message}</span>}
                     </div>
+
+                    <div className="mb-4">
+                        <input 
+                            className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" 
+                            type="text" placeholder="Email"
+                            {...register('email', {required: {value: true, message: "Email không được để trống"},
+                            pattern: {
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: "Email không đúng định dạng"
+                            }
+                            })}
+                        />
+                        {errors.email && <span className='errors'>{errors.email.message}</span>}
+                    </div>
+
+                    <div className="mb-4 relative">
+                        <input  
+                            className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"                        
+                            type={passwordEye === false ? "password" : "text"}
+                            placeholder="Mật khẩu"
+                            {...register('password', 
+                            {required: {value: true, message: "Vui lòng kiểm tra lại mật khẩu"}, 
+                            minLength: {value: 6, message: "Mật khẩu phải có ít nhất 6 ký tự."},
+                            maxLength: {value: 100, message: "Mật khẩu không quá 100 ký tự."}
+                            })}
+                        />
+                        {errors.password && <span className='errors'>{errors.password.message}</span>}
+                        <div className="text-2xl absolute top-[10px] right-3">
+                            {passwordEye === false ? (
+                                <FaEyeSlash onClick={handlePasswordClick} />
+                            ) : (
+                                <FaEye onClick={handlePasswordClick} />
+                            )}
+                        </div>                      
+                    </div>
+
+                    <div className="mb-4 relative">
+                        <input                        
+                            type={confirmPasswordEye === false ? "password" : "text"}
+                            placeholder="Nhập lại mật khẩu"
+                            className={`appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight`}
+                            {...register("confirmPassword", { required: 'Bắt buộc phải nhập lại mật khẩu.',
+                            validate: (value) =>
+                            value === password || "Mật khẩu không chính xác.",
+                            })}
+                        />
+                        {errors.confirmPassword && <span className="errors">{errors.confirmPassword.message}</span>}
+                        <div className="text-2xl absolute top-[10px] right-3">
+                            {confirmPasswordEye === false ? (
+                                <FaEyeSlash onClick={handleConfirmPasswordClick} />
+                            ) : (
+                                <FaEye onClick={handleConfirmPasswordClick} />
+                            )}
+                        </div>      
+                    </div>
+
                     <div className="mb-6">
-                      <input {...register('password', {required: true, minLength: 8})} className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" type="password" placeholder="Mật khẩu"/>
-                      {errors.password && errors.password.type === "required"  && <span className='errors'>Vui lòng kiểm tra lại mật khẩu.</span>}
-                      {errors.password && errors.password.type === "minLength"  && <span className='errors'>Mật khẩu ít nhất 8 kí tự.</span>}
+                        <input {...register('birthday', {required: true})} className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight" type="date"/>
+                        {errors.birthday && <span className='errors'>Vui lòng chọn ngày tháng năm sinh.</span>}
                     </div>
+
+
                     <div className="flex items-center justify-between">
-                      <button className="bg-[#e50914] text-white font-bold w-full py-3 px-4 rounded">
-                        Đăng nhập
-                      </button>
-                    </div>
-                    <div className="login-form-help mt-4 flex items-center justify-between">
-                            <label className="hover:text-gray-500 block text-sm text-gray-400">
-                              <div className="flex items-center justify-between">
-                                  <input type="checkbox" className="mr-2 text-gray-400 rounded"/>
-                                  <span>Ghi nhớ mật khẩu</span>
-                              </div>
-                            </label>
-                
-                        <div className="text-sm">
-                            <a href="#" className="font-medium text-gray-400 hover:text-gray-500 hover:underline">
-                                Quên mật khẩu?
-                            </a>
-                        </div>
+                        <button className="bg-[#e50914] text-white font-bold w-full py-3 px-4 rounded">
+                            Đăng ký
+                        </button>
                     </div>
                   </form>
                 </div>
                 <div className="login-form-other">
-                  <div className="login-signup text-gray-400 flex justify-between">
-                    <span>Bạn chưa có tài khoản?</span> <Link href={`/signup`}><a className='text-white hover:underline'>Đăng ký ngay.</a></Link>
-                  </div>
+                    <div className="login-signup text-gray-400 flex justify-between">
+                        <span>Bạn đã có tài khoản?</span> <Link href={`/login`}><a className='text-white hover:underline'>Quay lại đăng nhập.</a></Link>
+                    </div>
                 </div>
               </div>
             </div>
