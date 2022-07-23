@@ -9,6 +9,7 @@ import Link from "next/link";
 import Meta from "../components/Shared/Meta";
 import MovieSlider from "../components/Movie/MovieSlider";
 import type { NextPage } from "next";
+import { getBannerMovie } from "../api/movies";
 
 interface HomeProps {
   data: {
@@ -17,13 +18,15 @@ interface HomeProps {
   main: Item;
 }
 
-const Home: NextPage<HomeProps> = () => {
+const Home: NextPage<HomeProps> = (props) => {
+  console.log(props);
+
   const ImageSlide: any = []
   return (
     <>
       <Meta
-        title="Cinema"
-        description="Watch your favorite movies and TV shows in out website."
+        title="Phim FPOLY"
+        description="Xem những bộ phim yêu thích của bạn và chương trình TV trên website."
         image="/preview.png"
       />
 
@@ -38,17 +41,17 @@ const Home: NextPage<HomeProps> = () => {
         <div className="z-10 w-auto flex-1 flex justify-center items-center">
           <div className="flex flex-col items-start gap-4">
             <p className="md:text-5xl text-4xl text-gray-100 max-w-xl">
-              TEST MOVIE
+              {props.data.title}
             </p>
             <p className="md:text-xl text-lg max-w-xl text-gray-100 text-justify multiline-ellipsis">
-              TEST Overview
+              {props.data.overview}
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
               <Link href={`/movie/test1010/watch`}>
                 <a>
                   <Button>
                     <FaPlayCircle />
-                    <span>Watch Now</span>
+                    <span>Xem Ngay</span>
                   </Button>
                 </a>
               </Link>
@@ -56,7 +59,7 @@ const Home: NextPage<HomeProps> = () => {
                 <a>
                   <Button>
                     <FaInfoCircle />
-                    <span>View Info</span>
+                    <span>Xem Thông Tin </span>
                   </Button>
                 </a>
               </Link>
@@ -66,7 +69,7 @@ const Home: NextPage<HomeProps> = () => {
         <div className="flex-1 justify-center items-center hidden md:flex min-w-[300px]">
           <Image
             className="z-10 w-[300px] rounded-xl"
-            src={imageResize("https://image.tmdb.org/t/p/w300/61PVJ06oecwvcBisoAQu6SDfdcS.jpg", "w300")}
+            src={imageResize(`${props.data.poster_path}`, "w300")}
             alt=""
           />
         </div>
@@ -79,9 +82,10 @@ const Home: NextPage<HomeProps> = () => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-
+    const { data } = await getBannerMovie()
     return {
       props: {
+        data
       },
       revalidate: 3600,
     };

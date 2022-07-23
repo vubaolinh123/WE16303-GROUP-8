@@ -1,5 +1,4 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
 import "nprogress/nprogress.css";
 import "swiper/css";
 import "swiper/css/navigation";
