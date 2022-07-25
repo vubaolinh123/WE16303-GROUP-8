@@ -1,8 +1,10 @@
+import axios from "axios";
 import { Detail } from "../models/type";
 import instance from "./config";
 
 const API_KEY: string = "aaa6da55e3c5a4fcac2c50e20c2f5c51"
 const language: string = "vi-VI"
+const paramMovie = `?api_key=${API_KEY}&language=${language}`
 
 // Truyền id Phim vào hàm này để lấy dữ liệu Phim đó
 const urlGetMovie = (idMovie: string) => {
@@ -15,12 +17,12 @@ export const getHomeData: () => Promise<any> = async () => {
     const HomeAPIRoutes: {
         [key: string]: { url: string; media_type: "tv" | "movie" };
     } = {
-        "Top Phim Thịnh Hành": { url: `/trending/movie/week?api_key=${API_KEY}&language=${language}`, media_type: "movie" },
-        "Top Phim Phổ Biến": { url: `/movie/popular?api_key=${API_KEY}&language=${language}`, media_type: "movie" },
-        "Top Phim Đánh Giá Cao": { url: `/movie/top_rated?api_key=${API_KEY}&language=${language}`, media_type: "movie" },
-        "Chương Trình Truyền Hình Thịnh Hành": { url: `/trending/tv/week?api_key=${API_KEY}&language=${language}`, media_type: "tv" },
-        "Chương Trình Truyền Hình Phổ Biến": { url: `/tv/popular?api_key=${API_KEY}&language=${language}`, media_type: "tv" },
-        "Chương Trình Truyền Hình Đánh Giá Cao": { url: `/tv/top_rated?api_key=${API_KEY}&language=${language}`, media_type: "tv" },
+        "Top Phim Thịnh Hành": { url: `/trending/movie/week${paramMovie}`, media_type: "movie" },
+        "Top Phim Phổ Biến": { url: `/movie/popular${paramMovie}`, media_type: "movie" },
+        "Top Phim Đánh Giá Cao": { url: `/movie/top_rated${paramMovie}`, media_type: "movie" },
+        "Chương Trình Truyền Hình Thịnh Hành": { url: `/trending/tv/week${paramMovie}`, media_type: "tv" },
+        "Chương Trình Truyền Hình Phổ Biến": { url: `/tv/popular${paramMovie}`, media_type: "tv" },
+        "Chương Trình Truyền Hình Đánh Giá Cao": { url: `/tv/top_rated${paramMovie}`, media_type: "tv" },
     };
 
     // lấy toàn bộ dữ liệu của phim
@@ -46,3 +48,64 @@ export const getHomeData: () => Promise<any> = async () => {
     return data;
 
 }
+
+
+export const getMovieDetails: (id: string) => Promise<any> = async (id) => {
+    const labels = ["data", "casts", "similar", "videos"];
+
+    const result = (
+        await Promise.all([
+            instance.get(`/movie/${id}${paramMovie}`),
+            instance.get(`/movie/${id}/credits${paramMovie}`),
+            instance.get(`/movie/${id}/similar${paramMovie}`),
+            instance.get(`/movie/${id}/videos${paramMovie}`),
+        ])
+    ).reduce((final, current, index) => {
+        if (labels[index] === "data") {
+            final[labels[index]] = current.data;
+        } else if (labels[index] === "casts") {
+            final[labels[index]] = current.data.cast
+                .filter((item: any) => item.name && item.character && item.profile_path)
+                .slice(0, 10);
+        } else if (labels[index] === "similar") {
+            final[labels[index]] = current.data.results.map((item: any) => ({
+                ...item,
+                media_type: "movie",
+            }));
+        } else if (labels[index] === "videos") {
+            final[labels[index]] = current.data.results.filter(
+                (item: any) => item.name && item.site === "YouTube"
+            );
+        }
+
+        return final;
+    }, {} as any);
+
+    return result;
+};
+
+
+export const getWatchMovieContent: (id: string) => Promise<any> = async (
+    id
+) => {
+    const labels = ["data", "similar"];
+
+    const result = (
+        await Promise.all([
+            instance.get(`/movie/${id}${paramMovie}`),
+            instance.get(`/movie/${id}/similar${paramMovie}`),
+        ])
+    ).reduce((final, current, index) => {
+        if (labels[index] === "data") {
+            final[labels[index]] = current.data;
+        } else if (labels[index] === "similar") {
+            final[labels[index]] = current.data.results.map((item: any) => ({
+                ...item,
+                media_type: "movie",
+            }));
+        }
+        return final;
+    }, {} as any);
+
+    return result;
+};
