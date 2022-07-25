@@ -16,7 +16,7 @@ const StarRating: NextPage<StarRatingProps> = ({
             {new Array(maximum).fill("").map((_, index) => (
                 <span
                     key={index}
-                    className={`text-xl ${index < stars ? "text-orange" : "text-gray-300"
+                    className={`text-xl ${index < stars ? "text-orange-500" : "text-gray-300"
                         }`}
                 >
                     &#9733;
