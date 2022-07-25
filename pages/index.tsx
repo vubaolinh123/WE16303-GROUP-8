@@ -9,6 +9,7 @@ import Link from "next/link";
 import Meta from "../components/Shared/Meta";
 import MovieSlider from "../components/Movie/MovieSlider";
 import type { NextPage } from "next";
+import { signOut } from 'next-auth/react'
 
 interface HomeProps {
   data: {

@@ -1,4 +1,5 @@
-import { NextPage } from 'next'
+/* eslint-disable @next/next/no-img-element */
+import { GetStaticProps, NextPage } from 'next'
 import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
@@ -6,16 +7,21 @@ import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import Button from '../components/Shared/Button'
 import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
+import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
+import { Session } from 'inspector'
 
 type TypeInputs = {
     name: string,
     email: string,
     password: string,
     birthday: string,
-    confirmPassword: string
+    confirmPassword: string,
+    providers: any
 }
 
-const SignUpPage: NextPage<TypeInputs> = () => {
+const SignUpPage = ({providers}: TypeInputs) => {
+  const { data: session, status } = useSession()
+
   const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const namSinh = (new Date(data.birthday)).getFullYear();
@@ -34,20 +40,43 @@ const SignUpPage: NextPage<TypeInputs> = () => {
   const handleConfirmPasswordClick = () => {
     setConfirmPasswordEye(!confirmPasswordEye);
   };
+  if (status === "authenticated") {
+    return (
+      <>
+        <Meta
+            title="Login"
+            description="Login"
+            image="/not-found.png"
+        />
+        <div>
+          <Image
+            src="/bg-loginPage.jpg"
+            opacity={0.5}
+            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-[1000px]"
+            alt=""
+          />
+          <div className='mt-60'>
+            <p>Signed in as {session?.user!.name}</p>
+            <button onClick={() => signOut()}>Sign out</button>
+          </div>
+        </div>
+      </>
+    )
+  }
 
   const password = watch('password')
   return (
     <>
         <Meta
-            title="404 Not Found"
-            description="404 Not Found"
+            title="Sign Up"
+            description="Sign Up"
             image="/not-found.png"
         />
         <div>
           <Image
-            src="https://assets.nflxext.com/ffe/siteui/vlv3/3a073c5f-0160-4d85-9a42-6f59aa4b64b9/3242af29-8ec6-41c7-890e-5bd7393e2047/VN-vi-20220718-popsignuptwoweeks-perspective_alpha_website_large.jpg"
+            src="/bg-loginPage.jpg"
             opacity={0.5}
-            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-screen"
+            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-[1200px]"
             alt=""
           />
           <div className="login-body">
@@ -135,6 +164,25 @@ const SignUpPage: NextPage<TypeInputs> = () => {
                         </button>
                     </div>
                   </form>
+                  <div className='form-login-line'>or</div>
+                  <div className='mt-6'>
+                    <button
+                      className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 gap-3 rounded w-full"
+                      onClick={() =>signIn(providers!.google.id)}
+                    >
+                      <img className="w-6 h-6" src="/google.svg" alt="" />
+
+                      <span>Login With Google</span>
+                    </button>
+                    <button
+                      className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
+                      onClick={() =>signIn(providers!.facebook.id)}
+                    >
+                      <img className="w-7 h-7" src="/icons8-facebook.svg" alt="" />
+
+                      <span>Login With Facebook</span>
+                    </button>
+                  </div>
                 </div>
                 <div className="login-form-other">
                     <div className="login-signup text-gray-400 flex justify-between">
@@ -148,5 +196,22 @@ const SignUpPage: NextPage<TypeInputs> = () => {
     </>
   )
 }
+export const getStaticProps: GetStaticProps = async (context) => {
+  const providers = await getProviders();
+  try {
+    return {
+      props: {
+        providers,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      notFound: true,
+      revalidate: true,
+    };
+  }
+};
+
 
 export default SignUpPage
