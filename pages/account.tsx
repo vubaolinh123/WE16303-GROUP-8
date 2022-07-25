@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from 'next'
 import { signOut, useSession } from 'next-auth/react'
-import { Router } from 'next/router'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Image from '../components/Shared/Image'
 import Meta from '../components/Shared/Meta'
@@ -12,11 +12,16 @@ import { IUser } from '../models/type'
 const account: NextPage = () => {
 
   const [user, setUser] = useState<IUser>()
+  const router = useRouter()
 
   useEffect(() => {
-      const {user} = JSON.parse(localStorage.getItem('user') as string);
-      console.log(user);
-      setUser(user)
+      if(localStorage.getItem('user')){
+        const {user} = JSON.parse(localStorage.getItem('user') as string);
+        console.log(user);
+        setUser(user)
+      } else{
+        router.push('/')
+      }
     }, [])
   return (
     <>
@@ -35,7 +40,7 @@ const account: NextPage = () => {
         <div className='mt-60'>
           <img src={user?.image} alt="" />
           <p>Signed in as {user?.name}</p>
-          <button onClick={() => {signOut(); localStorage.removeItem('user');}}>Sign out</button>
+          <button onClick={() => {signOut(); localStorage.removeItem('user'); router.push('/')}}>Sign out</button>
         </div>
       </div>
     </>
