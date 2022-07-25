@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+*::-webkit-scrollbar {
+  width: 4px;
+  background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #736f6f;
+}
+*::-webkit-resizer{
+  width: 4px;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   @apply m-0 text-gray-200 min-h-screen overflow-x-hidden;
@@ -55,4 +67,63 @@ body {
   @apply w-8 h-8 rounded-full text-center inline-flex justify-center items-center;
   --tw-bg-opacity: 1 !important;
     background-color: rgb(42 42 42 / var(--tw-bg-opacity)) !important;
+}
+
+.login-body{
+  display: block;
+  margin: 0 auto;
+  max-width: 450px;
+  background-color: transparent;
+  min-height: 100vh;
+}
+
+.login-body:before {
+  content: "";
+  height: 130px;
+  display: block;
+}
+
+
+.login-body:after {
+  content: "";
+  height: 145px;
+  display: block;
+}
+
+.login-form-main{
+  padding: 0px 5%;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 4px;
+  background: rgba(0,0,0,.75);
+  padding: 60px 68px 40px;
+}
+
+.login-form-main h2{
+  font-weight: 700;
+  font-size: 32px;
+  margin-bottom: 28px;
+  color: #fff;
+}
+
+.login-form{
+  width: 100%;
+  background: rgba(0,0,0,.75);
+}
+
+.login-form input{
+  background: #333;
+}
+
+.login-form-other{
+  background: rgba(0,0,0,.75);
+  padding: 20px 68px 80px;
+
+}
+
+.errors{
+  color: red;
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 7px;
 }
