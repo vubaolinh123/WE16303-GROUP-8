@@ -77,7 +77,7 @@ const Home: NextPage<HomeProps> = ({ data, main }) => {
       {Object.keys(data).map((item, index) => (
         <Fragment key={item}>
           <h1
-            className={`text-2xl mb-3 md:ml-16 ml-4 ${index === 0 ? "mt-16 md:mt-8" : "mt-8"
+            className={`text-2xl mb-3 md:ml-16 ml-4 text-white ${index === 0 ? "mt-16 md:mt-8" : "mt-8"
               }`}
           >
             {item}
