@@ -6,6 +6,7 @@ import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import Button from '../components/Shared/Button'
 import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
+import { signup } from '../api/auth'
 
 type TypeInputs = {
     name: string,
@@ -17,10 +18,12 @@ type TypeInputs = {
 
 const SignUpPage: NextPage<TypeInputs> = () => {
   const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
-  const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
-    const namSinh = (new Date(data.birthday)).getFullYear();
+  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
+    const namSinh = (new Date(user.birthday)).getFullYear();
     const tuoi = 2022 - namSinh
-    console.log({...data, age: tuoi})
+    console.log()
+    const { data } = await signup({...user, age: +tuoi});
+    console.log(data);
   }
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);

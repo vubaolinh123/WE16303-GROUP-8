@@ -5,7 +5,8 @@ import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import Button from '../components/Shared/Button'
-import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { signin } from '../api/auth'
 
 type TypeInputs = {
   email: string,
@@ -14,8 +15,10 @@ type TypeInputs = {
 
 const SignInPage: NextPage<TypeInputs> = () => {
   const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
-  const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
+  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
+    const { data } = await signin(user);
     console.log(data)
+    localStorage.setItem("user",JSON.stringify(data))
   }
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);
@@ -23,6 +26,7 @@ const SignInPage: NextPage<TypeInputs> = () => {
   const handlePasswordClick = () => {
     setPasswordEye(!passwordEye);
   };
+  
   return (
     <>
         <Meta
