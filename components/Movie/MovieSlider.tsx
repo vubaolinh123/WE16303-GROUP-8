@@ -11,8 +11,7 @@ interface MovieSliderProps {
 }
 
 const MovieSlider: NextPage<MovieSliderProps> = ({ data, loop = true }) => {
-    const ImageSlide: any = []
-    const dataS = [0, 1, 2]; // fake Data
+
     return (
         <Swiper
             className="!w-[calc(100vw-16px)] md:!px-14 !px-2"
@@ -25,9 +24,9 @@ const MovieSlider: NextPage<MovieSliderProps> = ({ data, loop = true }) => {
             navigation
         >
             <div className="!flex">
-                {dataS.map((item, index) => (
-                    <SwiperSlide key={index} className="!w-[200px] !flex">
-                        <MovieCard item={ImageSlide["https://image.tmdb.org/t/p/w300/61PVJ06oecwvcBisoAQu6SDfdcS.jpg"]} width={200} height={300} />
+                {data.map((item) => (
+                    <SwiperSlide key={item.id} className="!w-[200px] !flex">
+                        <MovieCard item={item} width={200} height={300} />
                     </SwiperSlide>
                 ))}
             </div>
