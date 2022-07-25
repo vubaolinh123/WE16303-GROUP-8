@@ -1,13 +1,23 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from 'next'
 import { signOut, useSession } from 'next-auth/react'
-import React from 'react'
+import { Router } from 'next/router'
+import React, { useEffect, useState } from 'react'
 import Image from '../components/Shared/Image'
 import Meta from '../components/Shared/Meta'
+import { IUser } from '../models/type'
 
 
 const account: NextPage = () => {
-  const user = JSON.parse(localStorage.getItem('UserLoginWithGoogle') as string);
+
+  const [user, setUser] = useState<IUser>()
+
+  useEffect(() => {
+      const user = JSON.parse(localStorage.getItem('user') as string);
+      console.log(user);
+      setUser(user)
+    }, [])
   return (
     <>
       <Meta
@@ -23,9 +33,9 @@ const account: NextPage = () => {
           alt=""
         />
         <div className='mt-60'>
-          <img src={user.image} alt="" />
-          <p>Signed in as {user.name}</p>
-          <button onClick={() => {signOut(); localStorage.removeItem('UserLoginWithGoogle')}}>Sign out</button>
+          <img src={user?.image} alt="" />
+          <p>Signed in as {user?.name}</p>
+          <button onClick={() => {signOut(); localStorage.removeItem('user');}}>Sign out</button>
         </div>
       </div>
     </>

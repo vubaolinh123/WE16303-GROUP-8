@@ -6,7 +6,7 @@ import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import {getProviders, useSession, signIn, signOut} from 'next-auth/react'
+import {getProviders, useSession, signIn} from 'next-auth/react'
 import Router from 'next/router'
 
 type TypeInputs = {
@@ -31,7 +31,7 @@ const SignInPage = ({providers}: TypeInputs) => {
   };
   
   if (status === "authenticated") {    
-    localStorage.setItem('UserLoginWithGoogle', JSON.stringify(session.user))
+    localStorage.setItem('user', JSON.stringify(session.user))
     Router.push('/account') 
   }
 
