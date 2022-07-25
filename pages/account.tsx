@@ -14,7 +14,7 @@ const account: NextPage = () => {
   const [user, setUser] = useState<IUser>()
 
   useEffect(() => {
-      const user = JSON.parse(localStorage.getItem('user') as string);
+      const {user} = JSON.parse(localStorage.getItem('user') as string);
       console.log(user);
       setUser(user)
     }, [])
