@@ -31,7 +31,7 @@ const SignInPage = ({providers}: TypeInputs) => {
   };
   
   if (status === "authenticated") {    
-    localStorage.setItem('user', JSON.stringify(session.user as any))
+    localStorage.setItem('user', JSON.stringify(session.user || []))
     Router.push('/account') 
   }
 
