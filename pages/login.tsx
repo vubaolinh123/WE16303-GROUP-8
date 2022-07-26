@@ -26,6 +26,7 @@ const SignInPage = ({providers}: TypeInputs) => {
     const { data } = await signin(user);
     console.log(data)
     localStorage.setItem("user",JSON.stringify(data))
+    Router.push('/account') 
   }
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);
@@ -116,7 +117,7 @@ const SignInPage = ({providers}: TypeInputs) => {
                   <div className='form-login-line'>or</div>
                   <div className='mt-6'>
                     <button
-                      className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 gap-3 rounded w-full"
+                      className="flex items-center justify-center bg-[#181a1b] text-white font-bold py-3 px-4 gap-3 rounded w-full"
                       onClick={() =>signIn(providers!.google.id)}
                     >
                       <img className="w-6 h-6" src="/google.svg" alt="" />
@@ -124,7 +125,7 @@ const SignInPage = ({providers}: TypeInputs) => {
                       Login With Google
                     </button>
                     <button
-                      className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
+                      className="flex items-center justify-center bg-[#181a1b] text-white font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
                       onClick={() =>signIn(providers!.facebook.id)}
                     >
                       <img className="w-7 h-7" src="/icons8-facebook.svg" alt="" />
