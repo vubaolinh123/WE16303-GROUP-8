@@ -17,7 +17,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
     return (
         <>
             <Meta
-                title={`${data.title} - Xem Phim Tập - Phim FPOLY`}
+                title={`${data.title} - Xem Phim - Phim FPOLY`}
                 description="Xem phim của bạn"
                 image={imageOriginal(data.backdrop_path)}
             />
