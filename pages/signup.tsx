@@ -6,9 +6,9 @@ import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
 import Button from '../components/Shared/Button'
-import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
-import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
-import { Session } from 'inspector'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { getProviders, signIn, useSession } from 'next-auth/react'
+import { Router, useRouter } from 'next/router'
 
 type TypeInputs = {
     name: string,
@@ -21,6 +21,7 @@ type TypeInputs = {
 
 const SignUpPage = ({providers}: TypeInputs) => {
   const { data: session, status } = useSession()
+  const router = useRouter()
 
   const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
@@ -40,43 +41,26 @@ const SignUpPage = ({providers}: TypeInputs) => {
   const handleConfirmPasswordClick = () => {
     setConfirmPasswordEye(!confirmPasswordEye);
   };
-  if (status === "authenticated") {
-    return (
-      <>
-        <Meta
-            title="Login"
-            description="Login"
-            image="/not-found.png"
-        />
-        <div>
-          <Image
-            src="/bg-loginPage.jpg"
-            opacity={0.5}
-            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-[1000px]"
-            alt=""
-          />
-          <div className='mt-60'>
-            <p>Signed in as {session?.user!.name}</p>
-            <button onClick={() => signOut()}>Sign out</button>
-          </div>
-        </div>
-      </>
-    )
+  if (status === "authenticated") {    
+    localStorage.setItem('user', JSON.stringify(session))
+    console.log(session);
+    
+    router.push('/account') 
   }
 
   const password = watch('password')
   return (
     <>
         <Meta
-            title="Sign Up"
-            description="Sign Up"
+            title="Đăng ký"
+            description="Đăng ký"
             image="/not-found.png"
         />
         <div>
           <Image
             src="/bg-loginPage.jpg"
-            opacity={0.5}
-            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-[1200px]"
+            opacity={0.5}            
+            className="w-screen fixed top-0 bottom-0 left-0 hidden md:block object-cover z-[-1]"
             alt=""
           />
           <div className="login-body">
@@ -171,22 +155,20 @@ const SignUpPage = ({providers}: TypeInputs) => {
                       onClick={() =>signIn(providers!.google.id)}
                     >
                       <img className="w-6 h-6" src="/google.svg" alt="" />
-
-                      <span>Login With Google</span>
+                      Login With Google
                     </button>
                     <button
                       className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
                       onClick={() =>signIn(providers!.facebook.id)}
                     >
                       <img className="w-7 h-7" src="/icons8-facebook.svg" alt="" />
-
-                      <span>Login With Facebook</span>
+                      Login With Facebook
                     </button>
                   </div>
                 </div>
                 <div className="login-form-other">
                     <div className="login-signup text-gray-400 flex justify-between">
-                        <span>Bạn đã có tài khoản?</span> <Link href={`/login`}><a className='text-white hover:underline'>Quay lại đăng nhập.</a></Link>
+                        Bạn đã có tài khoản? <Link href={`/login`}><a className='text-white hover:underline'>Quay lại đăng nhập.</a></Link>
                     </div>
                 </div>
               </div>

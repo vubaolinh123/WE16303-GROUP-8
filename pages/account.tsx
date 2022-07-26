@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from 'next'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Image from '../components/Shared/Image'
@@ -26,15 +26,15 @@ const account: NextPage = () => {
   return (
     <>
       <Meta
-          title="Login"
-          description="Login"
+          title="User profile"
+          description="User profile"
           image="/not-found.png"
       />
       <div>
         <Image
           src="/bg-loginPage.jpg"
-          opacity={0.5}
-          className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-[1000px]"
+          opacity={0.5}            
+          className="w-screen fixed top-0 bottom-0 left-0 hidden md:block object-cover z-[-1]"
           alt=""
         />
         <div className='mt-60'>

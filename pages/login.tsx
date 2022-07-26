@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetStaticProps, NextPage } from 'next'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
@@ -32,23 +32,21 @@ const SignInPage = ({providers}: TypeInputs) => {
   
   if (status === "authenticated") {    
     localStorage.setItem('user', JSON.stringify(session))
-    console.log(session);
-    
     Router.push('/account') 
   }
 
   return (
     <>
         <Meta
-            title="Login"
-            description="Login"
+            title="Đăng nhập"
+            description="Đăng nhập"
             image="/not-found.png"
         />
         <div>
           <Image
             src="/bg-loginPage.jpg"
             opacity={0.5}
-            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] min-h-[1000px]"
+            className="w-screen fixed top-0 bottom-0 left-0 hidden md:block object-cover z-[-1]"
             alt=""
           />
           <div className="login-body">
@@ -120,7 +118,7 @@ const SignInPage = ({providers}: TypeInputs) => {
                     >
                       <img className="w-6 h-6" src="/google.svg" alt="" />
 
-                      <span>Login With Google</span>
+                      Login With Google
                     </button>
                     <button
                       className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
@@ -128,13 +126,13 @@ const SignInPage = ({providers}: TypeInputs) => {
                     >
                       <img className="w-7 h-7" src="/icons8-facebook.svg" alt="" />
 
-                      <span>Login With Facebook</span>
+                      Login With Facebook
                     </button>
                   </div>
                 </div>
                 <div className="login-form-other">
                   <div className="login-signup text-gray-400 flex justify-between">
-                    <span>Bạn chưa có tài khoản?</span> <Link href={`/signup`}><a className='text-white hover:underline'>Đăng ký ngay.</a></Link>
+                    Bạn chưa có tài khoản? <Link href={`/signup`}><a className='text-white hover:underline'>Đăng ký ngay.</a></Link>
                   </div>
                 </div>
               </div>

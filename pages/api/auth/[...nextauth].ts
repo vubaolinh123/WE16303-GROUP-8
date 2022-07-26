@@ -9,17 +9,19 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_ID!,
-      clientSecret: process.env.FACEBOOK_SECRET!,
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     })
   ],
   pages: {
-    signIn: "/signin",
-    signOut: '/signout',
+    signIn: '/signin',
+    signOut: '/signin',
+    error: '/signin'
   },
   session: {
-    strategy: 'jwt'
+    strategy: "jwt",
   },
-  debug: true
+  // debug: true,
+  secret: process.env.SECRET,
 
 })
