@@ -1,18 +1,24 @@
-import { NextPage } from 'next'
+/* eslint-disable @next/next/no-img-element */
+import { GetStaticProps, NextPage } from 'next'
 import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
-import Button from '../components/Shared/Button'
-import { FaEye, FaEyeSlash, FaInfoCircle, FaPlayCircle } from 'react-icons/fa'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import {getProviders, useSession, signIn} from 'next-auth/react'
+import Router from 'next/router'
 
 type TypeInputs = {
   email: string,
-  password: string
+  password: string,
+  providers: any
 }
 
-const SignInPage: NextPage<TypeInputs> = () => {
+const SignInPage = ({providers}: TypeInputs) => {
+  
+  const { data: session, status } = useSession()
+  
   const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     console.log(data)
@@ -23,18 +29,24 @@ const SignInPage: NextPage<TypeInputs> = () => {
   const handlePasswordClick = () => {
     setPasswordEye(!passwordEye);
   };
+  
+  if (status === "authenticated") {    
+    localStorage.setItem('user', JSON.stringify(session))
+    Router.push('/account') 
+  }
+
   return (
     <>
         <Meta
-            title="404 Not Found"
-            description="404 Not Found"
+            title="Đăng nhập"
+            description="Đăng nhập"
             image="/not-found.png"
         />
         <div>
           <Image
-            src="https://assets.nflxext.com/ffe/siteui/vlv3/3a073c5f-0160-4d85-9a42-6f59aa4b64b9/3242af29-8ec6-41c7-890e-5bd7393e2047/VN-vi-20220718-popsignuptwoweeks-perspective_alpha_website_large.jpg"
+            src="/bg-loginPage.jpg"
             opacity={0.5}
-            className="w-screen absolute top-0 left-0 hidden md:block object-cover z-[-1] h-screen"
+            className="w-screen fixed top-0 bottom-0 left-0 hidden md:block object-cover z-[-1]"
             alt=""
           />
           <div className="login-body">
@@ -98,10 +110,29 @@ const SignInPage: NextPage<TypeInputs> = () => {
                         </div>
                     </div>
                   </form>
+                  <div className='form-login-line'>or</div>
+                  <div className='mt-6'>
+                    <button
+                      className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 gap-3 rounded w-full"
+                      onClick={() =>signIn(providers!.google.id)}
+                    >
+                      <img className="w-6 h-6" src="/google.svg" alt="" />
+
+                      Login With Google
+                    </button>
+                    <button
+                      className="flex items-center justify-center bg-white text-black font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
+                      onClick={() =>signIn(providers!.facebook.id)}
+                    >
+                      <img className="w-7 h-7" src="/icons8-facebook.svg" alt="" />
+
+                      Login With Facebook
+                    </button>
+                  </div>
                 </div>
                 <div className="login-form-other">
                   <div className="login-signup text-gray-400 flex justify-between">
-                    <span>Bạn chưa có tài khoản?</span> <Link href={`/signup`}><a className='text-white hover:underline'>Đăng ký ngay.</a></Link>
+                    Bạn chưa có tài khoản? <Link href={`/signup`}><a className='text-white hover:underline'>Đăng ký ngay.</a></Link>
                   </div>
                 </div>
               </div>
@@ -111,5 +142,22 @@ const SignInPage: NextPage<TypeInputs> = () => {
     </>
   )
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const providers = await getProviders();
+  try {
+    return {
+      props: {
+        providers,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      notFound: true,
+      revalidate: true,
+    };
+  }
+};
 
 export default SignInPage
