@@ -1,0 +1,83 @@
+{
+  "OneMovies": [
+    {
+      "adult": false,
+      "backdrop_path": "/wcKFYIiVDvRURrzglV9kGu7fpfY.jpg",
+      "belongs_to_collection": {
+        "id": 618529,
+        "name": "Loạt phim Doctor Strange",
+        "poster_path": "/oa5uQOTY9Y4ERNrsDk7E0eC1E3h.jpg",
+        "backdrop_path": "/5ZuctJh5uX5L2dz1CjA7WsTJwZk.jpg"
+      },
+      "budget": 200000001,
+      "genres": [
+        {
+          "id": 14,
+          "name": "Phim Giả Tượng"
+        },
+        {
+          "id": 28,
+          "name": "Phim Hành Động"
+        },
+        {
+          "id": 12,
+          "name": "Phim Phiêu Lưu"
+        }
+      ],
+      "homepage": "",
+      "id": 453395,
+      "imdb_id": "tt9419884",
+      "original_language": "en",
+      "original_title": "Doctor Strange in the Multiverse of Madness",
+      "overview": "Sự kiện xảy sau phần phim Người Nhện: Không còn nhà (2021) và mùa đầu tiên của Loki (2021), Bác sĩ Stephen Strange đã sử dụng một phét thuật bị cấm và mở ra cánh cổng dẫn tới đa vũ trụ, vô tình dẫn đưa một biến thể hắc ám của Stephen Strange khác đến vũ trụ mình - mối đe dọa lớn mà Dr. Strange có thể phải đối đầu hoặc hợp sức chống lại một cái ác khác, đồng hành cùng Strange còn có Wong và Wanda Maximoff cùng với nhân vật mới American Chavez.",
+      "popularity": 3721.88,
+      "poster_path": "/ovMxUPSSuvBD7GcgdQxzbJfsR8q.jpg",
+      "production_companies": [
+        {
+          "id": 420,
+          "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+          "name": "Marvel Studios",
+          "origin_country": "US"
+        },
+        {
+          "id": 176762,
+          "logo_path": null,
+          "name": "Kevin Feige Productions",
+          "origin_country": "US"
+        }
+      ],
+      "production_countries": [
+        {
+          "iso_3166_1": "US",
+          "name": "United States of America"
+        }
+      ],
+      "release_date": "2022-05-04",
+      "revenue": 953200000,
+      "runtime": 126,
+      "spoken_languages": [
+        {
+          "english_name": "Cantonese",
+          "iso_639_1": "cn",
+          "name": "广州话 / 廣州話"
+        },
+        {
+          "english_name": "English",
+          "iso_639_1": "en",
+          "name": "English"
+        },
+        {
+          "english_name": "Spanish",
+          "iso_639_1": "es",
+          "name": "Español"
+        }
+      ],
+      "status": "Released",
+      "tagline": "Đi vào vũ trụ khác của Strange.",
+      "title": "Doctor Strange: Đa Vũ Trụ Hỗn Loạn",
+      "video": false,
+      "vote_average": 7.502,
+      "vote_count": 4652
+    }
+  ]
+}
