@@ -9,6 +9,7 @@ import Button from '../components/Shared/Button'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import { Router, useRouter } from 'next/router'
+import { signup } from '../api/auth'
 
 type TypeInputs = {
     name: string,
@@ -24,10 +25,12 @@ const SignUpPage = ({providers}: TypeInputs) => {
   const router = useRouter()
 
   const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
-  const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
-    const namSinh = (new Date(data.birthday)).getFullYear();
+  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
+    const namSinh = (new Date(user.birthday)).getFullYear();
     const tuoi = 2022 - namSinh
-    console.log({...data, age: tuoi})
+    console.log()
+    const { data } = await signup({...user, age: +tuoi});
+    console.log(data);
   }
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);

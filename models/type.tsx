@@ -65,7 +65,6 @@ export interface SearchResult {
     results: Item[];
 }
 
-
 export interface IUser {
     _id?: string
     name?: string,

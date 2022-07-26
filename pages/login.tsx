@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import {getProviders, useSession, signIn} from 'next-auth/react'
 import Router from 'next/router'
+import Button from '../components/Shared/Button'
+import { signin } from '../api/auth'
 
 type TypeInputs = {
   email: string,
@@ -20,8 +22,10 @@ const SignInPage = ({providers}: TypeInputs) => {
   const { data: session, status } = useSession()
   
   const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
-  const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
+  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
+    const { data } = await signin(user);
     console.log(data)
+    localStorage.setItem("user",JSON.stringify(data))
   }
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);
@@ -34,7 +38,6 @@ const SignInPage = ({providers}: TypeInputs) => {
     localStorage.setItem('user', JSON.stringify(session))
     Router.push('/account') 
   }
-
   return (
     <>
         <Meta
