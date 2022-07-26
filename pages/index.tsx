@@ -103,7 +103,7 @@ export const getStaticProps: GetStaticProps = async () => {
         data,
         main
       },
-      // revalidate: 1,
+      revalidate: 3600,
     };
   } catch (error) {
     console.log(error);
