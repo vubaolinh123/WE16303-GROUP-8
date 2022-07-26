@@ -9,6 +9,7 @@ import NProgress from "nprogress";
 import Router from "next/router";
 import instance from '../api/config';
 import { SWRConfig } from "swr";
+import {SessionProvider} from 'next-auth/react'
 
 
 NProgress.configure({
@@ -22,7 +23,8 @@ Router.events.on("routeChangeError", NProgress.done);
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const LayoutWrapper = Component.Layout ?? Layout;
-  return <LayoutWrapper>
+  return <SessionProvider session={pageProps.session}>
+    <LayoutWrapper>
     <SWRConfig
       value={{
         fetcher: async (url: string) => instance.get(url),
@@ -31,7 +33,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Component {...pageProps} />
     </SWRConfig>
   </LayoutWrapper>
-
+  </SessionProvider>
 }
 
 export default MyApp

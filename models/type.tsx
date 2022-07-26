@@ -66,6 +66,7 @@ export interface SearchResult {
 }
 
 export interface IUser {
+    _id?: string
     name?: string,
     email: string,
     password: string,

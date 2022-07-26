@@ -1,6 +1,5 @@
 import { FaInfoCircle, FaPlayCircle } from "react-icons/fa";
 import { imageOriginal, imageResize } from "../api/constants";
-
 import Button from "../components/Shared/Button";
 import { GetStaticProps } from "next";
 import Image from "../components/Shared/Image";
@@ -77,7 +76,7 @@ const Home: NextPage<HomeProps> = ({ data, main }) => {
       {Object.keys(data).map((item, index) => (
         <Fragment key={item}>
           <h1
-            className={`text-2xl mb-3 md:ml-16 ml-4 ${index === 0 ? "mt-16 md:mt-8" : "mt-8"
+            className={`text-2xl mb-3 md:ml-16 ml-4 text-white ${index === 0 ? "mt-16 md:mt-8" : "mt-8"
               }`}
           >
             {item}
@@ -103,7 +102,7 @@ export const getStaticProps: GetStaticProps = async () => {
         data,
         main
       },
-      // revalidate: 1,
+      revalidate: 3600,
     };
   } catch (error) {
     console.log(error);

@@ -109,3 +109,65 @@ export const getWatchMovieContent: (id: string) => Promise<any> = async (
 
     return result;
 };
+
+
+export const getTVDetails: (id: string) => Promise<any> = async (id) => {
+    const labels = ["data", "casts", "similar", "videos"];
+
+    const result = (
+        await Promise.all([
+            instance.get(`/tv/${id}${paramMovie}`),
+            instance.get(`/tv/${id}/credits${paramMovie}`),
+            instance.get(`/tv/${id}/similar${paramMovie}`),
+            instance.get(`/tv/${id}/videos${paramMovie}`),
+        ])
+    ).reduce((final, current, index) => {
+        if (labels[index] === "data") {
+            final[labels[index]] = current.data;
+        } else if (labels[index] === "casts") {
+            final[labels[index]] = current.data.cast
+                .filter((item: any) => item.name && item.character && item.profile_path)
+                .slice(0, 10);
+        } else if (labels[index] === "similar") {
+            final[labels[index]] = current.data.results.map((item: any) => ({
+                ...item,
+                media_type: "tv",
+            }));
+        } else if (labels[index] === "videos") {
+            final[labels[index]] = current.data.results.filter(
+                (item: any) => item.name && item.site === "YouTube"
+            );
+        }
+
+        return final;
+    }, {} as any);
+
+    return result;
+};
+
+export const getTVSeasons: (id: string) => Promise<any> = async (id) => {
+    const data = (await instance.get(`/tv/${id}${paramMovie}`)).data as Detail;
+
+    if (data.seasons.length === 0) throw new Error("404");
+
+    const res = await Promise.all(
+        data.seasons.map((item) =>
+            instance.get(`/tv/${id}/season/${item.season_number}${paramMovie}`)
+        )
+    );
+
+    const seasons = res
+        .map((item) => item.data)
+        .filter(
+            (item) =>
+                item.name &&
+                item.poster_path &&
+                item.episodes.length > 0 &&
+                item.episodes.every((child: any) => child.name && child.still_path)
+        );
+
+    return {
+        seasons,
+        data,
+    };
+};
