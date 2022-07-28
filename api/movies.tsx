@@ -171,3 +171,17 @@ export const getTVSeasons: (id: string) => Promise<any> = async (id) => {
         data,
     };
 };
+
+
+export const search: (query: string, page?: number) => Promise<any> = async (
+    query,
+    page = 1
+) => {
+    const data = (await instance.get(`search/multi?api_key=${API_KEY}&query=${query}&page=${page}&language=${language}`))
+        .data;
+
+    return {
+        ...data,
+        results: data.results.filter((item: any) => item.poster_path),
+    };
+};
