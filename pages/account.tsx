@@ -4,6 +4,7 @@ import { NextPage } from 'next'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
 import Image from '../components/Shared/Image'
 import Meta from '../components/Shared/Meta'
 import { IUser } from '../models/type'
@@ -31,16 +32,32 @@ const account: NextPage = () => {
           image="/not-found.png"
       />
       <div>
-        <Image
-          src="/bg-loginPage.jpg"
-          opacity={0.5}            
-          className="w-screen fixed top-0 bottom-0 left-0 hidden md:block object-cover z-[-1]"
-          alt=""
-        />
-        <div className='mt-60'>
-          <img src={user?.image} alt="" />
-          <p>Signed in as {user?.name}</p>
-          <button onClick={() => {signOut(); localStorage.removeItem('user'); router.push('/')}}>Sign out</button>
+        <div className="py-20 h-screen px-44 account-content">
+          <div className="account-header flex justify-between items-baseline">
+            <h1 className='text-[40px]'>Tài khoản</h1>
+            <button className="bg-red-500 hover:bg-red-700 text-white flex items-center font-bold py-1 px-4 rounded">
+                <FaPen className='mr-1'/> Sửa thông tin
+            </button>
+          </div>
+          <div className="md:grid md:grid-cols-3 mt-4 md:gap-6">
+            <div className="md:col-span-1">
+              <div className="px-4 sm:px-0">
+                <h3 className="leading-6 flex"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
+                <button 
+                  className='text-white mt-4 flex items-center hover:fill-red-500' 
+                  onClick={() => {signOut(); localStorage.removeItem('user')}}
+                > <FaSignOutAlt className='mr-3'/> Đăng xuất </button>
+              </div>
+            </div>
+            <div className="mt-5 md:mt-0 md:col-span-2">
+              <div className='mt-1 text-[#333]'>
+                <p className=' text-[#666]'><span className='font-bold'>Email: </span>{user?.email}</p>
+                <p className='mt-2 text-[#666]'><span className='font-bold'>Name: </span>{user?.name}</p>
+                <p className='mt-2 text-[#666]'><span className='font-bold'>Ngày sinh: </span> {user?.birthday ? user?.birthday : 'Chưa cập nhật'}</p>
+                <p className='mt-2 text-[#666]'><span className='font-bold'>Mật khẩu: </span>*******  <button className="py-1 px-4 rounded"><FaPen/></button></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
