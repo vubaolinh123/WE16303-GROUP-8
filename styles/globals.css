@@ -130,3 +130,27 @@ body {
   font-weight: 300;
   margin-top: 7px;
 }
+
+.form-login-line{  
+  display: flex;
+  width: 100%;
+  -webkit-box-align: center;
+  align-items: center;
+  margin: 20px 0px;
+}
+
+.form-login-line::before, .form-login-line::after {
+  content: "";
+  flex: 0 1 100%;
+  border-bottom: 1px solid rgb(193, 199, 198);
+  margin: 0px 10px;
+  transform: translateY(-50%);
+}
+
+.form-login-line::before{
+  margin-left: 0;
+}
+
+.form-login-line::after{
+  margin-right: 0;
+}

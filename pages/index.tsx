@@ -1,6 +1,5 @@
 import { FaInfoCircle, FaPlayCircle } from "react-icons/fa";
 import { imageOriginal, imageResize } from "../api/constants";
-
 import Button from "../components/Shared/Button";
 import { GetStaticProps } from "next";
 import Image from "../components/Shared/Image";
