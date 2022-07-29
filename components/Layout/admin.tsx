@@ -7,6 +7,7 @@ import Link from 'next/link';
 import logo from '../../public/img/Netflix-logo.png'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import 'antd/dist/antd.css';
 
 const LayoutAdmin = ({ children }: LayoutProps) => {
     const [collapsed, setCollapsed] = useState(false);

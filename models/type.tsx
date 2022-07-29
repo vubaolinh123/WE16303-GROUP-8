@@ -64,3 +64,14 @@ export interface SearchResult {
     total_results: number;
     results: Item[];
 }
+
+export interface PopularMovie {
+    page: number;
+    total_pages: number;
+    total_results: number;
+    results: Item[];
+  }
+
+export interface Category {
+    genres: { id: number; name: string }[];
+}
