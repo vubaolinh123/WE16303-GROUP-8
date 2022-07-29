@@ -31,24 +31,30 @@ export const getHomeData: () => Promise<any> = async () => {
     //     '/trending/movie/week',
     //     '/movie/popular',
     // ]
+    // console.log("HomeAPIRoutes",HomeAPIRoutes);
     const promises = await Promise.all(
         Object.keys(HomeAPIRoutes).map((item) => instance.get(HomeAPIRoutes[item].url))
     );
+    // console.log("promises",promises);
+    
 
     const data = promises.reduce((final, current, index) => {
+        // console.log("final",final);
+        // console.log("current",current);
+        // console.log("index",index);
         final[Object.keys(HomeAPIRoutes)[index]] = current.data.results.map(
             (item: any) => ({
                 ...item,
                 media_type: HomeAPIRoutes[Object.keys(HomeAPIRoutes)[index]].media_type,
             })
         );
+        
         return final;
     }, {} as any);
 
     return data;
 
 }
-
 
 export const getMovieDetails: (id: string) => Promise<any> = async (id) => {
     const labels = ["data", "casts", "similar", "videos"];
