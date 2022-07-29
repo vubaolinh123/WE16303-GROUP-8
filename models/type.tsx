@@ -75,3 +75,15 @@ export interface PopularMovie {
 export interface Category {
     genres: { id: number; name: string }[];
 }
+
+export interface IUser {
+    _id?: string
+    name?: string,
+    email: string,
+    password: string,
+    image?: string,
+    birthday?: string,
+    age?: number,
+    role?: number,
+    status?: number
+}

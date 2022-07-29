@@ -32,7 +32,7 @@ const Pagination: NextPage<PaginationProps> = ({
                         <Link key={index} href={resolveLink(index + 1)}>
                             <a>
                                 <button
-                                    className={`rounded-btn ${current === index + 1 ? "!bg-orange" : ""
+                                    className={`rounded-btn ${current === index + 1 ? "!bg-orange-500" : ""
                                         }`}
                                 >
                                     {index + 1}
@@ -63,7 +63,7 @@ const Pagination: NextPage<PaginationProps> = ({
                         <Link key={index} href={resolveLink(maximum - 4 + index)}>
                             <a>
                                 <button
-                                    className={`rounded-btn ${current === maximum - 4 + index ? "!bg-orange" : ""
+                                    className={`rounded-btn ${current === maximum - 4 + index ? "!bg-orange-500" : ""
                                         }`}
                                 >
                                     {maximum - 4 + index}
@@ -84,7 +84,7 @@ const Pagination: NextPage<PaginationProps> = ({
                         <Link key={index} href={resolveLink(current - 2 + index)}>
                             <a>
                                 <button
-                                    className={`rounded-btn ${current === current - 2 + index ? "!bg-orange" : ""
+                                    className={`rounded-btn ${current === current - 2 + index ? "!bg-orange-500" : ""
                                         }`}
                                 >
                                     {current - 2 + index}
