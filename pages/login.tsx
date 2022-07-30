@@ -1,6 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { GetStaticProps, NextPage } from 'next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
@@ -8,8 +7,7 @@ import Link from 'next/link'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import {getProviders, useSession, signIn} from 'next-auth/react'
 import Router from 'next/router'
-import Button from '../components/Shared/Button'
-import { signin } from '../api/auth'
+import { signin, signinwithnextauth } from '../api/auth'
 
 type TypeInputs = {
   email: string,
@@ -17,13 +15,13 @@ type TypeInputs = {
   providers: any
 }
 
-const SignInPage = ({providers}: TypeInputs) => {
+const SignInPage: NextPage<TypeInputs> = ({providers}) => {
   
   const { data: session, status } = useSession()
   
   const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
-    const { data } = await signin(user);
+    const {data} = await signin(user);
     console.log(data)
     localStorage.setItem("user",JSON.stringify(data))
     Router.push('/account') 
@@ -35,10 +33,17 @@ const SignInPage = ({providers}: TypeInputs) => {
     setPasswordEye(!passwordEye);
   };
   
-  if (status === "authenticated") {    
-    localStorage.setItem('user', JSON.stringify(session))
-    Router.push('/account') 
-  }
+  useEffect(() => {
+    (async() => {
+      if (status === "authenticated") {
+        const {data} = await signinwithnextauth(session.user);    
+        console.log(data);        
+        localStorage.setItem('user', JSON.stringify(data.user))
+        Router.push('/account') 
+        };
+    })()
+  }, [status])
+  
   return (
     <>
         <Meta

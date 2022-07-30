@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetStaticProps, NextPage } from 'next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
@@ -9,7 +9,7 @@ import Button from '../components/Shared/Button'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import { Router, useRouter } from 'next/router'
-import { signup } from '../api/auth'
+import { signinwithnextauth, signup } from '../api/auth'
 
 type TypeInputs = {
     name: string,
@@ -21,14 +21,14 @@ type TypeInputs = {
 }
 
 const SignUpPage = ({providers}: TypeInputs) => {
-  const { data: session, status } = useSession()
   const router = useRouter()
 
   const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
   const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
-    const namSinh = (new Date(user.birthday)).getFullYear();
-    const tuoi = 2022 - namSinh
-    await signup({...user, age: +tuoi});
+    const yearOfBirh = (new Date(user.birthday)).getFullYear();
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - yearOfBirh;
+    signup({...user, age});
     router.push('/login') 
   }
   // handle password eye
@@ -37,18 +37,25 @@ const SignUpPage = ({providers}: TypeInputs) => {
   const handlePasswordClick = () => {
     setPasswordEye(!passwordEye);
   };
+
   // handle confirm password eye
   const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
 
   const handleConfirmPasswordClick = () => {
     setConfirmPasswordEye(!confirmPasswordEye);
   };
-  if (status === "authenticated") {    
-    localStorage.setItem('user', JSON.stringify(session))
-    console.log(session);
-    
-    router.push('/account') 
-  }
+
+  const { data: session, status } = useSession()
+  useEffect(() => {
+    (async() => {
+      if (status === "authenticated") {
+        const {data} = await signinwithnextauth(session.user);    
+        console.log(data);        
+        localStorage.setItem('user', JSON.stringify(data.user))
+        router.push('/account') 
+        };
+    })()
+  }, [status])
 
   const password = watch('password')
   return (
