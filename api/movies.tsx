@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Detail } from "../models/type";
-import instance from "./config";
+import { instance } from "./config";
 
 const API_KEY: string = "aaa6da55e3c5a4fcac2c50e20c2f5c51"
 const language: string = "vi-VI"
@@ -36,7 +36,7 @@ export const getHomeData: () => Promise<any> = async () => {
         Object.keys(HomeAPIRoutes).map((item) => instance.get(HomeAPIRoutes[item].url))
     );
     // console.log("promises",promises);
-    
+
 
     const data = promises.reduce((final, current, index) => {
         // console.log("final",final);
@@ -48,7 +48,7 @@ export const getHomeData: () => Promise<any> = async () => {
                 media_type: HomeAPIRoutes[Object.keys(HomeAPIRoutes)[index]].media_type,
             })
         );
-        
+
         return final;
     }, {} as any);
 
