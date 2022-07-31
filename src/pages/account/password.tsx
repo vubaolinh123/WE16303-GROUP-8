@@ -2,7 +2,7 @@
 import { GetStaticProps, NextPage } from 'next'
 import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
-import Meta from '../../src/components/Shared/Meta'
+import Meta from '../../components/Shared/Meta'
 import Link from 'next/link'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { getProviders, signIn, useSession } from 'next-auth/react'

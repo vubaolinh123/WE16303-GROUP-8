@@ -32,7 +32,7 @@ const account: NextPage = () => {
       <div>
         <div className="py-20 h-screen px-44 account-content">
           <div className="account-header flex justify-between items-baseline">
-            <h1 className='text-[40px]'>Tài khoản</h1> 
+            <h1 className='text-[40px] text-white'>Tài khoản</h1> 
             <Link href="./account/userprofile">
               <button className="bg-red-500 hover:bg-red-700 text-white flex items-center font-bold py-1 px-4 rounded">
                   <FaPen className='mr-1'/> Sửa thông tin
@@ -42,7 +42,7 @@ const account: NextPage = () => {
           <div className="md:grid md:grid-cols-3 mt-4 md:gap-6">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
-                <h3 className="leading-6 flex"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
+                <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
                 <button 
                   className='text-white mt-4 flex items-center hover:fill-red-500' 
                   onClick={() => {signOut(); localStorage.removeItem('user')}}

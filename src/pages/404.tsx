@@ -1,4 +1,4 @@
-import Meta from "../src/components/Shared/Meta";
+import Meta from "../components/Shared/Meta";
 import type { NextPage } from "next";
 
 const NotFound: NextPage = () => {

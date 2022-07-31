@@ -5,6 +5,6 @@ export const instance = axios.create({
 });
 
 export const API_NodeJS = axios.create({
-    baseURL: "https://nodejs-group-8.herokuapp.com/api/",
+    baseURL: "https://phim-poly.herokuapp.com/api/",
 });
 
