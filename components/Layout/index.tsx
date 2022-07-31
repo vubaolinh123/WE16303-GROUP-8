@@ -3,6 +3,7 @@ import React from 'react'
 import { LayoutProps } from '../../models/layout'
 import Footer from './Footer'
 import Navbar from './Navbar'
+import 'antd/dist/antd.css';
 
 const Layout = ({ children }: LayoutProps) => {
     return (

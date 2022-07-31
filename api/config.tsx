@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: "https://api.themoviedb.org/3/",
 });
-export default instance;
+
+export const API_NodeJS = axios.create({
+    baseURL: "https://nodejs-group-8.herokuapp.com/api/",
+});
+

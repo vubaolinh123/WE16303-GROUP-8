@@ -14,6 +14,7 @@ const Pagination: NextPage<PaginationProps> = ({
     maximum,
     resolveLink,
 }) => {
+    
     return (
         <div className="flex items-center justify-center gap-1 flex-wrap">
             {current > 1 && (
