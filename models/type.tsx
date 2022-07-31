@@ -65,6 +65,17 @@ export interface SearchResult {
     results: Item[];
 }
 
+export interface PopularMovie {
+    page: number;
+    total_pages: number;
+    total_results: number;
+    results: Item[];
+  }
+
+export interface Category {
+    genres: { id: number; name: string }[];
+}
+
 export interface IUser {
     _id?: string
     name?: string,
