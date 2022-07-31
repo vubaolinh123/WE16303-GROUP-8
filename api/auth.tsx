@@ -1,5 +1,5 @@
 import { IUser } from "../models/type";
-import instance from "./config";
+import {instance} from "./config";
 
 export const signup = (user: IUser) => {
     return instance.post(`http://localhost:3001/api/signup`, user)   
