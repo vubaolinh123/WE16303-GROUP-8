@@ -1,6 +1,6 @@
 import React from 'react'
-import LayoutAdmin from '../../../components/Layout/admin'
-import { LayoutProps } from '../../../models/layout'
+import LayoutAdmin from '../../../src/components/Layout/admin'
+import { LayoutProps } from '../../../src/models/layout'
 
 type Props = {}
 

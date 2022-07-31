@@ -1,4 +1,4 @@
-import instance from "./config";
+import {instance} from "./config";
 
 const API_KEY: string = "aaa6da55e3c5a4fcac2c50e20c2f5c51"
 const language: string = "vi-VI"

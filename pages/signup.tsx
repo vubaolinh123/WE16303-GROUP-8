@@ -5,7 +5,6 @@ import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../components/Shared/Meta'
 import Image from "../components/Shared/Image"
 import Link from 'next/link'
-import Button from '../components/Shared/Button'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { getProviders, signIn, useSession } from 'next-auth/react'
 import { Router, useRouter } from 'next/router'

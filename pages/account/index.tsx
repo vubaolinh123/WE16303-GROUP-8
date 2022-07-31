@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
-import Meta from '../../components/Shared/Meta'
-import { IUser } from '../../models/type'
+import Meta from '../../src/components/Shared/Meta'
+import { IUser } from '../../src/models/type'
 
 
 const account: NextPage = () => {
