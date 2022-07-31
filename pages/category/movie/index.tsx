@@ -15,7 +15,6 @@ interface CategoryProps {
   data: PopularMovie,
   dataCategory: Category[],
   response: PopularMovie,
-  responseSort: PopularMovie,
   q: string
   // data: {
   //   [id: string]: Item[];
@@ -25,18 +24,18 @@ interface CategoryProps {
 
 
 
-const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, response, responseSort }) => {
+const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, response }) => {
   const router = useRouter()
   console.log("router query", router.query);
   console.log("query", q);
   console.log("response", response);
-  console.log("responseSort", responseSort);
+  // console.log("responseSort", responseSort);
   const [dataSort, setDataSort] = useState<PopularMovie>()
 
   console.log('dataSort', dataSort);
   const [urlSort, setUrlSort] = useState<any>()
   const test2: any[] = []
-  const sortLanguage = [{ name: "Korea", value: "ko" }, { name: "America", value: "hy" }, { name: "Japan", value: "ja" }, { name: "Vietnam", value: "vi" }]
+  const sortLanguage = [{ name: "Korea", value: "ko" }, { name: "America", value: "en" }, { name: "Japan", value: "ja" }, { name: "Vietnam", value: "vi" }]
   const sortYear = [{ name: "2022", value: 2022 }, { name: "2021", value: 2021 }, { name: "2020", value: 2020 }, { name: "2019", value: 2019 }, { name: "2018", value: 2018 }, { name: "Trước Đó", value: 2017 }]
   const sortBy = [
     { name: `Độ Phổ Biến `, icon: <UpOutlined />, value: "popularity.desc" },
@@ -95,21 +94,22 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
 
   const onFinish = async (values: any) => {
     const flag: any = {}
-    flag.type = values.type ? values.type : "false";
-    flag.genres = values.genres ? values.genres : "false";
+    flag.type = values.type ? values.type : "";
+    flag.genres = values.genres ? values.genres : "";
     flag.page = router.query.page ? Number(router.query.page) : 1;
-    flag.language = values.language ? values.language : "false";
-    flag.year = values.year ? values.year : "false";
+    flag.language = values.language ? values.language : "";
+    flag.year = values.year ? values.year : 0;
     flag.sort = values.sort ? values.sort : "popularity.desc";
+    flag.theatres = router.query.theatres ? router.query.theatres : false;
 
     if (values.type && values.genres) {
       router.push({
         pathname: `/category/${values.type}`,
-        query: { genres: flag.genres, page: flag.page, sort_by: flag.sort, year: flag.year },
+        query: { genres: flag.genres, page: flag.page, sort_by: flag.sort, year: flag.year, theatres: flag.theatres },
       })
     }
 
-    const response = await sortMovie(flag.page, q, flag.language, flag.year, flag.sort)
+    const response = await sortMovie(flag.page, q, flag.language, flag.year, flag.sort, flag.theatres)
     console.log('response submit', response);
     setDataSort(response)
     console.log('dataSort sort', dataSort);
@@ -146,18 +146,20 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
 
   console.log('dataSort', dataSort);
 
-  console.log('responseSort submit 2', responseSort);
+  // console.log('responseSort submit 2', responseSort);
 
   useEffect(() => {
-    if(responseSort){
-      setDataSort(responseSort)
-      console.log('dataSort useEffect', dataSort);
-    }
-    if(response){
-      setDataSort(response)
-      console.log('response useEffect', response);
-    }
-  }, [responseSort,response])
+    setDataSort(response)
+    console.log('response useEffect', dataSort);
+    // if(Array.isArray(responseSort.results)){
+    //   setDataSort(responseSort)
+    //   console.log('responseSort useEffect', dataSort);
+    // }
+    // if(Array.isArray(response.results)){
+    //   setDataSort(response)
+    //   console.log('response useEffect', dataSort);
+    // }
+  }, [response])
 
 
   return (
@@ -213,7 +215,7 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
             <Select placeholder="Thể Loại" style={{ width: 200 }}>
               {name.map((item: any, index) => (
                 <Option key={index} value={item.value}>
-                  {item.name}
+                  <span className="!text-black">{item.name}</span>
                 </Option>
               ))}
             </Select>
@@ -225,7 +227,7 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
                 if (item.name === selectedCompanyId) {
                   return item.value.map((item2: any, index: any) => {
                     return <Option key={index} value={item2.id}>
-                      {item2.name}
+                      <span className="!text-black">{item2.name}</span>
                     </Option>
                   })
                 }
@@ -238,29 +240,29 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
             <Select placeholder="Quốc Gia" style={{ width: 120 }}  >
               {sortLanguage.map((item: any, index) => {
                 return <Option key={index} value={item.value}>
-                  {item.name}
+                  <span className="!text-black">{item.name}</span>
                 </Option>
               })}
 
             </Select>
           </Form.Item>
 
-          <Form.Item name="year" >
+          <Form.Item name="year" className="text-black" >
             <Select placeholder="Tất Cả" style={{ width: 200 }} >
               {sortYear.map((item: any, index) => {
                 return <Option key={index} value={item.value}>
-                  {item.name}
+                  <span className="!text-black">{item.name}</span>
                 </Option>
               })}
 
             </Select>
           </Form.Item>
 
-          <Form.Item name="sort"  >
-            <Select placeholder="Sắp Xếp" style={{ width: 200 }}  >
+          <Form.Item name="sort" >
+            <Select  placeholder="Sắp Xếp" style={{ width: 200 }}  >
               {sortBy.map((item: any, index) => {
-                return <Option key={index} value={item.value}>
-                  <span>{item.name}</span>
+                return <Option  key={index} value={item.value}>
+                  <span className="!text-black">{item.name}</span>
                   <span className="text-sm text-red-500  ">{item.icon}</span>
                 </Option>
               })}
@@ -281,7 +283,7 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="button" onClick={onReset}>
+            <Button danger type="primary" htmlType="button" onClick={onReset}>
               Reset
             </Button>
           </Form.Item>
@@ -289,23 +291,13 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
         </Form>
       </div>
 
-      {q && dataSort
+      {q || dataSort
         ? <div className="md:mx-20 pt-24 mx-10">
-          <h1 className="text-2xl mb-8">
+          {/* <h1 className="text-2xl mb-8">
             Có ({dataSort ? dataSort.total_results : response.total_results}{" "}
             {dataSort ? dataSort.total_results : response.total_results <= 1 ? "result" : "results"} Kết Quả)
-          </h1>
+          </h1> */}
 
-          {category.map((item: any, index) => {
-            return <Dropdown key={index + 1} overlay={menu2[index]} trigger={['click']}>
-              <button onClick={(e) => e.preventDefault()} >
-                <Space>
-                  {item.name}
-                  <DownOutlined />
-                </Space>
-              </button>
-            </Dropdown>
-          })}
 
 
           <MovieGrid
@@ -323,12 +315,12 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
         </div>
 
         : <div className="md:mx-20 pt-24 mx-10">
-          <h1 className="text-2xl mb-8">
-            Search result ({data.total_results}{" "}
-            {data.total_results <= 1 ? "result" : "results"} found)
-          </h1>
+          {/* <h1 className="text-2xl mb-8">
+            Có ({data.total_results}{" "}
+            {data.total_results <= 1 ? "result" : "results"} Kết quả)
+          </h1> */}
 
-          {category.map((item: any, index) => {
+          {/* {category.map((item: any, index) => {
             return <Dropdown key={index + 1} overlay={menu2[index]} trigger={['click']}>
               <button onClick={(e) => e.preventDefault()} >
                 <Space>
@@ -337,7 +329,7 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
                 </Space>
               </button>
             </Dropdown>
-          })}
+          })} */}
 
           <MovieGrid
             data={data.results}
@@ -360,27 +352,32 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
     const q = query.genres as string;
     const page = query.page ? Number(query.page) : 1;
-    const year: any = query.year ? Number(query.year) : "false"
+    const year: any = query.year ? Number(query.year) : 0
     const sort = query.sort_by ? query.sort_by as string : "popularity.desc"
-    const language = query.language ? query.language as string : "false"
+    const language = query.language ? query.language as string : ""
+    const theatres = query.theatres ? true : false
     const data = await getDefaultMovie(page)
     const dataCategory = await getCategoryData()
 
-
+    // const responseSort = await sortMovie(page, q, language, year, sort)
+    // const response = await getMovieByCategory(page, q)
 
     if (query.year && query.sort_by) {
       console.log("Case 1 page", page);
-
-      const responseSort = await sortMovie(page, q, language, year, sort)
+      const response = await sortMovie(page, q, language, year, sort, theatres)
+     
       console.log("Case 1");
 
       return {
         props: {
           data,
           dataCategory,
-          responseSort,
+          // responseSort,
+          response,
           q
         },
+        
+        
       };
     }
 
@@ -394,6 +391,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
           response,
           q
         },
+        
       };
     }
 
