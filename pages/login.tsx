@@ -8,6 +8,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import {getProviders, useSession, signIn} from 'next-auth/react'
 import Router from 'next/router'
 import { signin, signinwithnextauth } from '../api/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, loginwithnextauth } from '../features/user/user.slice'
 
 type TypeInputs = {
   email: string,
@@ -18,14 +20,8 @@ type TypeInputs = {
 const SignInPage: NextPage<TypeInputs> = ({providers}) => {
   
   const { data: session, status } = useSession()
-  
-  const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
-  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
-    const {data} = await signin(user);
-    console.log(data)
-    localStorage.setItem("user",JSON.stringify(data))
-    Router.push('/account') 
-  }
+  const dispatch = useDispatch()
+
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);
 
@@ -33,12 +29,23 @@ const SignInPage: NextPage<TypeInputs> = ({providers}) => {
     setPasswordEye(!passwordEye);
   };
   
+  const{register, handleSubmit, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
+  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
+    try {
+      await dispatch(login(user) as any);
+      Router.push('/account')       
+    } catch (error) {
+      
+    }
+  }
+  
   useEffect(() => {
     (async() => {
       if (status === "authenticated") {
-        const {data} = await signinwithnextauth(session.user);    
-        console.log(data);        
-        localStorage.setItem('user', JSON.stringify(data.user))
+        await dispatch(loginwithnextauth(session?.user) as any) 
+        // const {data} = await signinwithnextauth(session.user);    
+        // console.log(data);        
+        // localStorage.setItem('user', JSON.stringify(data.user))
         Router.push('/account') 
         };
     })()

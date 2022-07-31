@@ -3,21 +3,31 @@ import { signin, signinwithnextauth } from "../../api/auth";
 import { IUser } from "../../models/type";
 
 interface IUserState {
-  value: IUser;
+  value: {token: string, user: IUser};
 }
 
 const initialState: IUserState = {
-  value: { email: "", password: "" },
+  value: {token: "", user: {email: '', password: ""}}
 };
 
 // Action
-export const login = createAsyncThunk("signin", async (user: IUser) => {
-  const { data } = await signin(user);
-  return data;
+export const login = createAsyncThunk("user/signin", async (user: IUser) => {
+  try {
+    const { data } = await signin(user);
+    console.log(data);
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data.message)
+  }
 });
-export const loginwithnextauth = createAsyncThunk("signinwithnextauth", async (user: IUser) => {
-  const { data } = await signinwithnextauth(user);
-  return data;
+export const loginwithnextauth = createAsyncThunk("user/signinwithnextauth", async (user: any) => {
+  try {
+    const { data } = await signinwithnextauth(user);
+    console.log(data);
+    return data;
+  } catch (error: any) {
+    console.log(error.message.data)
+  }
 });
 
 const userSlice = createSlice({

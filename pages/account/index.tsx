@@ -4,9 +4,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
-import Meta from '../../src/components/Shared/Meta'
-import { IUser } from '../../src/models/type'
-
+import { useSelector } from 'react-redux'
+import Meta from '../../components/Shared/Meta'
+import { IUser } from '../../models/type'
+// import "./index.css"
+import {store} from '../../app/store'
 
 const account: NextPage = () => {
 
@@ -14,12 +16,12 @@ const account: NextPage = () => {
   const router = useRouter()
 
   useEffect(() => {
-      if(localStorage.getItem('user')){
-        const user = JSON.parse(localStorage.getItem('user') as string);
-        console.log(user);
-        setUser(user)
+      if(localStorage.getItem('persist:root')){
+        // const {user} = JSON.parse(localStorage.getItem('persist:root') as string);
+        const {user: userPro} = store.getState()
+        setUser(userPro.value?.user!)
       } else{
-        router.push('/')
+        router.push('/login')
       }
     }, [])
   return (
@@ -45,7 +47,7 @@ const account: NextPage = () => {
                 <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
                 <button 
                   className='text-white mt-4 flex items-center hover:fill-red-500' 
-                  onClick={() => {signOut(); localStorage.removeItem('user')}}
+                  onClick={() => {signOut(); localStorage.removeItem('persist:root'); router.push('login')}}
                 > <FaSignOutAlt className='mr-3'/> Đăng xuất </button>
               </div>
             </div>
