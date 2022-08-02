@@ -1,12 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-import { GetStaticProps, NextPage } from 'next'
 import React, { useState } from 'react'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import Meta from '../../components/Shared/Meta'
-import Link from 'next/link'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import { getProviders, signIn, useSession } from 'next-auth/react'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+import "./index.css"
 
 type TypeInputs = {
     email: string,
@@ -16,7 +14,7 @@ type TypeInputs = {
     providers: any
 }
 
-const SignUpPage = ({providers}: TypeInputs) => {
+const ChangePasswordPage = () => {
   const router = useRouter()
 
   const{register, handleSubmit, watch, formState: {errors}} = useForm<TypeInputs>({ mode: "onTouched"})
@@ -37,12 +35,6 @@ const SignUpPage = ({providers}: TypeInputs) => {
   const handleConfirmPasswordClick = () => {
     setConfirmPasswordEye(!confirmPasswordEye);
   };
-
-  const { data: session, status } = useSession()
-  if (status === "authenticated") {    
-    localStorage.setItem('user', JSON.stringify(session))
-    router.push('/account') 
-  }
 
   const password = watch('password')
   return (
@@ -129,22 +121,5 @@ const SignUpPage = ({providers}: TypeInputs) => {
     </>
   )
 }
-export const getStaticProps: GetStaticProps = async (context) => {
-  const providers = await getProviders();
-  try {
-    return {
-      props: {
-        providers,
-      },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      notFound: true,
-      revalidate: true,
-    };
-  }
-};
 
-
-export default SignUpPage
+export default ChangePasswordPage

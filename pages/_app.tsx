@@ -13,6 +13,8 @@ import { SessionProvider } from 'next-auth/react'
 import { Provider } from 'react-redux';
 import { persistor, store } from '../app/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 NProgress.configure({
@@ -36,6 +38,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             }}
           >
             <Component {...pageProps} />
+            <ToastContainer
+              position="top-right"
+              autoClose={4000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              draggable
+              theme='dark'
+              pauseOnHover = {false}
+            />
           </SWRConfig>
         </LayoutWrapper>
       </SessionProvider>
