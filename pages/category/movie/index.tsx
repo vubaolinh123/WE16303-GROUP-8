@@ -1,5 +1,5 @@
 import { FaInfoCircle, FaPlayCircle } from "react-icons/fa";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, GetStaticProps } from "next";
 import { Category, Item, PopularMovie } from "../../../models/type";
 import Meta from "../../../components/Shared/Meta";
 import type { NextPage } from "next";
@@ -50,8 +50,8 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
     { name: "Phim", value: "movie" },
     { name: "TV Show", value: "tv" }
   ]
-  console.log("name",name);
-  
+  console.log("name", name);
+
 
   const { Option } = Select;
 
@@ -259,9 +259,9 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
           </Form.Item>
 
           <Form.Item name="sort" >
-            <Select  placeholder="Sắp Xếp" style={{ width: 200 }}  >
+            <Select placeholder="Sắp Xếp" style={{ width: 200 }}  >
               {sortBy.map((item: any, index) => {
-                return <Option  key={index} value={item.value}>
+                return <Option key={index} value={item.value}>
                   <span className="!text-black">{item.name}</span>
                   <span className="text-sm text-red-500  ">{item.icon}</span>
                 </Option>
@@ -348,8 +348,10 @@ const MovieCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respons
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
+    context.res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate")
+    const query = context.query
     const q = query.genres as string;
     const page = query.page ? Number(query.page) : 1;
     const year: any = query.year ? Number(query.year) : 0
@@ -365,7 +367,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     if (query.year && query.sort_by) {
       console.log("Case 1 page", page);
       const response = await sortMovie(page, q, language, year, sort, theatres)
-     
+
       console.log("Case 1");
 
       return {
@@ -376,8 +378,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
           response,
           q
         },
-        
-        
+
+
       };
     }
 
@@ -391,7 +393,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
           response,
           q
         },
-        
+
       };
     }
 

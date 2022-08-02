@@ -3,17 +3,45 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { getCategoryData } from "../../api/category";
 import { useEffect, useState } from "react";
-import { Dropdown, Menu, Space } from "antd";
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, Space, Avatar } from "antd";
+import { DownOutlined, UpOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 
 const Navbar: NextPage = () => {
 
+    
     const [dataCategory, SetDataCategory] = useState<{}[]>([])
     const name = [
         { name: "Phim", value: "movie" },
         { name: "TV Show", value: "tv" }
     ]
     const category: any[] = []
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: '1',
+                    icon: <BellOutlined />,
+                    label: (
+                        <span>
+                            Profile
+                        </span>
+                    ),
+                },
+                {
+                    key: '2',
+                    label: (
+                        <span>
+                            Log Out
+                        </span>
+                    ),
+                    icon: <BellOutlined />,
+                    danger: true,
+
+
+                }
+            ]}
+        />
+    );
 
     console.log("dataCategory", dataCategory);
 
@@ -87,7 +115,7 @@ const Navbar: NextPage = () => {
                 })}
                 <Link href={`/category/movie?theatres=true`}>
 
-                    <span className="h-full w-auto px-4 pt-[13px] cursor-pointer hover:text-red-600 ">
+                    <span className="h-full w-auto px-4 pt-[13px] cursor-pointer text-white hover:text-red-600 ">
                         Phim Chiếu Rạp
                     </span>
                 </Link>
@@ -97,6 +125,12 @@ const Navbar: NextPage = () => {
                     <FaSearch className="mr-4 cursor-pointer" size={25} />
                 </a>
             </Link>
+            <div className="px-4">
+
+                <Dropdown overlay={menu} className="cursor-pointer" trigger={['hover']}>
+                    <Avatar size="large" icon={<UserOutlined />} />
+                </Dropdown>
+            </div>
         </div >
     );
 };

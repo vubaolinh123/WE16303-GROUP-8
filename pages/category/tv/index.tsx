@@ -1,5 +1,5 @@
 import { FaInfoCircle, FaPlayCircle } from "react-icons/fa";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, GetStaticProps } from "next";
 import { Category, Item, PopularMovie } from "../../../models/type";
 import Meta from "../../../components/Shared/Meta";
 import type { NextPage } from "next";
@@ -357,8 +357,10 @@ const TVShowCategory: NextPage<CategoryProps> = ({ data, dataCategory, q, respon
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
+    context.res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate")
+    const query = context.query
     const q = query.genres as string;
     const page = query.page ? Number(query.page) : 1;
     const year: any = query.year ? Number(query.year) : 0
