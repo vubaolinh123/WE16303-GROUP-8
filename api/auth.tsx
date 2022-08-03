@@ -1,6 +1,6 @@
 import { IUser } from "../models/type";
+import {instance} from "./config";
 import {API_NodeJS} from "./config";
-
 export const signup = (user: IUser) => {
     return API_NodeJS.post(`signup`, user)   
 }

@@ -21,6 +21,7 @@
     "eslint": "8.18.0",
     "eslint-config-next": "12.1.6",
     "json2mq": "^0.2.0",
+    "moment": "^2.29.4",
     "next": "^12.1.6",
     "next-auth": "^4.10.2",
     "nprogress": "^0.2.0",
