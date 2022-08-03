@@ -4,7 +4,7 @@ import Meta from '../../components/Shared/Meta'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import "./index.css"
+// import "./index.css"
 
 type TypeInputs = {
     email: string,
