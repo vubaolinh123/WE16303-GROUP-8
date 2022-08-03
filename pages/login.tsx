@@ -32,6 +32,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
 
@@ -60,9 +61,12 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
         }
       }
     })();
+    reset()
   }, [status]);
 
+
   console.log("email", typeof watch("email"));
+  console.log("email", watch("email"));
 
   return (
     <>
@@ -84,6 +88,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
                     <input
                       className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.email && "input-invalid" }`}
                       type="text"
+                      defaultChecked={true}
                       {...register("email", {
                         required: {
                           value: true,
