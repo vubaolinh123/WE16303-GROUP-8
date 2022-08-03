@@ -42,8 +42,8 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
         Router.push("/account");
         console.log(1)
       }, 1000);   
-    } catch (error) {
-      console.log(2);
+    } catch (error: any) {
+      toast.error("Sai tên tài khoản hoặc mật khẩu");
     }
   };
 
@@ -55,7 +55,9 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
           setTimeout(() => {
             Router.push("/account");
           }, 1000);
-        } catch (error) {}
+        } catch (error) {
+          toast.error("Đăng nhập thất bại");
+        }
       }
     })();
   }, [status]);

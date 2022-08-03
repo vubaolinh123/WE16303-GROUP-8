@@ -8,3 +8,7 @@ export const API_NodeJS = axios.create({
     baseURL: "https://phim-poly.herokuapp.com/api/",
 });
 
+export const API_NodeLocal = axios.create({
+    baseURL: "http://localhost:3001/api/",
+});
+
