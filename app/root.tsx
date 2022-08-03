@@ -6,7 +6,7 @@ import authReducer from "../features/auth/auth.slice";
 
 const rootReducer = combineReducers({
     product: productReducer,
-    user: userSlice
+    user: userSlice,
     auth: authReducer
 });
 

@@ -9,25 +9,25 @@ import { toast } from 'react-toastify'
 import Meta from '../../components/Shared/Meta'
 import { signout } from "../../features/auth/auth.slice";
 import { IUser } from '../../models/type'
+import {store} from "../../app/store"
 
 
 
 const account: NextPage = () => {
   const { data: session, status } = useSession()
+  const isLoggedIn = store.getState().auth.isLoggedIn;
 
   const dispatch = useDispatch()
   const [user, setUser] = useState<IUser>()
-  const [btnchangepass, setBtnchangepass] = useState<boolean>(true)
   const router = useRouter()
-
   useEffect(() => {
-      if(localStorage.getItem('persist:root')){
-        const {auth} = JSON.parse(localStorage.getItem('persist:root') as string);
-        setUser(JSON.parse(auth)?.value?.user)
-      } else{
-        router.push('/login')
-      }
-    }, [])
+    if(isLoggedIn){
+      const {auth} = JSON.parse(localStorage.getItem('persist:root') as string);
+      setUser(JSON.parse(auth)?.value?.user)
+    } else {
+      router.push('/login')
+    }
+  }, [isLoggedIn])
     
   const onHandleChangePass = () => {
     if(status === "authenticated") {
