@@ -29,6 +29,10 @@ body {
   @apply !bg-black;
 }
 
+.bg-defaul {
+  background-color: #2a2a2a !important;
+}
+
 .bg-dark-darken{
     --tw-bg-opacity: 1 !important;
     background-color: rgb(26 26 26 / var(--tw-bg-opacity)) !important;
@@ -127,9 +131,9 @@ body {
 
 .errors{
   color: red;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 300;
-  margin-top: 7px;
+  padding-top: 10px;
 }
 
 .form-login-line{  
@@ -158,4 +162,40 @@ body {
 
 .account-content .account-header{
   border-bottom: 1px solid #999;
+}
+
+input:focus{
+  outline: 0 none!important;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  --tw-ring-color: #333 !important;
+}
+
+.login-form .input-group input{
+  box-sizing: border-box;
+  height: 50px;
+}
+
+.login-form .input-group label{
+  position: absolute;
+  left: 0;
+  padding: 12px;
+  pointer-events: none;
+  transition: 0.5s;
+  font-size: 16px;
+  color: #8c8c8c;
+}
+/* .login-form .input-group input:valid ~ label, */
+.login-form .input-group input:valid ~ label,
+.login-form .input-group input:focus ~ label
+{
+  font-size: 11px;
+  transform: translateY(-10px);
+}
+
+.input-invalid,
+.input-invalid:focus{
+  border-bottom: 2px solid red;
 }
