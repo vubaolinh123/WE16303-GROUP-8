@@ -135,7 +135,7 @@ const ItemView: NextPage<ItemViewProps> = ({
                     )}
                     {casts && (
                         <>
-                            <h1 className="text-2xl my-8">Diễn Viên</h1>
+                            <h1 className="text-2xl my-8 text-gray-100">Diễn Viên</h1>
 
                             <div
                                 className="grid gap-3"
@@ -161,7 +161,7 @@ const ItemView: NextPage<ItemViewProps> = ({
                 </div>
                 {similar && (
                     <>
-                        <h1 className="my-10 text-2xl px-6 md:px-20">Phim Tương Tự</h1>
+                        <h1 className="my-10 text-2xl px-6 md:px-20 text-gray-100">Phim Tương Tự</h1>
                         <MovieSlider data={similar} loop={false} />
                     </>
                 )}
