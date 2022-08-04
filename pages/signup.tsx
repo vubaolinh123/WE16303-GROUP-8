@@ -90,11 +90,10 @@ const SignUpPage = ({ providers }: TypeInputs) => {
               <div className="login-form-main d-flex flex-row m-0">
                 <h2>Đăng ký</h2>
                 <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="mb-4">
+                  <div className="mb-4 relative input-group">
                     <input
-                      className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"
+                      className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.name && "input-invalid" }`}
                       type="text"
-                      placeholder="Họ tên"
                       {...register("name", {
                         required: {
                           value: true,
@@ -110,16 +109,16 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                         },
                       })}
                     />
+                    <label htmlFor="">Họ tên</label>
                     {errors.name && (
                       <span className="errors">{errors.name.message}</span>
                     )}
                   </div>
 
-                  <div className="mb-4">
+                  <div className="mb-4 relative input-group">
                     <input
-                      className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"
+                      className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.email && "input-invalid" }`}
                       type="text"
-                      placeholder="Email"
                       {...register("email", {
                         required: {
                           value: true,
@@ -131,16 +130,16 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                         },
                       })}
                     />
+                    <label htmlFor="">Email</label>
                     {errors.email && (
                       <span className="errors">{errors.email.message}</span>
                     )}
                   </div>
 
-                  <div className="mb-4 relative">
+                  <div className="mb-4 relative input-group">
                     <input
-                      className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"
+                      className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.password && "input-invalid" }`}
                       type={passwordEye === false ? "password" : "text"}
-                      placeholder="Mật khẩu"
                       {...register("password", {
                         required: {
                           value: true,
@@ -156,6 +155,7 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                         },
                       })}
                     />
+                    <label htmlFor="">Mật khẩu</label>
                     {errors.password && (
                       <span className="errors">{errors.password.message}</span>
                     )}
@@ -168,17 +168,17 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                     </div>
                   </div>
 
-                  <div className="mb-4 relative">
+                  <div className="mb-4 relative input-group">
                     <input
                       type={confirmPasswordEye === false ? "password" : "text"}
-                      placeholder="Nhập lại mật khẩu"
-                      className={`appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight`}
+                      className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.confirmPassword && "input-invalid" }`}
                       {...register("confirmPassword", {
                         required: "Bắt buộc phải nhập lại mật khẩu.",
                         validate: (value) =>
                           value === password || "Mật khẩu không chính xác.",
                       })}
                     />
+                    <label htmlFor="">Nhập lại mật khẩu</label>
                     {errors.confirmPassword && (
                       <span className="errors">
                         {errors.confirmPassword.message}
@@ -196,7 +196,7 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                   <div className="mb-6">
                     <input
                       {...register("birthday", { required: true })}
-                      className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"
+                      className={`appearance-none text-sm shadow-none border-none rounded w-full py-4 px-3 text-white leading-tight ${errors.birthday && "input-invalid" }`}
                       type="date"
                     />
                     {errors.birthday && (

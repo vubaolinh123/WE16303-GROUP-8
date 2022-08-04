@@ -31,6 +31,8 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
   const {
     register,
     handleSubmit,
+    watch,
+    reset,
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
 
@@ -59,7 +61,12 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
         }
       }
     })();
+    reset()
   }, [status]);
+
+
+  console.log("email", typeof watch("email"));
+  console.log("email", watch("email"));
 
   return (
     <>
@@ -77,11 +84,11 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
               <div className="login-form-main d-flex flex-row m-0">
                 <h2>Đăng nhập</h2>
                 <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="mb-4">
+                  <div className="mb-4 relative input-group">
                     <input
-                      className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"
+                      className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.email && "input-invalid" }`}
                       type="text"
-                      placeholder="Email"
+                      defaultChecked={true}
                       {...register("email", {
                         required: {
                           value: true,
@@ -93,16 +100,16 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
                         },
                       })}
                     />
+                    <label htmlFor="">Email</label>
                     {errors.email && (
                       <span className="errors">{errors.email.message}</span>
                     )}
                   </div>
 
-                  <div className="mb-4 relative">
+                  <div className="mb-4 relative input-group">
                     <input
-                      className="appearance-none border-none rounded w-full py-3 px-3 text-white leading-tight"
+                      className={`appearance-none text-sm border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.password && "input-invalid" }`}
                       type={passwordEye === false ? "password" : "text"}
-                      placeholder="Mật khẩu"
                       {...register("password", {
                         required: {
                           value: true,
@@ -118,6 +125,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
                         },
                       })}
                     />
+                    <label htmlFor="">Mật khẩu</label>
                     {errors.password && (
                       <span className="errors">{errors.password.message}</span>
                     )}
