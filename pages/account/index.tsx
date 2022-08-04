@@ -14,12 +14,12 @@ import {store} from "../../app/store"
 
 
 const account: NextPage = () => {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
   const isLoggedIn = store.getState().auth.isLoggedIn;
-
-  const dispatch = useDispatch()
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [user, setUser] = useState<IUser>()
-  const router = useRouter()
+  
   useEffect(() => {
     if(isLoggedIn){
       const {auth} = JSON.parse(localStorage.getItem('persist:root') as string);
