@@ -97,12 +97,15 @@ const ItemView: NextPage<ItemViewProps> = ({
                         {data.genres && (
                             <div className="flex gap-2 flex-wrap">
                                 {data.genres.map((item) => (
-                                    <span
+                                    <Link href={``}
                                         key={item.id}
-                                        className="bg-dark-lighten border border-white px-3 py-1 rounded-full whitespace-nowrap"
+
                                     >
-                                        {item.name}
-                                    </span>
+                                        <a className="bg-dark-lighten border border-white px-3 py-1 rounded-full whitespace-nowrap text-white">
+                                            {item.name}
+
+                                        </a>
+                                    </Link>
                                 ))}
                             </div>
                         )}
