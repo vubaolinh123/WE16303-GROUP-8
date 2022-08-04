@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @import '~antd/dist/antd.css'; */
 
 
 *::-webkit-scrollbar {
@@ -153,4 +154,8 @@ body {
 
 .form-login-line::after{
   margin-right: 0;
+}
+
+.account-content .account-header{
+  border-bottom: 1px solid #999;
 }

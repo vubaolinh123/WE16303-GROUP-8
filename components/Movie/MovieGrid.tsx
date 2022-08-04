@@ -16,6 +16,7 @@ const MovieGrid: NextPage<MovieGridProps> = ({
     maximumPage,
     resolveLink,
 }) => {
+    
     return (
         <>
             <div
