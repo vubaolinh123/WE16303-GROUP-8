@@ -8,6 +8,7 @@ import { IUser } from "../../models/type";
 import { useDispatch, useSelector } from "react-redux";
 import { changepass, changeuserprofile } from "../../features/auth/auth.slice";
 import Link from "next/link";
+import { store } from "../../app/store";
 
 
 type TypeInputs = {
@@ -27,8 +28,10 @@ const ChangeUserProfilePage = () => {
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
 
-  const user = useSelector((state: any) => state.auth.value.user)
-  reset(user);
+  useEffect(() => {
+    const user = store.getState().auth.value.user
+    reset(user);
+  }, [])
 
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const yearOfBirh = new Date(data.birthday).getFullYear();

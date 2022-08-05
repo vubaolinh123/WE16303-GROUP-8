@@ -18,20 +18,15 @@ const account: NextPage = () => {
   const isLoggedIn = store.getState().auth.isLoggedIn;
   const router = useRouter();
   const dispatch = useDispatch();
-  const [user, setUser] = useState<IUser>()
+  // const [user, setUser] = useState<IUser>()
   const valueUse = useSelector((state: any) => state.auth.value.user)
 
-  // useEffect(() => {
-  //   const valueUse = useSelector((state: any) => state.auth.value.user)
-  //   setUser(valueUse)
-  // }, [isLoggedIn])
-
   useEffect(() => {
-    if (isLoggedIn) {
-      const { auth } = JSON.parse(localStorage.getItem('persist:root') as string);
-      setUser(JSON.parse(auth)?.value?.user)
-    } else {
+    if (!isLoggedIn) {
       router.push('/login')
+    } else {
+      // const { auth } = JSON.parse(localStorage.getItem('persist:root') as string);
+      // setUser(JSON.parse(auth)?.value?.user)      
     }
   }, [isLoggedIn])
     
