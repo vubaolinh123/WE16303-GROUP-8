@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Router, useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { IUser } from "../../models/type";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changepass, changeuserprofile } from "../../features/auth/auth.slice";
 import Link from "next/link";
 
@@ -27,10 +27,8 @@ const ChangeUserProfilePage = () => {
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
 
-  useEffect(() => {
-    const { auth } = JSON.parse(localStorage.getItem("persist:root") as string);
-    reset(JSON.parse(auth)?.value?.user);
-  }, []);
+  const user = useSelector((state: any) => state.auth.value.user)
+  reset(user);
 
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const yearOfBirh = new Date(data.birthday).getFullYear();

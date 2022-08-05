@@ -14,12 +14,17 @@ import { store } from "../../app/store"
 
 
 const account: NextPage = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isLoggedIn = store.getState().auth.isLoggedIn;
   const router = useRouter();
   const dispatch = useDispatch();
   const [user, setUser] = useState<IUser>()
   const valueUse = useSelector((state: any) => state.auth.value.user)
+
+  // useEffect(() => {
+  //   const valueUse = useSelector((state: any) => state.auth.value.user)
+  //   setUser(valueUse)
+  // }, [isLoggedIn])
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -29,14 +34,13 @@ const account: NextPage = () => {
       router.push('/login')
     }
   }, [isLoggedIn])
-
-  const onHandleChangePass = () => {
-    if (status === "authenticated") {
+    
+  const onHandleChangePass = (e: any) => {
+    if(status === "authenticated") {
       toast.info("Đăng nhập bằng google (facebook) không thể đổi mật khẩu")
     } else {
       router.push("/account/password")
     }
-
   }
 
   return (
@@ -59,11 +63,11 @@ const account: NextPage = () => {
           <div className="md:grid md:grid-cols-3 mt-4 md:gap-6">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
-                <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3' />Thông tin cá nhân</h3>
-                <button
-                  className='text-white mt-4 flex items-center hover:fill-red-500'
-                  onClick={() => { dispatch(signout()) }}
-                > <FaSignOutAlt className='mr-3' /> Đăng xuất </button>
+                <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
+                <button type='button'
+                  className='text-white mt-4 flex items-center hover:fill-red-500' 
+                  onClick={() => {dispatch(signout()); router.push('/login')}}
+                > <FaSignOutAlt className='mr-3'/> Đăng xuất </button>
               </div>
             </div>
             <div className="mt-5 md:mt-0 md:col-span-2">

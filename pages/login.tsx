@@ -41,7 +41,6 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
       await dispatch((login(user) as any)).unwrap()
       setTimeout(() => {
         Router.push("/account");
-        console.log(1)
       }, 1000);   
     } catch (error: any) {
       toast.error("Sai tên tài khoản hoặc mật khẩu");
@@ -63,10 +62,6 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
     })();
     reset()
   }, [status]);
-
-
-  console.log("email", typeof watch("email"));
-  console.log("email", watch("email"));
 
   return (
     <>
