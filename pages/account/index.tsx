@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Meta from '../../components/Shared/Meta'
 import { signout } from "../../features/auth/auth.slice";
@@ -14,28 +14,33 @@ import {store} from "../../app/store"
 
 
 const account: NextPage = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isLoggedIn = store.getState().auth.isLoggedIn;
   const router = useRouter();
   const dispatch = useDispatch();
   const [user, setUser] = useState<IUser>()
-  
+  const userValue = store.getState().auth.value.user
+
+  // useEffect(() => {
+  //   const valueUse = useSelector((state: any) => state.auth.value.user)
+  //   setUser(valueUse)
+  // }, [isLoggedIn])
+
   useEffect(() => {
-    if(isLoggedIn){
-      const {auth} = JSON.parse(localStorage.getItem('persist:root') as string);
+    if (isLoggedIn) {
+      const { auth } = JSON.parse(localStorage.getItem('persist:root') as string);
       setUser(JSON.parse(auth)?.value?.user)
     } else {
       router.push('/login')
     }
   }, [isLoggedIn])
     
-  const onHandleChangePass = () => {
+  const onHandleChangePass = (e: any) => {
     if(status === "authenticated") {
       toast.info("Đăng nhập bằng google (facebook) không thể đổi mật khẩu")
     } else{
       router.push("/account/password")
     }
-
   }
 
   return (
@@ -59,9 +64,9 @@ const account: NextPage = () => {
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
                 <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
-                <button 
+                <button type='button'
                   className='text-white mt-4 flex items-center hover:fill-red-500' 
-                  onClick={() => {dispatch(signout())}}
+                  onClick={() => {dispatch(signout()); router.push('/login')}}
                 > <FaSignOutAlt className='mr-3'/> Đăng xuất </button>
               </div>
             </div>
