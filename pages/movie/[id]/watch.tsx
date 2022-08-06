@@ -62,7 +62,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                         alt=""
                                     />
                                     <div className="py-3 group-hover:text-orange transition duration-300">
-                                        <h1>{item.title}</h1>
+                                        <h1 className="text-gray-100">{item.title}</h1>
                                         <StarRating
                                             stars={Math.round(item.vote_average / 2)}
                                             maximum={5}
