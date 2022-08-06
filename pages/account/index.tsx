@@ -20,13 +20,11 @@ const account: NextPage = () => {
   const dispatch = useDispatch();
   // const [user, setUser] = useState<IUser>()
   const valueUse = useSelector((state: any) => state.auth.value.user)
+  
 
   useEffect(() => {
     if (!isLoggedIn) {
       router.push('/login')
-    } else {
-      // const { auth } = JSON.parse(localStorage.getItem('persist:root') as string);
-      // setUser(JSON.parse(auth)?.value?.user)      
     }
   }, [isLoggedIn])
     

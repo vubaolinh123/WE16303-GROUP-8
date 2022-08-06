@@ -51,7 +51,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
     (async () => {
       if (status === "authenticated") {
         try {
-          await dispatch(loginwithnextauth(session.user) as any);
+          await dispatch(loginwithnextauth(session.user) as any).unwrap();
           setTimeout(() => {
             Router.push("/account");
           }, 1000);

@@ -57,7 +57,6 @@ const ChangePasswordPage = () => {
 
   const newpassword = watch("newpassword");
   const currentpassword = watch("password")
-  console.log(currentpassword)
   return (
     <>
       <Meta

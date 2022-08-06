@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "eslint-config-eslint": "^7.0.0",
+    "eslint-config-google": "^0.14.0",
     "@zeit/next-css": "^0.1.5",
     "@reduxjs/toolkit": "^1.8.3",
     "@tailwindcss/forms": "^0.5.2",

@@ -1,5 +1,5 @@
 import { Cast, Detail, Item, VideoTrailer } from "../../models/type";
-import { FaPlayCircle, FaYoutube } from "react-icons/fa";
+import { FaBookmark, FaPlayCircle, FaYoutube } from "react-icons/fa";
 import { Fragment, useState } from "react";
 import { imageOriginal, imageResize } from "../../api/constants";
 
@@ -11,6 +11,8 @@ import Meta from "../Shared/Meta";
 import MovieSlider from "../Movie/MovieSlider";
 import type { NextPage } from "next";
 import StarRating from "../Display/StarRating";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavoriteMovie } from "../../api/favoritemovie";
 
 interface ItemViewProps {
     media_type: "movie" | "tv";
@@ -27,8 +29,19 @@ const ItemView: NextPage<ItemViewProps> = ({
     similar,
     videos,
 }) => {
+    const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
-
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+    const userId = useSelector((state: any) => state.auth.value.user._id);
+    
+    const handleAddFavorite = async (movieId: string) => {
+        try {
+            await dispatch(addFavoriteMovie({movieId, userId}) as any).unwrap()
+            
+        } catch (error) {
+            
+        }
+    }
     return (
         <>
             <Meta
@@ -82,6 +95,12 @@ const ItemView: NextPage<ItemViewProps> = ({
                                 <Button onClick={() => setTrailerModalOpened(true)}>
                                     <FaYoutube />
                                     <span>Xem Trailer</span>
+                                </Button>
+                            )}
+                            {isLoggedIn &&(
+                                <Button onClick={(e) => {e.preventDefault(); handleAddFavorite(data.id.toString())}}>
+                                    <FaBookmark />
+                                    Lưu
                                 </Button>
                             )}
                         </div>

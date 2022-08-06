@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { store } from '../../app/store';
 import { Dropdown, Menu, Space, Avatar } from "antd";
 import { DownOutlined, UpOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
+import { useSelector } from "react-redux";
 
 const Navbar: NextPage = () => {
 
@@ -19,10 +20,7 @@ const Navbar: NextPage = () => {
     ]
     const category: any[] = []
 
-    console.log("dataCategory", dataCategory);
-
     Object.values(dataCategory).map((item: any, index) => {
-        // console.log("item", item);
 
         const test = { name: name[index].name, value: {} }
 
@@ -36,7 +34,6 @@ const Navbar: NextPage = () => {
         test.value = flag
         category.push(test)
     })
-    console.log("category", category);
 
     const menu2: any = category.map((item: any) => {
         return <Menu
@@ -47,8 +44,6 @@ const Navbar: NextPage = () => {
             }
         />
     })
-    console.log("menu2", menu2);
-
 
     useEffect(() => {
         const getCategory = async () => {
@@ -93,6 +88,13 @@ const Navbar: NextPage = () => {
                         Phim Chiếu Rạp
                     </span>
                 </Link>
+                {isLoggedIn &&
+                    <Link href={`/account/my-list`}>
+                        <span className="h-full w-auto px-4 pt-[13px] cursor-pointer text-white hover:text-red-600 ">
+                            Danh sách của tôi
+                        </span>
+                    </Link>
+                }
             </div>
             <Link href="/search">
                 <a>
