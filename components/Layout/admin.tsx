@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import 'antd/dist/antd.css';
 import Head from 'next/head';
-import PrivateRoute from '../PrivateRouter';
+import PrivateRoute from '../PrivateRouter/index';
 
 const LayoutAdmin = ({ children }: LayoutProps) => {
     const [collapsed, setCollapsed] = useState(false);
