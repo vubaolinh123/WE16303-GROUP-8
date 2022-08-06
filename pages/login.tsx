@@ -50,18 +50,20 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      if (status === "authenticated") {
-        try {
-          await dispatch(loginwithnextauth(session.user) as any);
-          setTimeout(() => {
-            Router.push("/account");
-          }, 1000);
-        } catch (error) {
-          toast.error("Đăng nhập thất bại");
+    if (!isLoggedIn) {
+      (async () => {
+        if (status === "authenticated") {
+          try {
+            await dispatch(loginwithnextauth(session.user) as any);
+            setTimeout(() => {
+              Router.push("/account");
+            }, 1000);
+          } catch (error) {
+            toast.error("Đăng nhập thất bại");
+          }
         }
-      }
-    })();
+      })();      
+    }
   }, [status]);
 
   return (

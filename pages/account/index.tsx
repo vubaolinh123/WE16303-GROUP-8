@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
+import { FaCoins, FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import LoadingPage from '../../components/Display/LoadingPage'
@@ -27,7 +27,7 @@ const account = () => {
   }
 
   if (!isLoggedIn) {
-    router.push('/login')
+    router.push('/')
     return <LoadingPage/>
   }
   return (  
@@ -51,9 +51,16 @@ const account = () => {
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
                 <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
+                {valueUse.role === 1 &&
+                  <Link href={'/admin'}>
+                    <button type='button'
+                    className='text-white mt-4 flex items-center hover:fill-red-500'
+                    > <FaCoins className='mr-3'/> Chuyển đến Admin </button>
+                  </Link>
+                }
                 <button type='button'
                   className='text-white mt-4 flex items-center hover:fill-red-500' 
-                  onClick={() => {dispatch(signout()); router.push('/')}}
+                  onClick={() => {dispatch(signout())}}
                 > <FaSignOutAlt className='mr-3'/> Đăng xuất </button>
               </div>
             </div>
