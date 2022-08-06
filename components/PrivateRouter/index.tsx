@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-// import LoadingPage from "../Display/LoadingPage";
+import LoadingPage from "../Display/LoadingPage";
 
 type PrivateRouteProps = {
   children: any;
@@ -13,10 +13,10 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   if (!isLoggedIn) {
     router.push('/login');
-    // return <LoadingPage/>
+    return <LoadingPage/>
   } else if (currentUser.role !== 1) {
     router.push('/');
-    // return <LoadingPage/>
+    return <LoadingPage/>
   }
   return children;
 };
