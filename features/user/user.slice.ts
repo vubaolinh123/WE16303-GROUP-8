@@ -64,7 +64,7 @@ const userSlide = createSlice({
         breadcrumb: ""
     },
     reducers: {
-        changeBreadcrumb(state, action) {
+        changeBreadcrumb(state: any, action: any) {
             state.breadcrumb = action.payload
         }
     },

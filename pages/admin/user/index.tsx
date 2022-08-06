@@ -13,7 +13,9 @@ import { changeBreadcrumb, editRoleUser, editUser, getListUser } from '../../../
 import { LayoutProps } from '../../../models/layout';
 import LayoutAdmin from '../../../components/Layout/admin';
 import AdminPageHeader from '../../../components/Display/AdminPageHeader';
+
 import style from "../../../styles/admin.module.scss"
+import Meta from '../../../components/Shared/Meta';
 
 
 interface DataType {
@@ -42,6 +44,14 @@ const AdminUser = (props: LayoutProps) => {
     const dispatch = useAppDispatch();
     console.log('users', users);
     console.log('breadcrumb', breadcrumb);
+    const dateStr1 = "2022-08-03T07:07:16.117+00:00";
+    const date1 = new Date(dateStr1);
+
+    const timestamp = date1.getTime();
+    console.log("timestamp", timestamp);
+    console.log("time Unix", moment(timestamp));
+    const timeTest = moment(dateStr1).toObject()
+    console.log("timeTest", timeTest);
 
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -61,10 +71,12 @@ const AdminUser = (props: LayoutProps) => {
             age: item.age,
             role: item.role,
             status: item.status,
-            createdAt: moment(item.createdAt).format("MMM Do YYYY, h:mm:ss a"),
-            updatedAt: moment(item.updatedAt).format("MMM Do YYYY, h:mm:ss a")
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
         }
     })
+    console.log("dataTable",dataTable);
+    
 
     //------------------TABLE-DATA-------------------
 
@@ -334,8 +346,8 @@ const AdminUser = (props: LayoutProps) => {
                 showTitle: false,
             },
             render: item => (
-                <Tooltip placement="topLeft" title={item}>
-                    {item}
+                <Tooltip placement="topLeft" title={moment(item).format("MMM Do YYYY, h:mm:ss a")}>
+                    {moment(item).format("MMM Do YYYY, h:mm:ss a")}
                 </Tooltip>
             ),
         },
@@ -347,8 +359,8 @@ const AdminUser = (props: LayoutProps) => {
                 showTitle: false,
             },
             render: item => (
-                <Tooltip placement="topLeft" title={item}>
-                    {item}
+                <Tooltip placement="topLeft" title={moment(item).format("MMM Do YYYY, h:mm:ss a")}>
+                    {moment(item).format("MMM Do YYYY, h:mm:ss a")}
                 </Tooltip>
             ),
 
@@ -381,6 +393,13 @@ const AdminUser = (props: LayoutProps) => {
 
     return (
         <div className={style.admin_text}>
+            <Meta
+                title={"AdminUser - Phim FPOLY"}
+                description={
+                    `AdminUser`
+                }
+                image="/preview.png"
+            />
             <AdminPageHeader breadcrumb={"Quản Trị User"} />
             {selectedRowKeys.length > 1
                 ? <div className="">
@@ -421,7 +440,7 @@ const AdminUser = (props: LayoutProps) => {
                 size="small"
                 // className={`mt-4`}
                 className="text"
-                rowClassName={"break-words text"}
+                rowClassName={style.text}
                 bordered
                 footer={(record) => `Hiển thị ${record.length} trên tổng ${users.length}`}
                 rowSelection={rowSelection}
