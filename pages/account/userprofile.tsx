@@ -25,10 +25,13 @@ const ChangeUserProfilePage = () => {
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
 
+  const user = useSelector((state: any) => state.auth.value.user)
+
   useEffect(() => {
-    const user = store.getState().auth.value.user
-    reset(user);
-  }, [])
+    if (user) {
+      reset(user);
+    }
+  }, [user])
 
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const yearOfBirh = new Date(data.birthday).getFullYear();
@@ -42,7 +45,7 @@ const ChangeUserProfilePage = () => {
       toast.success("Thay đổi thông tin thất bại")
     }
   };
-
+  
   return (
     <>
       <Meta
@@ -58,10 +61,10 @@ const ChangeUserProfilePage = () => {
             className="login-form bg-defaul"
             onSubmit={handleSubmit(onSubmit)}
           >
-            
+
             <div className="mb-4 relative w-[400px]">
               <label className="block text-gray-300 text-sm font-bold mb-2">
-                  Email
+                Email
               </label>
               <input
                 className="appearance-none rounded w-full py-3 px-3 text-white leading-tight"
@@ -76,7 +79,7 @@ const ChangeUserProfilePage = () => {
 
             <div className="mb-4 relative w-[400px]">
               <label className="block text-gray-300 text-sm font-bold mb-2">
-                  Họ tên
+                Họ tên
               </label>
               <input
                 className="appearance-none rounded w-full py-3 px-3 text-white leading-tight"
@@ -90,7 +93,7 @@ const ChangeUserProfilePage = () => {
 
             <div className="mb-4 relative w-[400px]">
               <label className="block text-gray-300 text-sm font-bold mb-2">
-                  Ngày sinh
+                Ngày sinh
               </label>
               <input
                 className="appearance-none rounded w-full py-3 px-3 text-white leading-tight"

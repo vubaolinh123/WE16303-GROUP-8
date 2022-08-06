@@ -12,7 +12,8 @@ const Navbar: NextPage = () => {
 
 
     const [dataCategory, SetDataCategory] = useState<{}[]>([])
-    const isLoggedIn = store.getState().auth.isLoggedIn
+    // const isLoggedIn = store.getState().auth.isLoggedIn
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn)
 
     const name = [
         { name: "Phim", value: "movie" },
@@ -109,7 +110,7 @@ const Navbar: NextPage = () => {
                 }
                 {isLoggedIn === false &&
                     <Link href={'/login'}>
-                        <button className="hover:text-red-700 w-[70px] duration-1000">Đăng nhập</button>
+                        <button className="hover:text-red-700 w-[70px]">Đăng nhập</button>
                     </Link>
                 }
             </div>
