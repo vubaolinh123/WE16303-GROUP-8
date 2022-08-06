@@ -3,45 +3,21 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { getCategoryData } from "../../api/category";
 import { useEffect, useState } from "react";
+import { store } from '../../app/store';
 import { Dropdown, Menu, Space, Avatar } from "antd";
 import { DownOutlined, UpOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 
 const Navbar: NextPage = () => {
 
-    
+
     const [dataCategory, SetDataCategory] = useState<{}[]>([])
+    const isLoggedIn = store.getState().auth.isLoggedIn
+
     const name = [
         { name: "Phim", value: "movie" },
         { name: "TV Show", value: "tv" }
     ]
     const category: any[] = []
-    const menu = (
-        <Menu
-            items={[
-                {
-                    key: '1',
-                    icon: <BellOutlined />,
-                    label: (
-                        <span>
-                            Profile
-                        </span>
-                    ),
-                },
-                {
-                    key: '2',
-                    label: (
-                        <span>
-                            Log Out
-                        </span>
-                    ),
-                    icon: <BellOutlined />,
-                    danger: true,
-
-
-                }
-            ]}
-        />
-    );
 
     console.log("dataCategory", dataCategory);
 
@@ -58,7 +34,6 @@ const Navbar: NextPage = () => {
             }
         })
         test.value = flag
-        console.log("test", test);
         category.push(test)
     })
     console.log("category", category);
@@ -67,7 +42,6 @@ const Navbar: NextPage = () => {
         return <Menu
             items={
                 item.value.map((item2: any) => {
-                    // console.log("item 2", item2);
                     return item2
                 })
             }
@@ -126,10 +100,16 @@ const Navbar: NextPage = () => {
                 </a>
             </Link>
             <div className="px-4">
-
-                <Dropdown overlay={menu} className="cursor-pointer" trigger={['hover']}>
-                    <Avatar size="large" icon={<UserOutlined />} />
-                </Dropdown>
+                {isLoggedIn &&
+                    <Link href={'/account'}>
+                        <Avatar size="large" className="cursor-pointer" icon={<UserOutlined />} />
+                    </Link>
+                }
+                {isLoggedIn === false &&
+                    <Link href={'/login'}>
+                        <button className="hover:text-red-700 w-[70px] duration-1000">Đăng nhập</button>
+                    </Link>
+                }
             </div>
         </div >
     );

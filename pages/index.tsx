@@ -92,7 +92,6 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     const data = await getHomeData()
 
-
     const trending = data["Top Phim Thịnh Hành"];
     // main : data của bộ phim Hot nhất hiện tại để tự động Render lại Banner
     const main = trending[new Date().getDate() % trending.length];

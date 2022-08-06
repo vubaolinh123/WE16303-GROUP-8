@@ -35,7 +35,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                             allowFullScreen
                         ></iframe>
                     </div>
-                    <div className="my-10 flex flex-col items-start gap-4">
+                    <div className="my-10 flex flex-col items-start gap-4 ">
                         <Link href={`/movie/${data.id}`}>
                             <a className="text-2xl hover:text-orange transition">
                                 {data.title}
@@ -51,7 +51,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                     </div>
                 </div>
                 <div className="flex-shrink-0 w-full lg:w-80 flex flex-col gap-4 overflow-y-auto lg:max-h-screen">
-                    <h1 className="text-xl">Phim Tương Tự</h1>
+                    <h1 className="text-xl text-gray-100">Phim Tương Tự</h1>
                     {similar.map((item) => (
                         <Link key={item.id} href={`/movie/${item.id}`}>
                             <a>
@@ -62,7 +62,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                         alt=""
                                     />
                                     <div className="py-3 group-hover:text-orange transition duration-300">
-                                        <h1>{item.title}</h1>
+                                        <h1 className="text-gray-100">{item.title}</h1>
                                         <StarRating
                                             stars={Math.round(item.vote_average / 2)}
                                             maximum={5}
