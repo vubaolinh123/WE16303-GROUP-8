@@ -129,7 +129,14 @@ const LayoutAdmin = ({ children }: LayoutProps) => {
 
                         <SubMenu key="sub2" icon={<FolderFilled />} title="User">
                             <Menu.Item key="/admin/user">
-                                <Link href={'/admin/user'}>User Category</Link>
+                                <Link href={'/admin/user'}>User List</Link>
+                            </Menu.Item>
+                            
+                        </SubMenu>
+
+                        <SubMenu key="sub3" icon={<FolderFilled />} title="Comment">
+                            <Menu.Item key="/admin/comment">
+                                <Link href={'/admin/comment'}>Movie Comment</Link>
                             </Menu.Item>
                             
                         </SubMenu>
