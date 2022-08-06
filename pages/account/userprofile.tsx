@@ -27,11 +27,11 @@ const ChangeUserProfilePage = () => {
     reset,
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
+  const user = useSelector((state: any) => state.auth.value.user)
 
   useEffect(() => {
-    const user = store.getState().auth.value.user
     reset(user);
-  }, [])
+  }, [user])
 
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const yearOfBirh = new Date(data.birthday).getFullYear();
