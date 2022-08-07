@@ -11,6 +11,4 @@ const LoadingPage: NextPage = () => {
     );
 }
 
-LoadingPage.Layout = LayoutNone
-
 export default LoadingPage;
