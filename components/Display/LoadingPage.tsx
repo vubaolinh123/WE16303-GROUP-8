@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import LayoutNone from "../Layout/none";
 
 const LoadingPage: NextPage = () => {
     return (
@@ -10,7 +9,5 @@ const LoadingPage: NextPage = () => {
         </>
     );
 }
-
-LoadingPage.Layout = LayoutNone
 
 export default LoadingPage;

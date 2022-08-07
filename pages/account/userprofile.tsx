@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Meta from "../../components/Shared/Meta";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeuserprofile } from "../../features/auth/auth.slice";
 import Link from "next/link";
 import { store } from "../../app/store";
