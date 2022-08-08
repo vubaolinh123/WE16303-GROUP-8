@@ -19,7 +19,7 @@ const account = () => {
   const valueUse = useSelector((state: any) => state.auth.value.user)
     
   const onHandleChangePass = () => {
-    if(status === "authenticated") {
+    if (status === "authenticated") {
       toast.info("Đăng nhập bằng google (facebook) không thể đổi mật khẩu")
     } else {
       router.push("/account/password")

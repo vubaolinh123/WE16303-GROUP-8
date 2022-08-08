@@ -5,7 +5,7 @@ import { API_NodeJS,API_NodeLocal } from "./config"
 
 export const listComments = ()=>{
     const url = `comments`
-    return API_NodeLocal.get(url)
+    return API_NodeLocal.get<Comment[]>(url)
 }
 
 export const detailComments = (id: string) => {
