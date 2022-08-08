@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Table, Breadcrumb, Button, Space, Popconfirm, message, Input, Badge, Image, Tag } from 'antd';
+import { Table, Breadcrumb, Button, Space, Popconfirm, message, Input, Badge, Image, Tag, Tooltip } from 'antd';
 import type { Key, TableRowSelection } from 'antd/es/table/interface';
 import { SearchOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
@@ -11,9 +11,16 @@ import { useAppDispatch, useAppSelector } from '../../../app/hook';
 import AdminPageHeader from '../../../components/Display/AdminPageHeader';
 import { Detail } from '../../../models/type';
 import { instance } from '../../../api/config';
-import { detailMovie, getMovieDetails } from '../../../api/movies';
+import { detailMovie, detailTVShow, getMovieDetails } from '../../../api/movies';
 import Link from 'next/link';
-import { getListComments } from '../../../features/comment/comment.slice';
+import { getListComments, removeComment } from '../../../features/comment/comment.slice';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { listComments } from '../../../api/comment';
+import { Comment } from '../../../models/comment';
+import { imageResize } from '../../../api/constants';
+import style from "../../../styles/admin.module.scss"
+import Meta from '../../../components/Shared/Meta';
+import { getListUser } from '../../../features/user/user.slice';
 
 
 
@@ -29,9 +36,9 @@ interface DataType {
 
 interface ExpandedDataType {
   key: React.Key;
-  _id?: string,
-  user: string,
-  movie: string,
+  _id?: number,
+  userId: string,
+  movie_id: string,
   desc: string,
   status: number,
   createdAt?: string,
@@ -40,81 +47,29 @@ interface ExpandedDataType {
 
 
 type DataIndex = keyof ExpandedDataType;
+type DataIndex2 = keyof DataType;
+
+interface CommentListProps {
+  response: any,
+  data: any,
+  q: string
+
+}
+const CommentList = ({ response, data }: CommentListProps) => {
+  console.log("response", response);
+  console.log("data", data);
 
 
-type Props = {}
 
-const CommentList = (props: Props) => {
+
+  
+
 
   const comments = useAppSelector(item => item.comment.value)
-  const testComment = [
-    { _id: "abc", user: "62e4e4777c18d30e6dbcd342", movie: 756999, desc: "abc123", status: 0, createdAt: "abc", updatedAt: "abc" },
-    { _id: "abc1", user: "62e4e4777c18d30e6dbcd342", movie: 453395, desc: "abc123", status: 0, createdAt: "abc", updatedAt: "abc" },
-  ]
+  const users = useAppSelector(item => item.user.value)
   console.log("comments", comments);
-
-
-  // const abc = async (a: any) => {
-  //   const data = await detailMovie(a)
-  //   console.log("data", data);
-  //   // data.key = index + 1
-  //   testMovie.push({
-  //     key: data.id,
-  //     id: data.id,
-  //     image: data.backdrop_path,
-  //     genres: data.genres,
-  //     title: data.title,
-  //     createdAt: data.release_date,
-  //     status: data.status
-  //   })
-  // }
-
-  const getID = async (id: string) => {
-    // const data = await detailMovie(id)
-    // console.log("data", data);
-    return await detailMovie(id)
-  }
-
-  const fetchData = async (id: string) => {
-    return await detailMovie(id).then(res => res);
-  }
-
-  // const data = fetchData(giphy_url);
-  // console.log(`Data: ${data}`);
-
-  const testMovie: DataType[] = []
-  const dataTable = comments.map(async (item: any, index) => {
-
-    // abc(item.movie)
-    // return item
-    if (item.type === "movie") {
-      const abc = await detailMovie(item.movie_id)
-      console.log("abc", abc);
-      // testMovie.push(abc)
-      [...testMovie,abc]
-
-      const data = fetchData(item.movie_id);
-      console.log(`Data: ${data}`);
-
-      return abc
-      // return {
-      //   key: index + 1,
-      //   id: data.id,
-      //   image: data.backdrop_path,
-      //   genres: data.genres,
-      //   title: data.title,
-      //   createdAt: data.release_date,
-      //   status: data.status
-      // }
-
-    }
-
-  })
-  console.log("testMovie", testMovie);
-  console.log("dataTable", dataTable);
-
+  console.log("users", users);
   const dispatch = useAppDispatch();
-
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selected, setSelected] = useState<{ key: string, id: string | undefined }[]>([]);
@@ -125,30 +80,12 @@ const CommentList = (props: Props) => {
 
   //------------------STATE--------------------
 
-
-
-  // const dataTable = testMovie.map((item: any, index) => {
-  //   console.log("item dbtable", item);
-
-  //   return {
-  //     key: index + 1,
-  //     id: item.id,
-  //     image: item.image,
-  //     genres: item.genres,
-  //     title: item.title,
-  //     createdAt: item.createdAt,
-  //     status: item.status
-  //   }
-
-  // })
-  console.log('dataTable', dataTable);
-
   const childrenTable = comments.map((item: any, index) => {
     return {
       key: item._id,
       _id: item._id,
-      user: item.user,
-      movie: item.movie,
+      userId: item.user,
+      movie_id: item.movie,
       desc: item.desc,
       status: item.status,
       createdAt: item.createdAt,
@@ -176,7 +113,58 @@ const CommentList = (props: Props) => {
     setSearchText('');
   };
 
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
+  const getColumnSearchProps = (dataIndex: any): ColumnType<DataType> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={searchInput}
+          placeholder={`Tìm Kiếm ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Tìm
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Xóa
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Lọc
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record: any) => {
+      return record[dataIndex].toString().toLowerCase().includes((value as string).toLowerCase())
+    }
+
+  });
+
+  const getColumnSearchProps2 = (dataIndex: DataIndex): ColumnType<ExpandedDataType> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
@@ -281,22 +269,23 @@ const CommentList = (props: Props) => {
   }
   // ------------------SELECT-ROW-------------------
 
-  // const handleOk = (id) => {
-  //   const key = 'updatable';
-  //   setConfirmLoading(true);
-  //   console.log(id);
-  //   message.loading({ content: 'Loading...', key });
+  const handleOk = (id: any) => {
+    const key = 'updatable';
+    setConfirmLoading(true);
+    console.log(id);
+    message.loading({ content: 'Loading...', key });
 
-  //   setTimeout(() => {
-  //     if (Array.isArray(id)) {
-  //       dispatch(removeAnswerQuizSlide(id))
-  //     } else {
-  //       dispatch(removeAnswerQuizSlide(id))
-  //     }
-  //     setConfirmLoading(false);
-  //     message.success({ content: 'Xóa Thành Công!', key, duration: 2 });
-  //   }, 2000);
-  // };
+    setTimeout(() => {
+      if (Array.isArray(id)) {
+        dispatch(removeComment(id))
+      } else {
+        dispatch(removeComment(id))
+      }
+      setConfirmLoading(false);
+      setSelected([])
+      message.success({ content: 'Xóa Thành Công!', key, duration: 2 });
+    }, 2000);
+  };
 
   const handleCancel = () => {
     message.error('Hủy Hành Động!');
@@ -318,10 +307,7 @@ const CommentList = (props: Props) => {
       title: 'ID',
       dataIndex: 'id',
       key: "id",
-      // ...getColumnSearchProps('id'),
-      sorter: (a: any, b: any) => a._id - b._id,
-      // sorter: (record1, record2) => { return record1.key > record2.key },
-      sortDirections: ['descend'],
+      ...getColumnSearchProps('id'),
 
     },
 
@@ -333,24 +319,25 @@ const CommentList = (props: Props) => {
           <Image
             width={100}
             height={100}
-            src={record.image}
+            src={imageResize(record.image)}
           />
         </div>
       )
     },
     {
-      title: 'title',
+      title: 'Title',
       dataIndex: 'title',
       key: "title",
-      // ...getColumnSearchProps('title'),
+      ...getColumnSearchProps('title'),
     },
     {
-      title: 'genres',
+      title: 'Genres',
       key: "genres",
+      ...getColumnSearchProps('genres'),
       render: (record) => (
         <div className="">
           {record.genres.map((item: any) => {
-            return <span>{item}</span>
+            return <Tag color="red">{item.name}</Tag>
           })}
         </div>
       )
@@ -363,7 +350,7 @@ const CommentList = (props: Props) => {
     },
 
     {
-      title: 'Ngày Tạo',
+      title: 'CreatedAt',
       dataIndex: 'createdAt',
       key: "createdAt",
 
@@ -371,91 +358,117 @@ const CommentList = (props: Props) => {
 
   ];
 
-  // const expandedRowRender = (row: any) => {
+  const expandedRowRender = (row: any) => {
 
-  //   console.log("expandedRow", row);
+    console.log("expandedRow", row);
 
-  //   const columns2: ColumnsType<ExpandedDataType> = [
-  //     { title: 'Key', dataIndex: 'key', key: 'key', className: "hidden" },
-  //     { title: 'STT', dataIndex: 'stt', key: 'stt' },
-  //     { title: 'ID', dataIndex: '_id', key: '_id' },
+    const columns2: ColumnsType<ExpandedDataType> = [
+      { title: 'Key', dataIndex: 'key', key: 'key', className: "hidden", width: "8%" },
+      { title: 'STT', dataIndex: 'stt', key: 'stt',sorter: (a: any, b: any) => a.stt - b.stt },
+      {
+        title: 'ID',
+        dataIndex: '_id',
+        key: "_id",
+        ...getColumnSearchProps2('_id'),
+        ellipsis: {
+          showTitle: false,
+        },
+        render: item => (
+          <Tooltip placement="topLeft" title={item}>
+            {item}
+          </Tooltip>
+        ),
+      },
+      {
+        title: 'User',
+        key: 'userId',
+        ellipsis: {
+          showTitle: false,
+        },
+        render: (record) => (
+          <div className="">
+            {users.map((item: any, index) => {
+              if (item._id === record.userId) {
+                return <div className="flex justify-start gap-1 ">
+                  <div className="basis-1/4">
+                    <Image
+                      width={50}
+                      height={50}
+                      src={item.image}
+                    />
+                  </div>
 
-  //     { title: 'Answer', dataIndex: 'answer', key: 'answer' },
-  //     {
-  //       title: 'IsCorrect',
+                  <Tooltip placement="topLeft" title={item.name}>
+                    <span className='mt-4 basis-3/4 text-start '>{item.name}</span>
+                  </Tooltip>
+                </div>
+              }
+            })}
+          </div>
+        ),
+      },
+      {
+        title: 'Desc', key: 'desc', render: (record) => {
+          return <Tooltip placement="topLeft" title={record.desc}>
+            {record.desc}
+          </Tooltip>
+        }
+      },
+      {
+        title: "Hành Động", key: "action", render: (text, record) => (
+          <Space align="center" size="middle">
+            <Popconfirm
+              placement="topRight"
+              title="Bạn Có Muốn Xóa?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => { handleOk(record._id) }}
+              okButtonProps={{ loading: confirmLoading }}
+              onCancel={handleCancel}
+            >
+              <Button type="primary" danger >
+                Xóa
+              </Button>
+            </Popconfirm>
 
-  //       key: 'isCorrect',
-  //       render: (record) => (
-  //         <span>
-  //           {record.isCorrect === 1
-  //             ? <Badge status="success" text={<CheckCircleOutlined />} />
-  //             : <Badge status="error" text={<CloseCircleOutlined />} />
-  //           }
-  //         </span>
-  //       ),
-  //     },
-  //     {
-  //       title: "Hành Động", key: "action", render: (text, record) => (
-  //         <Space align="center" size="middle">
-  //           <Button style={{ background: "#198754" }} >
-  //             <Link href={`/admin/answerQuiz/${record._id}/edit`} >
-  //               <span className="text-white">Sửa</span>
-  //             </Link>
-
-  //           </Button>
-
-  //           <Popconfirm
-  //             placement="topRight"
-  //             title="Bạn Có Muốn Xóa?"
-  //             okText="Có"
-  //             cancelText="Không"
-  //             // onConfirm={() => { handleOk(record._id) }}
-  //             okButtonProps={{ loading: confirmLoading }}
-  //             onCancel={handleCancel}
-  //           >
-  //             <Button type="primary" danger >
-  //               Xóa
-  //             </Button>
-  //           </Popconfirm>
-
-  //         </Space>
-  //       ),
-  //     }
-  //   ];
-
-
-  //   // let data: any = answerQuizs.map((item: AnswerQuizType, index) => item.quiz === row._id ? {
-  //   //   key: index + 1,
-  //   //   _id: item._id,
-  //   //   answer: item.answer,
-  //   //   quiz: item.quiz,
-  //   //   isCorrect: item.isCorrect
-  //   // } : null)
-
-  //   let data: any = testComment.filter((item: any) => item.movie === row._id).map((item2: any, index) => {
-  //     return {
-  //       // key: item2._id,
-  //       // stt: index + 1,
-  //       // _id: item2._id,
-  //       // answer: item2.answer,
-  //       // quiz: item2.quiz,
-  //       // isCorrect: item2.isCorrect
-  //       key: item2._id,
-  //       stt: index + 1,
-  //       _id: item2._id,
-  //       user: item2.user,
-  //       movie: item2.movie,
-  //       desc: item2.desc,
-  //       status: item2.status,
-  //     }
-  //   })
-
+          </Space>
+        ),
+      }
+    ];
 
 
-  //   // console.log("data Children", data);
+    // let data: any = answerQuizs.map((item: AnswerQuizType, index) => item.quiz === row._id ? {
+    //   key: index + 1,
+    //   _id: item._id,
+    //   answer: item.answer,
+    //   quiz: item.quiz,
+    //   isCorrect: item.isCorrect
+    // } : null)
 
-  //   return <Table rowSelection={rowSelection} columns={columns2} dataSource={data} pagination={false} />
-  // }
+    let data: any = comments.filter((item: any) => item.movie_id === row.id).map((item2: any, index) => {
+      return {
+        // key: item2._id,
+        // stt: index + 1,
+        // _id: item2._id,
+        // answer: item2.answer,
+        // quiz: item2.quiz,
+        // isCorrect: item2.isCorrect
+        key: item2._id,
+        stt: index + 1,
+        _id: item2._id,
+        userId: item2.userId,
+        movie_id: item2.movie_id,
+        desc: item2.desc,
+        status: item2.status,
+      }
+    })
+
+
+
+    // console.log("data Children", data);
+
+    return <Table rowSelection={rowSelection} columns={columns2} dataSource={data} pagination={false} />
+  }
   //------------------TABLE-COLUMM-------------------
 
 
@@ -464,15 +477,17 @@ const CommentList = (props: Props) => {
 
   useEffect(() => {
     dispatch(getListComments())
+    dispatch(getListUser())
   }, [])
 
   return (
-    <div>
+    <div className={style.admin_text}>
       <AdminPageHeader breadcrumb={"Quản trị Comment"} />
 
 
-      {/* {selectedRowKeys.length > 1
+      {selectedRowKeys.length > 1
         ? <Popconfirm
+          className={`!text-black`}
           title="Bạn Có Muốn Xóa Hết?"
           okText="Có"
           cancelText="Không"
@@ -480,11 +495,11 @@ const CommentList = (props: Props) => {
           okButtonProps={{ loading: confirmLoading }}
           onCancel={handleCancel}
         >
-          <Button className='ml-4' type="primary" danger >
+          <Button className='mb-4' type="primary" danger >
             Xóa Hết
           </Button>
         </Popconfirm>
-        : ""} */}
+        : ""}
 
       <span style={{ marginLeft: 8 }}>
         {selectedRowKeys.length > 0 ? `Đã chọn ${selectedRowKeys.length} hàng` : ''}
@@ -496,10 +511,10 @@ const CommentList = (props: Props) => {
         bordered
 
         footer={() => `Hiển thị 10 trên tổng`}
-        // expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
+        expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
 
         columns={columns}
-        dataSource={testMovie}
+        dataSource={response}
 
       />
 
@@ -507,6 +522,75 @@ const CommentList = (props: Props) => {
   )
 }
 
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  try {
+    context.res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate")
+    const { data } = await listComments()
+
+
+
+    // const dataSort = data.map((item: any, index) => {
+    //   // const check = data.includes(item.movie_id)
+    //   // console.log("check",check);
+
+    //   if (data) {
+    //     return item
+    //   }
+    // })
+    // console.log("dataSort", dataSort);
+
+    const result: any = await Promise.all(data.map(async (item: any, index: any) => {
+      if (item.type === "movie") {
+        const abc = await detailMovie(item.movie_id)
+        return {
+          key: index + 1,
+          id: abc.id,
+          image: abc.poster_path,
+          genres: abc.genres,
+          title: abc.title,
+          createdAt: abc.release_date,
+          status: abc.status
+        }
+
+      } else {
+        const abc = await detailTVShow(item.movie_id)
+        return {
+          key: index + 1,
+          id: abc.id,
+          image: abc.poster_path,
+          genres: abc.genres,
+          title: abc.name,
+          createdAt: abc.first_air_date,
+          status: abc.status
+        }
+      }
+
+    }))
+    // console.log("response", response);
+    const response = Object.values(result.reduce((r: any, o: any) => {
+      if (r[o.id]) r[o.id].count++;
+      else r[o.id] = { ...o, sort: 1, count: 1 };
+      return r;
+    }, {}));
+    response.sort((a: any, b: any) => (a.key > b.key ? 1 : -1))
+
+
+    return {
+      props: {
+        response,
+        data
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      notFound: true,
+      revalidate: true,
+    };
+  }
+};
+
 CommentList.Layout = LayoutAdmin
+
 
 export default CommentList
