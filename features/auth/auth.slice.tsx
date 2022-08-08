@@ -66,7 +66,7 @@ const authSlice = createSlice({
   reducers: {
     signout: (state) => {
       localStorage.removeItem("persist:root");
-      signOut();
+      signOut({redirect: false});
       state.isLoggedIn = false;
       state.value = initialState.value
       toast.success("Đăng xuất thành công");

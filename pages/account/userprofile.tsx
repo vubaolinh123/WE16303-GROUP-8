@@ -8,6 +8,7 @@ import { IUser } from "../../models/type";
 import { useDispatch, useSelector } from "react-redux";
 import { changepass, changeuserprofile } from "../../features/auth/auth.slice";
 import Link from "next/link";
+import { store } from "../../app/store";
 
 
 type TypeInputs = {
@@ -29,6 +30,11 @@ const ChangeUserProfilePage = () => {
 
   const user = useSelector((state: any) => state.auth.value.user)
 
+  useEffect(() => {
+    if (user) {
+      reset(user);
+    }
+  }, [user])
 
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const yearOfBirh = new Date(data.birthday).getFullYear();
@@ -42,13 +48,7 @@ const ChangeUserProfilePage = () => {
       toast.success("Thay đổi thông tin thất bại")
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      reset(user);
-    }
-  }, [user])
-
+  
   return (
     <>
       <Meta

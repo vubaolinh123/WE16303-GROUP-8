@@ -1,12 +1,11 @@
 
-import { Observable } from "redux"
 import { Comment } from "../models/comment"
 import { API_NodeJS,API_NodeLocal } from "./config"
 
 
 export const listComments = ()=>{
     const url = `comments`
-    return API_NodeLocal.get<Comment[]>(url)
+    return API_NodeLocal.get(url)
 }
 
 export const detailComments = (id: string) => {
