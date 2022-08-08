@@ -88,8 +88,9 @@ export interface IUser {
     status?: number
 }
 
-export interface IFavoriteMovie {
+export interface IFavoriteMedia {
     _id?: string,
-    movieId: string,
-    user: string
+    mediaId: string,
+    userId: string,
+    media_type: number
 }

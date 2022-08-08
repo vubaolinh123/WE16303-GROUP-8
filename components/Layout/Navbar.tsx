@@ -109,7 +109,7 @@ const Navbar: NextPage = () => {
                     </Link>
                 }
                 {isLoggedIn === false &&
-                    <Link href={'/login'}>
+                    <Link href={'/account/login'}>
                         <button className="hover:text-red-700 w-[70px]">Đăng nhập</button>
                     </Link>
                 }

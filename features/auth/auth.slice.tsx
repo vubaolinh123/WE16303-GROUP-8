@@ -8,6 +8,7 @@ import {
 import { IUser } from "../../models/type";
 import { toast } from "react-toastify";
 import { signOut } from "next-auth/react";
+import { store } from "../../app/store";
 
 
 interface IUserState {
@@ -82,9 +83,10 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
     });
     builder.addCase(changepass.fulfilled, (state, action) => {
-      state = initialState;
+      state.value = initialState.value;
+      state.error = initialState.error
+      state.isLoggedIn = false
       localStorage.removeItem("persist:root");
-      // state.isLoggedIn = false
     });
     builder.addCase(changepass.rejected, (state, action) => {
       state.error = action.error;
