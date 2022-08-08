@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { FaCoins, FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
+import { FaCoins, FaPen, FaSignOutAlt, FaUserAlt, FaUserCog } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import LoadingPage from '../../components/Display/LoadingPage'
@@ -50,18 +50,18 @@ const account = () => {
           <div className="md:grid md:grid-cols-3 mt-4 md:gap-6">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
-                <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3'/>Thông tin cá nhân</h3>
+                <h3 className="leading-6 flex text-white items-center cursor-pointer"><FaUserAlt className='mr-3 '/>Thông tin cá nhân</h3>
                 {valueUse.role === 1 &&
                   <Link href={'/admin'}>
                     <button type='button'
-                    className='text-white mt-4 flex items-center hover:fill-red-500'
-                    > <FaCoins className='mr-3'/> Chuyển đến Admin </button>
+                    className='leading-6 text-white mt-4 flex items-center fill-red-500'
+                    > <FaUserCog className='mr-3'/>Chuyển đến trang quản trị</button>
                   </Link>
                 }
                 <button type='button'
                   className='text-white mt-4 flex items-center hover:fill-red-500' 
                   onClick={() => {dispatch(signout())}}
-                > <FaSignOutAlt className='mr-3'/> Đăng xuất </button>
+                > <FaSignOutAlt className='mr-3 text-red-500'/>Đăng xuất</button>
               </div>
             </div>
             <div className="mt-5 md:mt-0 md:col-span-2">

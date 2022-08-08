@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Meta from "../../components/Shared/Meta";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { IUser } from "../../models/type";
-import { useDispatch } from "react-redux";
-import { changepass, signout } from "../../features/auth/auth.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { changepass } from "../../features/auth/auth.slice";
 import Link from "next/link";
-// import "./index.css"
 
 type TypeInputs = {
   password: string;
@@ -18,6 +16,7 @@ type TypeInputs = {
 };
 
 const ChangePasswordPage = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const {
     register,
@@ -25,8 +24,7 @@ const ChangePasswordPage = () => {
     watch,
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
-  const [email, setEmail] = useState<string>();
-  const [errorEmail, setErrorEmail] = useState<string>()
+  const email = useSelector((state: any) => state.auth.value.user.email)
 
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);
@@ -40,24 +38,17 @@ const ChangePasswordPage = () => {
     setConfirmPasswordEye(!confirmPasswordEye);
   };
 
-  useEffect(() => {
-    const { auth } = JSON.parse(localStorage.getItem("persist:root") as string);
-    setEmail(JSON.parse(auth)?.value?.user.email);
-  }, []);
-
   const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
     try {
       await dispatch(changepass({ ...user, email }) as any).unwrap();
-      Router.push("/login")
+      router.push("/login")
     } catch (error : any) {
-      toast.error("Mật khẩu cũ không chính xác");
-        // setErrorEmail("Mật khẩu cũ không chính xác")
+      toast.error("Đổi mật khẩu không thành công");
     }
   };
 
   const newpassword = watch("newpassword");
   const currentpassword = watch("password")
-  console.log(currentpassword)
   return (
     <>
       <Meta
@@ -82,9 +73,6 @@ const ChangePasswordPage = () => {
                 type="password"
                 {...register("password")}
               />
-              {errorEmail && (
-                <span className="errors">{errorEmail}</span>
-              )}
             </div>
 
             <div className="mb-4 relative w-[400px]">

@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Meta from "../../components/Shared/Meta";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { IUser } from "../../models/type";
 import { useDispatch, useSelector } from "react-redux";
-import { changepass, changeuserprofile } from "../../features/auth/auth.slice";
+import { changeuserprofile } from "../../features/auth/auth.slice";
 import Link from "next/link";
 import { store } from "../../app/store";
 
@@ -15,7 +13,6 @@ type TypeInputs = {
   name: string;
   email: string;
   birthday: string;
-  confirmPassword: string;
 };
 
 const ChangeUserProfilePage = () => {

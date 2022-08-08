@@ -1,5 +1,5 @@
 import { Cast, Detail, Item, VideoTrailer } from "../../models/type";
-import { FaPlayCircle, FaYoutube } from "react-icons/fa";
+import { FaBookmark, FaPlayCircle, FaYoutube } from "react-icons/fa";
 import { Fragment, useState } from "react";
 import { imageOriginal, imageResize } from "../../api/constants";
 
@@ -11,6 +11,9 @@ import Meta from "../Shared/Meta";
 import MovieSlider from "../Movie/MovieSlider";
 import type { NextPage } from "next";
 import StarRating from "../Display/StarRating";
+import { useDispatch, useSelector } from "react-redux";
+import { addmedia } from "../../features/favorite/favorite.slice";
+import { toast } from "react-toastify";
 
 interface ItemViewProps {
     media_type: "movie" | "tv";
@@ -27,8 +30,19 @@ const ItemView: NextPage<ItemViewProps> = ({
     similar,
     videos,
 }) => {
+    const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
-
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+    const userId: string = useSelector((state: any) => state.auth.value.user._id);
+    
+    const handleAddFavorite = async (mediaId: string, media_type: number, name: string) => {
+        try {
+            await dispatch(addmedia({mediaId, userId, media_type}) as any).unwrap()
+            toast.success(`Đã thêm ${name} vào danh sách yêu thích`)
+        } catch (error: any) {
+            toast.error(`${name} đã có trong danh sách yêu thích`)            
+        }
+    }
     return (
         <>
             <Meta
@@ -82,6 +96,12 @@ const ItemView: NextPage<ItemViewProps> = ({
                                 <Button onClick={() => setTrailerModalOpened(true)}>
                                     <FaYoutube />
                                     <span>Xem Trailer</span>
+                                </Button>
+                            )}
+                            {(isLoggedIn) &&(
+                                <Button onClick={(e) => {handleAddFavorite(data.id.toString(), media_type === "movie" ? 0 : 1, media_type === "movie" ? data.title  : data.name )}}>
+                                    <FaBookmark />
+                                    Lưu
                                 </Button>
                             )}
                         </div>

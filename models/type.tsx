@@ -77,7 +77,7 @@ export interface Category {
 }
 
 export interface IUser {
-    _id?: string
+    _id?: string,
     name?: string,
     email: string,
     password?: string,
@@ -86,4 +86,11 @@ export interface IUser {
     age?: number,
     role?: number,
     status?: number
+}
+
+export interface IFavoriteMedia {
+    _id?: string,
+    mediaId: string,
+    userId: string,
+    media_type?: number
 }
