@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
-import { addFavoriteMedia, getListFavoriteMedia } from "../../api/favorite";
+import { addFavoriteMedia, getListFavoriteMovie, getListFavoriteTv, removeFavoriteMedia } from "../../api/favorite";
 import { IFavoriteMedia } from "../../models/type";
 
 
 interface IState {
-    value: any[]
+  listfavorite: {listfavoritemovie: any[],listfavoritetv: any[]},
+  error: any
 }
 
 export const initialState: IState = {
-    value: []
+  listfavorite: {listfavoritemovie: [], listfavoritetv: []},
+  error: {}
 };
 
 // Action;
@@ -17,16 +18,23 @@ export const initialState: IState = {
 export const addmedia = createAsyncThunk(
   "favorite/addmedia",
   async (item: IFavoriteMedia) => {
-    const { data } = await addFavoriteMedia(item);
-    return data;
+    await addFavoriteMedia(item);
   }
 );
 
-export const getlistmedia = createAsyncThunk(
-  "favorite/getlistmedia",
+export const getlistfavorite = createAsyncThunk(
+  "favorite/getlistfavorite",
   async (id: string) => {
-    const { data } = await getListFavoriteMedia(id);    
-    return data;
+    const { data: listfavoritemovie } = await getListFavoriteMovie(id);   
+    const { data: listfavoritetv } = await getListFavoriteTv(id); 
+    return {listfavoritemovie, listfavoritetv};
+  }
+);
+
+export const removefavorite = createAsyncThunk(
+  "favorite/removefavorite",
+  async (item: IFavoriteMedia) => {
+    await removeFavoriteMedia(item);
   }
 );
 
@@ -36,10 +44,17 @@ const favoriteSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(addmedia.fulfilled, (state, action) => {
-      state.value = action.payload;
     });
-    builder.addCase(getlistmedia.fulfilled, (state, action) => {
-      state.value = action.payload;
+    builder.addCase(removefavorite.fulfilled, (state, action) => {
+    });
+    builder.addCase(removefavorite.rejected, (state, action) => {
+      state.error = action.error
+    });
+    builder.addCase(addmedia.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(getlistfavorite.fulfilled, (state, action) => {
+      state.listfavorite = action.payload;
     });
   },
 });

@@ -50,7 +50,7 @@ const account = () => {
           <div className="md:grid md:grid-cols-3 mt-4 md:gap-6">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
-                <h3 className="leading-6 flex items-center cursor-pointer text-red-500"><FaUserAlt className='mr-3 fill-red-500'/>Thông tin cá nhân</h3>
+                <h3 className="leading-6 flex text-white items-center cursor-pointer"><FaUserAlt className='mr-3 '/>Thông tin cá nhân</h3>
                 {valueUse.role === 1 &&
                   <Link href={'/admin'}>
                     <button type='button'

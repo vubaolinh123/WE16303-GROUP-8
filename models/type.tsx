@@ -92,5 +92,5 @@ export interface IFavoriteMedia {
     _id?: string,
     mediaId: string,
     userId: string,
-    media_type: number
+    media_type?: number
 }
