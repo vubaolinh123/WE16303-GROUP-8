@@ -41,7 +41,7 @@ const Search: NextPage<SearchProps> = ({ result, newPage = false, q }) => {
                         className="flex flex-col items-center justify-center md:mt-12 mx-8"
                         onSubmit={handleSearchFormSubmit}
                     >
-                        <h1 className="text-center text-3xl mb-6">
+                        <h1 className="text-center text-3xl mb-6 text-gray-100">
                             Tìm các bộ phim yêu thích của bạn
                         </h1>
                         <div className="w-full max-w-xl relative">
@@ -62,7 +62,7 @@ const Search: NextPage<SearchProps> = ({ result, newPage = false, q }) => {
                     </form>
                 ) : (
                     <div className="md:mx-20 mx-10">
-                        <h1 className="text-2xl mb-8">
+                        <h1 className="text-2xl mb-8 text-gray-100">
                             Kết quả tìm kiếm cho &quot;{q}&quot; ({result.total_results}{" "}
                             kết quả tìm kiếm)
                         </h1>

@@ -3,12 +3,12 @@ import {
   changepassword,
   changeprofile,
   signin,
-  signinwithnextauth,
-  signup,
+  signinwithnextauth
 } from "../../api/auth";
 import { IUser } from "../../models/type";
 import { toast } from "react-toastify";
 import { signOut } from "next-auth/react";
+
 
 interface IUserState {
   value: { token: string; user: IUser };
@@ -66,8 +66,9 @@ const authSlice = createSlice({
   reducers: {
     signout: (state) => {
       localStorage.removeItem("persist:root");
-      signOut();
+      signOut({redirect: false});
       state.isLoggedIn = false;
+      state.value = initialState.value
       toast.success("Đăng xuất thành công");
     },
   },
@@ -81,9 +82,9 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
     });
     builder.addCase(changepass.fulfilled, (state, action) => {
-      state.value.user = action.payload;
+      state = initialState;
       localStorage.removeItem("persist:root");
-      state.isLoggedIn = false;
+      // state.isLoggedIn = false
     });
     builder.addCase(changepass.rejected, (state, action) => {
       state.error = action.error;

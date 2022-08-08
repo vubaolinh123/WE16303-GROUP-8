@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import 'antd/dist/antd.css';
 import Head from 'next/head';
+import PrivateRoute from '../PrivateRouter/index';
 
 const LayoutAdmin = ({ children }: LayoutProps) => {
     const [collapsed, setCollapsed] = useState(false);
@@ -101,7 +102,8 @@ const LayoutAdmin = ({ children }: LayoutProps) => {
 
 
     return (
-
+        <PrivateRoute>
+            
         <div className="">
             <Head>
                 <link rel="shortcut icon" href="/icon.png" type="image/x-icon" />
@@ -129,7 +131,14 @@ const LayoutAdmin = ({ children }: LayoutProps) => {
 
                         <SubMenu key="sub2" icon={<FolderFilled />} title="User">
                             <Menu.Item key="/admin/user">
-                                <Link href={'/admin/user'}>User Category</Link>
+                                <Link href={'/admin/user'}>User List</Link>
+                            </Menu.Item>
+                            
+                        </SubMenu>
+
+                        <SubMenu key="sub3" icon={<FolderFilled />} title="Comment">
+                            <Menu.Item key="/admin/comment">
+                                <Link href={'/admin/comment'}>Movie Comment</Link>
                             </Menu.Item>
                             
                         </SubMenu>
@@ -176,6 +185,7 @@ const LayoutAdmin = ({ children }: LayoutProps) => {
 
             </Layout>
         </div>
+        </PrivateRoute>
     )
 }
 

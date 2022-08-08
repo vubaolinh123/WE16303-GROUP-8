@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 import { store } from '../../app/store';
 import { Dropdown, Menu, Space, Avatar } from "antd";
 import { DownOutlined, UpOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
+import { useSelector } from "react-redux";
 
 const Navbar: NextPage = () => {
 
-    
+
     const [dataCategory, SetDataCategory] = useState<{}[]>([])
-    const isLoggedIn = store.getState().auth.isLoggedIn
-    
+    // const isLoggedIn = store.getState().auth.isLoggedIn
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn)
+
     const name = [
         { name: "Phim", value: "movie" },
         { name: "TV Show", value: "tv" }
@@ -34,7 +36,6 @@ const Navbar: NextPage = () => {
             }
         })
         test.value = flag
-        console.log("test", test);
         category.push(test)
     })
     console.log("category", category);
@@ -43,7 +44,6 @@ const Navbar: NextPage = () => {
         return <Menu
             items={
                 item.value.map((item2: any) => {
-                    // console.log("item 2", item2);
                     return item2
                 })
             }
@@ -102,14 +102,14 @@ const Navbar: NextPage = () => {
                 </a>
             </Link>
             <div className="px-4">
-                {isLoggedIn && 
+                {isLoggedIn &&
                     <Link href={'/account'}>
                         <Avatar size="large" className="cursor-pointer" icon={<UserOutlined />} />
                     </Link>
                 }
-                {isLoggedIn === false  && 
+                {isLoggedIn === false &&
                     <Link href={'/login'}>
-                        <button className="hover:text-red-700 w-[70px] duration-1000">Đăng nhập</button>
+                        <button className="hover:text-red-700 w-[70px]">Đăng nhập</button>
                     </Link>
                 }
             </div>
