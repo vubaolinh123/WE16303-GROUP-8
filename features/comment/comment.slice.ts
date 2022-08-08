@@ -72,7 +72,7 @@ const userSlide = createSlice({
         }
     },
     extraReducers(builder) {
-        builder.addCase(getListComments.fulfilled, (state, action) => {
+        builder.addCase(getListComments.fulfilled, (state: any, action) => {
             state.value = action.payload
         })
         builder.addCase(getDetailComments.fulfilled, (state, action) => {
