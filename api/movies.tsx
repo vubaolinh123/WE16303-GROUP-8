@@ -193,8 +193,9 @@ export const search: (query: string, page?: number) => Promise<any> = async (
 };
 
 
-export const detailMovie = async (id: string) => {
-    const data = (await instance.get(`movie/${id}?api_key=${API_KEY}&language=${language}`)).data;
+export const detailMovie = async (id: number) => {
+    const data =  await(await instance.get(`movie/${id}?api_key=${API_KEY}&language=${language}`)).data;
+    
     return {
         ...data
     };
@@ -203,9 +204,9 @@ export const detailMovie = async (id: string) => {
     // return instance.get(url)
 };
 
-// export const detailMovie: (id: string) => Promise<any> = async (id: string) => {
-//     const data = (await instance.get(`movie/${id}?api_key=${API_KEY}&language=${language}`)).data;
-//     return {
-//         ...data
-//     };
-// };
+export const detailTVShow = async (id: number) => {
+    const data = await (await instance.get(`tv/${id}?api_key=${API_KEY}&language=${language}`)).data;
+    return {
+        ...data
+    };
+};
