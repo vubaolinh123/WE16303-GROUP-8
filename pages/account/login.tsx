@@ -1,52 +1,27 @@
 import { GetStaticProps, NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Meta from "../components/Shared/Meta";
-import Image from "../components/Shared/Image";
+import Meta from "../../components/Shared/Meta";
+import Image from "../../components/Shared/Image";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { getProviders, signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { loginwithnextauth } from "../features/auth/auth.slice";
-import { signup } from "../api/auth";
-import { toast } from "react-toastify";
+import { getProviders, useSession, signIn } from "next-auth/react";
+import Router from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import PrivateClient from "../components/PrivateRouter/PrivateClient";
+import { login, loginwithnextauth } from "../../features/auth/auth.slice";
+import { toast } from "react-toastify";
+import PrivateClient from "../../components/PrivateRouter/PrivateClient";
 
 type TypeInputs = {
-  name: string;
   email: string;
   password: string;
-  birthday: string;
-  confirmPassword: string;
   providers: any;
 };
 
-const SignUpPage = ({ providers }: TypeInputs) => {
-  
+const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-  const router = useRouter();
+  const { data: session, status } = useSession();
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TypeInputs>({ mode: "onTouched" });
-
-  const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
-    try {
-      const yearOfBirh = new Date(data.birthday).getFullYear();
-      const currentYear = new Date().getFullYear();
-      const age = currentYear - yearOfBirh;
-      const user = { ...data, age }
-      await signup(user);
-      toast.success("Đăng ký thành công");
-      router.push("/login");
-    } catch (error: any) {
-      toast.error(error.response.data.message);
-    }
-  };
 
   // handle password eye
   const [passwordEye, setPasswordEye] = useState(false);
@@ -55,32 +30,46 @@ const SignUpPage = ({ providers }: TypeInputs) => {
     setPasswordEye(!passwordEye);
   };
 
-  // handle confirm password eye
-  const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<TypeInputs>({ mode: "onTouched" });
 
-  const handleConfirmPasswordClick = () => {
-    setConfirmPasswordEye(!confirmPasswordEye);
+  const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
+    try {
+      await dispatch((login(user) as any)).unwrap()
+      setTimeout(() => {
+        Router.push("/account");
+      }, 1000);   
+    } catch (error: any) {
+      toast.error("Sai tên tài khoản hoặc mật khẩu");
+    }
   };
 
-  const { data: session, status } = useSession();
   useEffect(() => {
-    (async () => {
-      if (status === "authenticated") {
-        try {
-          await dispatch(loginwithnextauth(session.user) as any);
-          setTimeout(() => {
-            router.push("/account");
-          }, 2000);
-        } catch (error) {}
-      }
-    })();
+    if (!isLoggedIn) {
+      (async () => {
+        if (status === "authenticated") {
+          try {
+            await dispatch(loginwithnextauth(session.user) as any);
+            setTimeout(() => {
+              Router.push("/account");
+            }, 1000);
+          } catch (error) {
+            toast.error("Đăng nhập thất bại");
+          }
+        }
+      })();      
+    }
   }, [status]);
 
-  const password = watch("password");
   return (
     <PrivateClient>
       <>
-        <Meta title="Đăng ký" description="Đăng ký" image="/not-found.png" />
+        <Meta title="Đăng nhập" description="Đăng nhập" image="/not-found.png" />
         <div>
           <Image
             src="/bg-loginPage.jpg"
@@ -92,37 +81,13 @@ const SignUpPage = ({ providers }: TypeInputs) => {
             <div>
               <div className="login-form">
                 <div className="login-form-main d-flex flex-row m-0">
-                  <h2>Đăng ký</h2>
+                  <h2>Đăng nhập</h2>
                   <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="mb-4 relative input-group">
-                      <input
-                        className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.name && "input-invalid" }`}
-                        type="text"
-                        {...register("name", {
-                          required: {
-                            value: true,
-                            message: "Họ tên không được để trống",
-                          },
-                          minLength: {
-                            value: 6,
-                            message: "Họ tên phải có ít nhất 6 ký tự.",
-                          },
-                          maxLength: {
-                            value: 100,
-                            message: "Họ tên không quá 100 ký tự.",
-                          },
-                        })}
-                      />
-                      <label htmlFor="">Họ tên</label>
-                      {errors.name && (
-                        <span className="errors">{errors.name.message}</span>
-                      )}
-                    </div>
-
                     <div className="mb-4 relative input-group">
                       <input
                         className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.email && "input-invalid" }`}
                         type="text"
+                        defaultChecked={true}
                         {...register("email", {
                           required: {
                             value: true,
@@ -142,7 +107,7 @@ const SignUpPage = ({ providers }: TypeInputs) => {
 
                     <div className="mb-4 relative input-group">
                       <input
-                        className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.password && "input-invalid" }`}
+                        className={`appearance-none text-sm border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.password && "input-invalid" }`}
                         type={passwordEye === false ? "password" : "text"}
                         {...register("password", {
                           required: {
@@ -172,48 +137,30 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                       </div>
                     </div>
 
-                    <div className="mb-4 relative input-group">
-                      <input
-                        type={confirmPasswordEye === false ? "password" : "text"}
-                        className={`appearance-none text-sm shadow-none border-none rounded w-full pt-5 pb-[6px] px-3 text-white leading-tight ${errors.confirmPassword && "input-invalid" }`}
-                        {...register("confirmPassword", {
-                          required: "Bắt buộc phải nhập lại mật khẩu.",
-                          validate: (value) =>
-                            value === password || "Mật khẩu không chính xác.",
-                        })}
-                      />
-                      <label htmlFor="">Nhập lại mật khẩu</label>
-                      {errors.confirmPassword && (
-                        <span className="errors">
-                          {errors.confirmPassword.message}
-                        </span>
-                      )}
-                      <div className="text-2xl absolute top-[10px] right-3">
-                        {confirmPasswordEye === false ? (
-                          <FaEyeSlash onClick={handleConfirmPasswordClick} />
-                        ) : (
-                          <FaEye onClick={handleConfirmPasswordClick} />
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="mb-6">
-                      <input
-                        {...register("birthday", { required: true })}
-                        className={`appearance-none text-sm shadow-none border-none rounded w-full py-4 px-3 text-white leading-tight ${errors.birthday && "input-invalid" }`}
-                        type="date"
-                      />
-                      {errors.birthday && (
-                        <span className="errors">
-                          Vui lòng chọn ngày tháng năm sinh.
-                        </span>
-                      )}
-                    </div>
-
                     <div className="flex items-center justify-between">
                       <button className="bg-[#e50914] text-white font-bold w-full py-3 px-4 rounded">
-                        Đăng ký
+                        Đăng nhập
                       </button>
+                    </div>
+                    <div className="login-form-help mt-4 flex items-center justify-between">
+                      <label className="hover:text-gray-500 block text-sm text-gray-400">
+                        <div className="flex items-center justify-between">
+                          <input
+                            type="checkbox"
+                            className="mr-2 text-gray-400 rounded"
+                          />
+                          <span>Ghi nhớ mật khẩu</span>
+                        </div>
+                      </label>
+
+                      <div className="text-sm">
+                        <a
+                          href="#"
+                          className="font-medium text-gray-400 hover:text-gray-500 hover:underline"
+                        >
+                          Quên mật khẩu?
+                        </a>
+                      </div>
                     </div>
                   </form>
                   <div className="form-login-line">or</div>
@@ -240,11 +187,9 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                 </div>
                 <div className="login-form-other">
                   <div className="login-signup text-gray-400 flex justify-between">
-                    Bạn đã có tài khoản?{" "}
-                    <Link href={`/login`}>
-                      <a className="text-white hover:underline">
-                        Quay lại đăng nhập.
-                      </a>
+                    Bạn chưa có tài khoản?{" "}
+                    <Link href={`/account/signup`}>
+                      <a className="text-white hover:underline">Đăng ký ngay.</a>
                     </Link>
                   </div>
                 </div>
@@ -256,6 +201,7 @@ const SignUpPage = ({ providers }: TypeInputs) => {
     </PrivateClient>
   );
 };
+
 export const getStaticProps: GetStaticProps = async (context) => {
   const providers = await getProviders();
   try {
@@ -273,4 +219,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
   }
 };
 
-export default SignUpPage;
+export default SignInPage;

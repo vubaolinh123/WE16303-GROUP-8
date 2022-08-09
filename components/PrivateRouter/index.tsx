@@ -12,7 +12,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const router = useRouter();
 
   if (!isLoggedIn) {
-    router.push('/login');
+    router.push('/account/login');
     return <LoadingPage/>
   } else if (currentUser.role !== 1) {
     router.push('/');

@@ -199,3 +199,21 @@ input:focus{
 .input-invalid:focus{
   border-bottom: 2px solid red;
 }
+
+.my-list__movie-card{
+  height: 340px;
+  box-sizing: border-box;
+}
+
+.my-list__movie-card button{
+  display: none;
+  padding: 0 7px;
+  border-radius: 2px;
+  background-color: #2a2a2a;
+}
+.my-list__movie-card button:hover{
+  color: #ff0000;
+}
+.my-list__movie-card:hover button{
+  display: block;
+}
