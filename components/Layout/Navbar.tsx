@@ -6,23 +6,22 @@ import { useEffect, useState } from "react";
 import { store } from '../../app/store';
 import { Dropdown, Menu, Space, Avatar } from "antd";
 import { DownOutlined, UpOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
+import { useSelector } from "react-redux";
 
 const Navbar: NextPage = () => {
 
-    
+
     const [dataCategory, SetDataCategory] = useState<{}[]>([])
-    const isLoggedIn = store.getState().auth.isLoggedIn
-    
+    // const isLoggedIn = store.getState().auth.isLoggedIn
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn)
+
     const name = [
         { name: "Phim", value: "movie" },
         { name: "TV Show", value: "tv" }
     ]
     const category: any[] = []
 
-    console.log("dataCategory", dataCategory);
-
     Object.values(dataCategory).map((item: any, index) => {
-        // console.log("item", item);
 
         const test = { name: name[index].name, value: {} }
 
@@ -34,23 +33,18 @@ const Navbar: NextPage = () => {
             }
         })
         test.value = flag
-        console.log("test", test);
         category.push(test)
     })
-    console.log("category", category);
 
     const menu2: any = category.map((item: any) => {
         return <Menu
             items={
                 item.value.map((item2: any) => {
-                    // console.log("item 2", item2);
                     return item2
                 })
             }
         />
     })
-    console.log("menu2", menu2);
-
 
     useEffect(() => {
         const getCategory = async () => {
@@ -95,6 +89,13 @@ const Navbar: NextPage = () => {
                         Phim Chiếu Rạp
                     </span>
                 </Link>
+                {isLoggedIn &&
+                    <Link href={`/account/my-list`}>
+                        <span className="h-full w-auto px-4 pt-[13px] cursor-pointer text-white hover:text-red-600 ">
+                            Danh sách của tôi
+                        </span>
+                    </Link>
+                }
             </div>
             <Link href="/search">
                 <a>
@@ -102,14 +103,14 @@ const Navbar: NextPage = () => {
                 </a>
             </Link>
             <div className="px-4">
-                {isLoggedIn && 
+                {isLoggedIn &&
                     <Link href={'/account'}>
                         <Avatar size="large" className="cursor-pointer" icon={<UserOutlined />} />
                     </Link>
                 }
-                {isLoggedIn === false  && 
-                    <Link href={'/login'}>
-                        <button className="hover:text-red-700 w-[70px] duration-1000">Đăng nhập</button>
+                {isLoggedIn === false &&
+                    <Link href={'/account/login'}>
+                        <button className="hover:text-red-700 w-[70px]">Đăng nhập</button>
                     </Link>
                 }
             </div>

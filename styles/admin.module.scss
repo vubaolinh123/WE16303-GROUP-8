@@ -1,5 +1,52 @@
-.admin_text{
-    :global(.text) {
-        @apply text-black
+.admin_text {
+    :global(*) {
+        @apply text-black;
+    };
+}
+
+
+
+.numberCard {
+    padding: 32px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    border: 1px black solid;
+    color: black !important;
+    
+    .iconWarp {
+        font-size: 54px;
+        float: left;
+        color: black !important;
     }
+
+    .content {
+        width: 100%;
+        padding-left: 78px;
+        color: black !important;
+        .title {
+            line-height: 16px;
+            font-size: 16px;
+            margin-bottom: 8px;
+            height: 16px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: black !important;
+        }
+
+        .number {
+            line-height: 32px;
+            font-size: 24px;
+            height: 32px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            margin-bottom: 0;
+            color: black !important;
+        }
+    }
+}
+.numberCard:hover {
+    border: 1px red solid;
+    box-shadow: inset;
 }

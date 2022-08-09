@@ -31,14 +31,10 @@ interface CategoryProps {
 
 const Category: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false }) => {
   const category: {}[] = []
-  const name = ["Phim","TV Show"]
-  console.log("dataCategory", dataCategory);
+  const name = ["Phim", "TV Show"]
 
-  console.log("data", data);
-
-  Object.values(dataCategory).map((item: any,index) => {
-    // console.log("item", item);
-    const test = {name: name[index], value: {}}
+  Object.values(dataCategory).map((item: any, index) => {
+    const test = { name: name[index], value: {} }
     const flag = item.map((item2: any) => {
       return {
         label: (<a href={`/category?genres=${item2.id}`}  >{item2.name}</a>),
@@ -46,29 +42,25 @@ const Category: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false
       }
     })
     test.value = flag
-    // console.log("test",test);
-    
+
     category.push(test)
   })
-  console.log("category", category);
 
- 
+
 
   const menu2 = category.map((item: any) => {
     return <Menu
       items={
         item.value.map((item2: any) => {
-          // console.log("item 2", item2);
           return item2
         })
       }
     />
   })
-  console.log("menu2", menu2);
 
 
 
- 
+
 
 
 

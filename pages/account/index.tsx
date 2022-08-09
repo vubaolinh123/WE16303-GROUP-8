@@ -1,34 +1,24 @@
-import { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { FaPen, FaSignOutAlt, FaUserAlt } from 'react-icons/fa'
+import React from 'react'
+import { FaCoins, FaPen, FaSignOutAlt, FaUserAlt, FaUserCog } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import LoadingPage from '../../components/Display/LoadingPage'
 import Meta from '../../components/Shared/Meta'
 import { signout } from "../../features/auth/auth.slice";
-import { IUser } from '../../models/type'
-import { store } from "../../app/store"
 
 
 
-const account: NextPage = () => {
-  const { data: session, status } = useSession();
-  const isLoggedIn = store.getState().auth.isLoggedIn;
+
+
+const account = () => {
+  const { status } = useSession();
+  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [user, setUser] = useState<IUser>()
   const valueUse = useSelector((state: any) => state.auth.value.user)
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      const { auth } = JSON.parse(localStorage.getItem('persist:root') as string);
-      setUser(JSON.parse(auth)?.value?.user)
-    } else {
-      router.push('/login')
-    }
-  }, [isLoggedIn])
 
   const onHandleChangePass = () => {
     if (status === "authenticated") {
@@ -36,9 +26,12 @@ const account: NextPage = () => {
     } else {
       router.push("/account/password")
     }
-
   }
 
+  if (!isLoggedIn) {
+    router.push('/')
+    return <LoadingPage />
+  }
   return (
     <>
       <Meta
@@ -59,11 +52,18 @@ const account: NextPage = () => {
           <div className="md:grid md:grid-cols-3 mt-4 md:gap-6">
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
-                <h3 className="leading-6 flex items-center text-white"><FaUserAlt className='mr-3' />Thông tin cá nhân</h3>
-                <button
+                <h3 className="leading-6 flex text-white items-center cursor-pointer"><FaUserAlt className='mr-3 ' />Thông tin cá nhân</h3>
+                {valueUse.role === 1 &&
+                  <Link href={'/admin'}>
+                    <button type='button'
+                      className='leading-6 text-white mt-4 flex items-center fill-red-500'
+                    > <FaUserCog className='mr-3' />Chuyển đến trang quản trị</button>
+                  </Link>
+                }
+                <button type='button'
                   className='text-white mt-4 flex items-center hover:fill-red-500'
                   onClick={() => { dispatch(signout()) }}
-                > <FaSignOutAlt className='mr-3' /> Đăng xuất </button>
+                > <FaSignOutAlt className='mr-3 text-red-500' />Đăng xuất</button>
               </div>
             </div>
             <div className="mt-5 md:mt-0 md:col-span-2">
@@ -73,15 +73,13 @@ const account: NextPage = () => {
                 <p className='mt-2 text-[#666]'><span className='font-bold'>Ngày sinh: </span> {valueUse?.birthday ? valueUse?.birthday : 'Chưa cập nhật'}</p>
                 <p className='mt-2 text-[#666]'>
                   <span className='font-bold'>Mật khẩu: </span> *******
-                  {/* <Link href="./account/password"> */}
                   <button onClick={onHandleChangePass} className="py-1 px-4 rounded"><FaPen className='fill-[#666] hover:fill-[white] duration-500' /></button>
-                  {/* </Link> */}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                </p >
+              </div >
+            </div >
+          </div >
+        </div >
+      </div >
     </>
   )
 }

@@ -18,9 +18,9 @@ export default NextAuth({
     signOut: '/signin',
     error: '/signin'
   },
-  session: {
-    strategy: "jwt",
-  },
+  // session: {
+  //   strategy: "jwt",
+  // },
   // debug: true,
   secret: process.env.SECRET,
 

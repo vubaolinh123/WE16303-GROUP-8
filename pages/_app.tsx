@@ -48,6 +48,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               draggable
               theme='dark'
               pauseOnHover = {false}
+              pauseOnFocusLoss = {false}
             />
           </SWRConfig>
         </LayoutWrapper>

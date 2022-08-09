@@ -1,5 +1,5 @@
 import { Cast, Detail, Item, VideoTrailer } from "../../models/type";
-import { FaPlayCircle, FaYoutube } from "react-icons/fa";
+import { FaBookmark, FaPlayCircle, FaYoutube } from "react-icons/fa";
 import { Fragment, useState } from "react";
 import { imageOriginal, imageResize } from "../../api/constants";
 
@@ -11,6 +11,9 @@ import Meta from "../Shared/Meta";
 import MovieSlider from "../Movie/MovieSlider";
 import type { NextPage } from "next";
 import StarRating from "../Display/StarRating";
+import { useDispatch, useSelector } from "react-redux";
+import { addmedia } from "../../features/favorite/favorite.slice";
+import { toast } from "react-toastify";
 
 interface ItemViewProps {
     media_type: "movie" | "tv";
@@ -27,8 +30,19 @@ const ItemView: NextPage<ItemViewProps> = ({
     similar,
     videos,
 }) => {
+    const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
-
+    const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+    const userId: string = useSelector((state: any) => state.auth.value.user._id);
+    
+    const handleAddFavorite = async (mediaId: string, media_type: number, name: string) => {
+        try {
+            await dispatch(addmedia({mediaId, userId, media_type}) as any).unwrap()
+            toast.success(`Đã thêm ${name} vào danh sách yêu thích`)
+        } catch (error: any) {
+            toast.error(`${name} đã có trong danh sách yêu thích`)            
+        }
+    }
     return (
         <>
             <Meta
@@ -84,6 +98,12 @@ const ItemView: NextPage<ItemViewProps> = ({
                                     <span>Xem Trailer</span>
                                 </Button>
                             )}
+                            {(isLoggedIn) &&(
+                                <Button onClick={(e) => {handleAddFavorite(data.id.toString(), media_type === "movie" ? 0 : 1, media_type === "movie" ? data.title  : data.name )}}>
+                                    <FaBookmark />
+                                    Lưu
+                                </Button>
+                            )}
                         </div>
                         <p className="text-4xl">
                             {media_type === "movie" ? data.title : data.name}
@@ -97,12 +117,15 @@ const ItemView: NextPage<ItemViewProps> = ({
                         {data.genres && (
                             <div className="flex gap-2 flex-wrap">
                                 {data.genres.map((item) => (
-                                    <span
+                                    <Link href={``}
                                         key={item.id}
-                                        className="bg-dark-lighten border border-white px-3 py-1 rounded-full whitespace-nowrap"
+
                                     >
-                                        {item.name}
-                                    </span>
+                                        <a className="bg-dark-lighten border border-white px-3 py-1 rounded-full whitespace-nowrap text-white">
+                                            {item.name}
+
+                                        </a>
+                                    </Link>
                                 ))}
                             </div>
                         )}
@@ -135,7 +158,7 @@ const ItemView: NextPage<ItemViewProps> = ({
                     )}
                     {casts && (
                         <>
-                            <h1 className="text-2xl my-8">Diễn Viên</h1>
+                            <h1 className="text-2xl my-8 text-gray-100">Diễn Viên</h1>
 
                             <div
                                 className="grid gap-3"
@@ -161,7 +184,7 @@ const ItemView: NextPage<ItemViewProps> = ({
                 </div>
                 {similar && (
                     <>
-                        <h1 className="my-10 text-2xl px-6 md:px-20">Phim Tương Tự</h1>
+                        <h1 className="my-10 text-2xl px-6 md:px-20 text-gray-100">Phim Tương Tự</h1>
                         <MovieSlider data={similar} loop={false} />
                     </>
                 )}
