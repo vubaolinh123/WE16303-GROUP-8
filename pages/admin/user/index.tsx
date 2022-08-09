@@ -42,16 +42,11 @@ const AdminUser = (props: LayoutProps) => {
     const breadcrumb = useAppSelector(item => item.user.breadcrumb)
     const users = useAppSelector(item => item.user.value)
     const dispatch = useAppDispatch();
-    console.log('users', users);
-    console.log('breadcrumb', breadcrumb);
     const dateStr1 = "2022-08-03T07:07:16.117+00:00";
     const date1 = new Date(dateStr1);
 
     const timestamp = date1.getTime();
-    console.log("timestamp", timestamp);
-    console.log("time Unix", moment(timestamp));
     const timeTest = moment(dateStr1).toObject()
-    console.log("timeTest", timeTest);
 
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -75,8 +70,7 @@ const AdminUser = (props: LayoutProps) => {
             updatedAt: item.updatedAt
         }
     })
-    console.log("dataTable",dataTable);
-    
+
 
     //------------------TABLE-DATA-------------------
 

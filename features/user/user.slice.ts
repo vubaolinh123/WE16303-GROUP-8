@@ -32,7 +32,6 @@ export const editRoleUser = createAsyncThunk(
     "users/editRoleUser",
     async (arr: any) => {
         if (Array.isArray(arr)) {
-            console.log("arr > 0", arr);
 
             let dataEdit: User[] = []
             for (let i = 0; i < arr.length; i++) {
@@ -43,8 +42,6 @@ export const editRoleUser = createAsyncThunk(
                 console.log("data2", data2);
                 dataEdit.push(data2)
             }
-
-            console.log("dataEdit", dataEdit);
 
             return dataEdit
         } else {
