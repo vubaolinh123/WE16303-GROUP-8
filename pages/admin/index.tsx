@@ -14,6 +14,7 @@ import { UserOutlined, CommentOutlined, VideoCameraOutlined, VideoCameraAddOutli
 import styles from "../../styles/admin.module.scss"
 import Meta from '../../components/Shared/Meta'
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next'
+import { getListComments } from '../../features/comment/comment.slice'
 
 
 type AdminDashbroadProps = {
@@ -22,41 +23,63 @@ type AdminDashbroadProps = {
   users: any
 }
 
-const AdminDashbroad = ({  }) => {
+const AdminDashbroad = ({ }) => {
   const users = useAppSelector(item => item.user.value)
-    const dispatch = useAppDispatch();
-    console.log('users', users);
-    // const dateStr1 = "2022-08-03T07:07:16.117+00:00";
-    // const date1 = new Date(dateStr1);
-    // const timestamp = date1.getTime();
-    // console.log("timestamp", timestamp);
-    // console.log("time Unix", moment(timestamp));
-    // const timeTest = moment(dateStr1).toObject()
-    // console.log("timeTest", timeTest);
-    // console.log("day in month", moment(dateStr1, "YYYY-M").daysInMonth());
+  const comments = useAppSelector(item => item.comment.value)
+  const dispatch = useAppDispatch();
+  console.log('users', users);
+  console.log('comments', comments);
+  const userAdmin = users.filter((item: any)=> item.role === 1)
+  // const dateStr1 = "2022-08-03T07:07:16.117+00:00";
+  // const date1 = new Date(dateStr1);
+  // const timestamp = date1.getTime();
+  // console.log("timestamp", timestamp);
+  // console.log("time Unix", moment(timestamp));
+  // const timeTest = moment(dateStr1).toObject()
+  // console.log("timeTest", timeTest);
+  // console.log("day in month", moment(dateStr1, "YYYY-M").daysInMonth());
 
-    const arrTime: any = [{ time: 6, quantity: 0 }]
-    console.log("final", moment().subtract(1, 'days'));
-    const usersTime = users.forEach((item: any) => {
-      const time = moment(item.createdAt).toObject()
-      const existingItem = arrTime.find((item: any) => item.time - 1 === time.months);
-      if (!existingItem) {
-        arrTime.push({
-          time: time.months + 1,
-          quantity: 1
-        });
+  const arrTime: any = [{ time: 6, quantity: 0 }]
+  console.log("final", moment().subtract(1, 'days'));
+  const usersTime = users.forEach((item: any) => {
+    const time = moment(item.createdAt).toObject()
+    const existingItem = arrTime.find((item: any) => item.time - 1 === time.months);
+    if (!existingItem) {
+      arrTime.push({
+        time: time.months + 1,
+        quantity: 1
+      });
 
-      } else {
-        existingItem.quantity++;
-      }
+    } else {
+      existingItem.quantity++;
+    }
 
-    })
-    console.log("arrTime", arrTime);
+  })
+  console.log("arrTime", arrTime);
 
-    useEffect(()=>{
-      dispatch(changeBreadcrumb("Quản Lý Users"))
-      dispatch(getListUser())
-    },[])
+  const arrTime2: any = [{ time: 6, quantity: 0 }]
+  console.log("final", moment().subtract(1, 'days'));
+  const usersTime2 = comments.forEach((item: any) => {
+    const time = moment(item.createdAt).toObject()
+    const existingItem = arrTime2.find((item: any) => item.time - 1 === time.months);
+    if (!existingItem) {
+      arrTime2.push({
+        time: time.months + 1,
+        quantity: 1
+      });
+
+    } else {
+      existingItem.quantity++;
+    }
+
+  })
+  console.log("arrTime2", arrTime2);
+
+  useEffect(() => {
+    dispatch(changeBreadcrumb("Quản Lý Users"))
+    dispatch(getListUser())
+    dispatch(getListComments())
+  }, [])
 
 
 
@@ -70,7 +93,7 @@ const AdminDashbroad = ({  }) => {
   // }
 
   // const { chartOptions, hoverData } = this.state;
-  const [state, setState] = useState()
+
   const test = {
     chartOptions: {
 
@@ -104,8 +127,41 @@ const AdminDashbroad = ({  }) => {
     },
     hoverData: null
   };
-  const { chartOptions, hoverData } = test;
+  const test2 = {
+    chartOptions: {
 
+      title: {
+        text: 'Số Lượng User '
+      },
+      xAxis: {
+        // [`${moment().subtract(3,"M").format("M/YYYY")}`, `${moment().subtract(2, 'M').format("M/YYYY")}`, `${moment().subtract(1, 'M').format("M/YYYY")}`, `${moment().format("M/YYYY")}`, `${moment().add(1, 'M').format("M/YYYY")}`, `${moment().add(2, 'M').format("M/YYYY")}`,]
+        categories: arrTime2.map((item: any) => {
+          return item.time
+
+        }),
+      },
+      series: [
+        {
+          data: arrTime2.map((item: any) => {
+            return item.quantity
+          })
+        }
+      ],
+      plotOptions: {
+        series: {
+          point: {
+            events: {
+              // mouseOver: setHoverData.bind(this)
+            }
+          }
+        },
+
+      }
+    },
+    hoverData: null
+  };
+  const { chartOptions, hoverData } = test;
+  const { chartOptions: chartOptions2, hoverData: hoverData2 } = test2;
 
 
 
@@ -187,7 +243,7 @@ const AdminDashbroad = ({  }) => {
               <p className={styles.number}>
                 <CountUp
                   start={0}
-                  end={123}
+                  end={users.length}
                   duration={2.75}
                   useEasing
                   useGrouping
@@ -213,7 +269,7 @@ const AdminDashbroad = ({  }) => {
               <p className={styles.number}>
                 <CountUp
                   start={0}
-                  end={123}
+                  end={comments.length}
                   duration={2.75}
                   useEasing
                   useGrouping
@@ -226,16 +282,63 @@ const AdminDashbroad = ({  }) => {
         </Col>
       </Row>
 
+      <Row gutter={24}>
+        <Col key={1} lg={16} md={12}>
+          <div className='w-[600px] '>
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={chartOptions}
+              containerProps={{ className: "w-[600px]" }}
+            />
 
-      <div className='w-[600px] '>
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={chartOptions}
-          containerProps={{ className: "w-[600px]" }}
-        />
+
+          </div>
+        </Col>
+        <Col key={2} lg={8} md={12}>
+          <Card
+            className={styles.numberCard}
+            bordered={false}
+            bodyStyle={{ padding: 10 }}
+
+          >
+            <span className={styles.iconWarp} >
+              <VideoCameraOutlined />
+            </span>
+            <div className={styles.content}>
+              <p className={styles.title}>Admin</p>
+              <p className={styles.number}>
+                <CountUp
+                  start={0}
+                  end={userAdmin.length}
+                  duration={2.75}
+                  useEasing
+                  useGrouping
+                  separator=","
+                // {...(countUp || {})}
+                />
+              </p>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col key={1} lg={16} md={12}>
+          <div className='w-[600px] '>
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={chartOptions2}
+              containerProps={{ className: "w-[600px]" }}
+            />
 
 
-      </div>
+          </div>
+        </Col>
+        <Col key={2} lg={8} md={12}>
+          
+        </Col>
+      </Row>
+
     </div>
   )
 }
@@ -243,7 +346,7 @@ const AdminDashbroad = ({  }) => {
 // export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
 //   try {
 //     context.res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate")
-    
+
 
 //     return {
 //       props: {
