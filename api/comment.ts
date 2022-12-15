@@ -1,6 +1,6 @@
 
 import { Comment } from "../models/comment"
-import { API_NodeJS,API_NodeLocal } from "./config"
+import { API_NodeJS, } from "./config"
 
 
 export const listComments = ()=>{

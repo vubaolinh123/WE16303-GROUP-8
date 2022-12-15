@@ -1,9 +1,9 @@
 import { User } from "../models/user"
-import { API_NodeJS, API_NodeLocal } from "./config"
+import { API_NodeJS } from "./config"
 
 
-export const listUsers = () => {
-    const url = `/users`
+export const listUsers = ()=>{
+    const url = `users`
     return API_NodeJS.get(url)
 }
 
@@ -14,7 +14,7 @@ export const detailUsers = (id: string) => {
 
 export const editUsers = (data: User) => {
     const url = `/users/${data._id}`
-    return API_NodeJS.put(url, data)
+    return API_NodeJS.put(url,data)
 }
 
 export const editRoleUsers = (id: string) => {

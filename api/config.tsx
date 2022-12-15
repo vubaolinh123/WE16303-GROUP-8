@@ -1,14 +1,11 @@
 import axios from "axios";
 
 export const instance = axios.create({
-    baseURL: "https://api.themoviedb.org/3/",
+    baseURL: process.env.NEXT_PUBLIC_API_MOVIE,
 });
 
 export const API_NodeJS = axios.create({
-    baseURL: "https://phim-poly.herokuapp.com/api/",
+    baseURL: process.env.NEXT_PUBLIC_API_BACKEND,
 });
 
-export const API_NodeLocal = axios.create({
-    baseURL: "http://localhost:3001/api/",
-});
 
