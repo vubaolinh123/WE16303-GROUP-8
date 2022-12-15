@@ -29,7 +29,7 @@ interface CategoryProps {
 
 
 
-const Category: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false }) => {
+const CategoryMovie: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false }) => {
   const categorys: {}[] = []
   const name = ["Phim", "TV Show"]
 
@@ -177,4 +177,4 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
 };
 
-export default Category;
+export default CategoryMovie;
