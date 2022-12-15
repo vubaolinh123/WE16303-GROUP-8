@@ -30,7 +30,7 @@ interface CategoryProps {
 
 
 const Category: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false }) => {
-  const category: {}[] = []
+  const categorys: {}[] = []
   const name = ["Phim", "TV Show"]
 
   Object.values(dataCategory).map((item: any, index) => {
@@ -43,12 +43,12 @@ const Category: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false
     })
     test.value = flag
 
-    category.push(test)
+    categorys.push(test)
   })
 
 
 
-  const menu2 = category.map((item: any) => {
+  const menu2 = categorys.map((item: any) => {
     return <Menu
       items={
         item.value.map((item2: any) => {
@@ -118,7 +118,7 @@ const Category: NextPage<CategoryProps> = ({ data, dataCategory, newPage = false
             {data.total_results <= 1 ? "result" : "results"} found)
           </h1>
 
-          {category.map((item: any, index) => {
+          {categorys.map((item: any, index) => {
             return <Dropdown key={index + 1} overlay={menu2[index]} trigger={['click']}>
               <button onClick={(e) => e.preventDefault()} >
                 <Space>
