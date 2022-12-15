@@ -5,12 +5,12 @@ import FacebookProvider from "next-auth/providers/facebook";
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID!,
-      clientSecret: process.env.GOOGLE_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET!,
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_SECRET!,
     })
   ],
   pages: {
@@ -22,6 +22,6 @@ export default NextAuth({
   //   strategy: "jwt",
   // },
   // debug: true,
-  secret: process.env.SECRET,
+  secret: process.env.NEXT_PUBLIC_SECRET,
 
 })
