@@ -1,34 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## The project was made by 3 members studying at FPT Polytechnic for assignment
 
-## Getting Started
+## Link Demo: https://movie.linkcualinh.com/
 
-First, run the development server:
-
+## Main Technology used
+- Nextjs, React ,Typescript, Tailwind, Ant Design
+- SWR, Redux-toolkit
+## Features
+- Watch Movie New Update
+- Register, Login, ChangeProfile, ChangePassword
+- Save favorite movies
+- Filter Movie
+## Installation
+- Clone the Project
+```bash
+npm install
+```
+- Create .env.local
+```bash
+NEXT_PUBLIC_TMDB_API_KEY= Your API Key, make one here: https://www.themoviedb.org
+NEXT_PUBLIC_API_MOVIE=https://api.themoviedb.org/3/
+NEXT_PUBLIC_API_BACKEND=http://localhost:3001/api/
+```
+- You need my folder BackEnd:  https://github.com/vubaolinh123/Api-Movie-Fpoly-Group
+- Run Project
 ```bash
 npm run dev
 # or
-yarn dev
+npm run build
+npm start
 ```
+## Screenshots, Preview
+![image](https://user-images.githubusercontent.com/73287503/208187723-ab4fabfe-78e4-41fa-b82f-60a595c1b885.png)
+![image](https://user-images.githubusercontent.com/73287503/208187917-4bd69757-d5a3-41e9-905d-df66f19003d6.png)
+![image](https://user-images.githubusercontent.com/73287503/208187848-ebd378e4-cfd7-4a6d-b4d9-8d4818d93081.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Summary
+👉 If you like this project, give it a star ✨ and share 👨🏻‍💻 it to your friends 👈
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
