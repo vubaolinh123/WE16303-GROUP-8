@@ -163,7 +163,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
                       </div>
                     </div>
                   </form>
-                  <div className="form-login-line">or</div>
+                  {/* <div className="form-login-line">or</div>
                   <div className="mt-6">
                     <button
                       className="flex items-center justify-center bg-[#181a1b] text-white font-bold py-3 px-4 gap-3 rounded w-full"
@@ -172,18 +172,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
                       <img className="w-6 h-6" src="/google.svg" alt="" />
                       Login With Google
                     </button>
-                    <button
-                      className="flex items-center justify-center bg-[#181a1b] text-white font-bold py-3 px-4 mt-4 gap-3 rounded w-full"
-                      onClick={() => signIn(providers!.facebook.id)}
-                    >
-                      <img
-                        className="w-7 h-7"
-                        src="/icons8-facebook.svg"
-                        alt=""
-                      />
-                      Login With Facebook
-                    </button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="login-form-other">
                   <div className="login-signup text-gray-400 flex justify-between">
@@ -204,6 +193,7 @@ const SignInPage: NextPage<TypeInputs> = ({ providers }) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const providers = await getProviders();
+
   try {
     return {
       props: {
