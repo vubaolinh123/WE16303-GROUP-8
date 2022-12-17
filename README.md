@@ -36,6 +36,8 @@ npm start
 
 ![image](https://user-images.githubusercontent.com/73287503/208187848-ebd378e4-cfd7-4a6d-b4d9-8d4818d93081.png)
 
+![image](https://user-images.githubusercontent.com/73287503/208265563-c43df1bf-95d5-4e78-a91c-7e578b298e19.png)
+
 ## Summary
 👉 If you like this project, give it a star ✨ and share 👨🏻‍💻 it to your friends 👈
 
