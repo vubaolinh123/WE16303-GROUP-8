@@ -10,7 +10,7 @@ import { search } from "../api/movies";
 import { useRouter } from "next/router";
 
 interface SearchProps {
-    result: SearchResult;
+    result: SearchResult; 
     newPage: boolean;
     q: string;
 }
