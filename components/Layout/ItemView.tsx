@@ -109,6 +109,7 @@ const ItemView: NextPage<ItemViewProps> = ({
                             {media_type === "movie" ? data.title : data.name}
                         </p>
                         <p className="text-lg text-justify">{data.overview}</p>
+                        {data.runtime && <div>Thời lượng: {data.runtime}phút</div>}
                         {data.release_date && <p>Ngày Phát Hành: {data.release_date}</p>}
                         {data.last_air_date && (
                             <p>Ngày Phát Hành Tập Cuối: {data.last_air_date}</p>

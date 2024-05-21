@@ -7,6 +7,9 @@ export interface Item {
     id: number;
     media_type: "tv" | "movie";
     vote_average: number;
+    popularity: number;
+    genres: { id: number; name: string }[];
+    runtime: any;
 }
 
 export interface Detail {
@@ -22,6 +25,7 @@ export interface Detail {
     vote_count: number;
     last_air_date: string;
     name: string;
+    runtime:number;
     seasons: {
         episode_count: number;
         season_number: number;
