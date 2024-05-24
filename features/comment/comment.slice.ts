@@ -22,7 +22,7 @@ export const getDetailComments = createAsyncThunk(
 export const addComment = createAsyncThunk(
     "comments/addComment",
     async (arr: Comment) => {
-        const { data } = await editComments(arr)
+        const { data } = await addComments(arr)
         return data
     }
 )
