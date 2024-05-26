@@ -81,6 +81,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
         const getDataComment = async () => {
             // const dataComment = await listCommentsByVideo(data.id)
             // setCommentsData(dataComment.data)
+
         }
         getDataComment()
         setCheck(false)
@@ -253,10 +254,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         const response = await getWatchMovieContent(id);
         // const comment = await listCommentsByVideo(id);
 
+
         return {
             props: {
                 ...response,
                 // commentsData: comment.data
+
             },
             revalidate: 3600,
         };
