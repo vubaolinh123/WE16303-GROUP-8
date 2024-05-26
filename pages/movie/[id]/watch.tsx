@@ -79,8 +79,8 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
 
     useEffect(() => {
         const getDataComment = async () => {
-            const dataComment = await listCommentsByVideo(data.id)
-            setCommentsData(dataComment.data)
+            // const dataComment = await listCommentsByVideo(data.id)
+            // setCommentsData(dataComment.data)
         }
         getDataComment()
         setCheck(false)
@@ -251,16 +251,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     try {
         const id = params?.id as string;
         const response = await getWatchMovieContent(id);
-        const comment = await listCommentsByVideo(id);
-
-        // console.log("comment",comment.data);
-        console.log("đã vào đây");
-
+        // const comment = await listCommentsByVideo(id);
 
         return {
             props: {
                 ...response,
-                commentsData: comment.data
+                // commentsData: comment.data
             },
             revalidate: 3600,
         };
