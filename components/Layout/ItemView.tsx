@@ -33,14 +33,14 @@ const ItemView: NextPage<ItemViewProps> = ({
     const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-    const userId: string = useSelector((state: any) => state.auth.value.user._id);
-    
+    const { _id: userId } = useSelector((state: any) => state.auth.value);
+
     const handleAddFavorite = async (mediaId: string, media_type: number, name: string) => {
         try {
-            await dispatch(addmedia({mediaId, userId, media_type}) as any).unwrap()
+            await dispatch(addmedia({ mediaId, userId, media_type }) as any).unwrap()
             toast.success(`Đã thêm ${name} vào danh sách yêu thích`)
         } catch (error: any) {
-            toast.error(`${name} đã có trong danh sách yêu thích`)            
+            toast.error(`${name} đã có trong danh sách yêu thích`)
         }
     }
     return (
@@ -98,8 +98,8 @@ const ItemView: NextPage<ItemViewProps> = ({
                                     <span>Xem Trailer</span>
                                 </Button>
                             )}
-                            {(isLoggedIn) &&(
-                                <Button onClick={(e) => {handleAddFavorite(data.id.toString(), media_type === "movie" ? 0 : 1, media_type === "movie" ? data.title  : data.name )}}>
+                            {(isLoggedIn) && (
+                                <Button onClick={(e) => { handleAddFavorite(data.id.toString(), media_type === "movie" ? 0 : 1, media_type === "movie" ? data.title : data.name) }}>
                                     <FaBookmark />
                                     Lưu
                                 </Button>

@@ -18,8 +18,8 @@ const account = () => {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
   const router = useRouter();
   const dispatch = useDispatch();
-  const valueUse = useSelector((state: any) => state.auth.value.user)
-
+  const valueUse = useSelector((state: any) => state.auth.value)
+  
   const onHandleChangePass = () => {
     if (status === "authenticated") {
       toast.info("Đăng nhập bằng google (facebook) không thể đổi mật khẩu")
@@ -53,7 +53,7 @@ const account = () => {
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
                 <h3 className="leading-6 flex text-white items-center cursor-pointer"><FaUserAlt className='mr-3 ' />Thông tin cá nhân</h3>
-                {valueUse.role === 1 &&
+                {valueUse?.role === 1 &&
                   <Link href={'/admin'}>
                     <button type='button'
                       className='leading-6 text-white mt-4 flex items-center fill-red-500'
@@ -73,7 +73,7 @@ const account = () => {
                 <p className='mt-2 text-[#666]'><span className='font-bold'>Ngày sinh: </span> {valueUse?.birthday ? valueUse?.birthday : 'Chưa cập nhật'}</p>
                 <p className='mt-2 text-[#666]'>
                   <span className='font-bold'>Mật khẩu: </span> *******
-                  <button onClick={onHandleChangePass} className="py-1 px-4 rounded"><FaPen className='fill-[#666] hover:fill-[white] duration-500' /></button>
+                  {/* <button onClick={onHandleChangePass} className="py-1 px-4 rounded"><FaPen className='fill-[#666] hover:fill-[white] duration-500' /></button> */}
                 </p >
               </div >
             </div >
