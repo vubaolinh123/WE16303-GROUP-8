@@ -2,11 +2,11 @@ import { IFavoriteMedia } from "../models/type";
 import {API_NodeJS} from "./config";
 
 export const addFavoriteMedia = (item: IFavoriteMedia) => {
-    return API_NodeJS.post(`favorite`, item)   
+    return API_NodeJS.post(`favoritemovie`, item)   
 }
 
 export const removeFavoriteMedia = (item: IFavoriteMedia) => {
-    return API_NodeJS.delete(`favorite/${item.userId}/${item.mediaId}`)   
+    return API_NodeJS.delete(`favoritemovie/${item.userId}/${item.mediaId}`)   
 }
 
 export const getListFavoriteMovie = (userId: string) => {
