@@ -13,7 +13,7 @@ const FavoriteList: NextPage = () => {
   const { TabPane } = Tabs;
   const dispatch = useDispatch();
 
-  const { _id: userId } = useSelector((state: any) => state.auth.value)
+  const { id: userId } = useSelector((state: any) => state.auth.value)
   const listFavorite = useSelector((state: any) => state.favorite.listfavorite)
   const { listfavoritemovie, listfavoritetv } = listFavorite
 
@@ -34,12 +34,12 @@ const FavoriteList: NextPage = () => {
     dispatch(getlistfavorite(userId) as any).unwrap();
     (async () => {
       Promise.all(listfavoritemovie.map(async (item: any): Promise<any> => {
-        const { data } = await getMovieDetails(item.mediaId);
+        const { data } = await getMovieDetails(item.mediaType);
         return data
       })).then((value: any) => setListMovie(value))
 
       Promise.all(listfavoritetv.map(async (item: any): Promise<any> => {
-        const { data } = await getTVDetails(item.mediaId);
+        const { data } = await getTVDetails(item.mediaType);
         return { ...data, media_type: "tv" }
       })).then((value: any) => setListTV(value))
     })()

@@ -33,7 +33,7 @@ const ItemView: NextPage<ItemViewProps> = ({
     const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-    const { _id: userId } = useSelector((state: any) => state.auth.value);
+    const { id: userId } = useSelector((state: any) => state.auth.value);
 
     const handleAddFavorite = async (mediaId: string, media_type: number, name: string) => {
         try {

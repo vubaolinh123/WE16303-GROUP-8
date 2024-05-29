@@ -218,8 +218,8 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                       </button>
                     </div>
                   </form>
-                  <div className="form-login-line">or</div>
-                  <div className="mt-6">
+                  {/* <div className="form-login-line">or</div> */}
+                  {/* <div className="mt-6">
                     <button
                       className="flex items-center justify-center bg-[#181a1b] text-white font-bold py-3 px-4 gap-3 rounded w-full"
                       onClick={() => signIn(providers!.google.id)}
@@ -238,7 +238,7 @@ const SignUpPage = ({ providers }: TypeInputs) => {
                       />
                       Login With Facebook
                     </button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="login-form-other">
                   <div className="login-signup text-gray-400 flex justify-between">
