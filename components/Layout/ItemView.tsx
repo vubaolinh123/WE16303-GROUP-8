@@ -33,11 +33,11 @@ const ItemView: NextPage<ItemViewProps> = ({
     const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-    const { _id: userId } = useSelector((state: any) => state.auth.value);
+    const { id: userId } = useSelector((state: any) => state.auth.value);
 
     const handleAddFavorite = async (mediaId: string, media_type: number, name: string) => {
         try {
-            await dispatch(addmedia({ mediaId, userId, media_type }) as any).unwrap()
+            await dispatch(addmedia({ mediaId, userId, mediaType:media_type }) as any).unwrap()
             toast.success(`Đã thêm ${name} vào danh sách yêu thích`)
         } catch (error: any) {
             toast.error(`${name} đã có trong danh sách yêu thích`)
