@@ -38,6 +38,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
     const [check, setCheck] = useState(false);
     const [searchInputValue, setSearchInputValue] = useState("");
     const [searchInputValueReply, setSearchInputValueReply] = useState("");
+    console.log("datadata", data);
 
     const handleSearchFormSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -79,8 +80,8 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
 
     useEffect(() => {
         const getDataComment = async () => {
-            // const dataComment = await listCommentsByVideo(data.id)
-            // setCommentsData(dataComment.data)
+            const dataComment = await listCommentsByVideo(data.id)
+            setCommentsData(dataComment.data)
 
         }
         getDataComment()
@@ -158,11 +159,11 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                             <Avatar shape="square" size="large" icon={<UserOutlined />} />
                                             <div className="h-auto">
                                                 <div>
-                                                    <div className="text-blue-500">{String(comment.userId.name)}</div>
+                                                    <div className="text-blue-500">{String(comment.userId?.name)}</div>
                                                     <div>{comment.desc}</div>
                                                     <div className="flex justify-between text-xs gap-4">
                                                         <div className="flex items-center gap-1 my-auto hover:cursor-pointer" onClick={() => handleReplyClickReply(String(comment._id))}><FaRegComments /> trả lời </div>
-                                                        <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment.createdAt))}</div>
+                                                        {/* <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment.createdAt))}</div> */}
                                                     </div>
                                                     {
                                                         reply == comment._id &&
@@ -182,7 +183,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                                         replies.map((item: any, index: number) => (
                                                             item.reply == comment._id &&
                                                             <div key={index}>
-                                                                {comment.replies.map((reply: Comment, index: number) => (
+                                                                {comment.replies?.map((reply: Comment, index: number) => (
                                                                     <div key={index} className="flex mb-8 gap-3 w-full h-full my-3">
                                                                         <Avatar shape="square" size="default" icon={<UserOutlined />} />
                                                                         <div className="h-auto">
@@ -191,7 +192,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                                                                 <div>{reply.desc}</div>
                                                                                 <div className="flex justify-between text-xs gap-8">
                                                                                     <div className="flex items-center gap-1 my-auto" onClick={() => handleReplyClickReply(String(comment._id))}><FaRegComments /> trả lời </div>
-                                                                                    <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment.createdAt))}</div>
+                                                                                    <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment?.createdAt))}</div>
                                                                                 </div>
                                                                             </div>
 
@@ -202,9 +203,9 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                                             </div>
                                                         ))
                                                     }
-                                                    {comment.replies.length > 0 &&
+                                                    {comment.replies?.length > 0 &&
                                                         < div key={index} className="flex py-2 items-center text-[10px] italic gap-1 cursor-pointer" onClick={(e) => handleReplyClick(String(comment._id), e)}  >
-                                                            {comment.replies.length} trả lời <FaChevronDown />
+                                                            {comment.replies?.length} trả lời <FaChevronDown />
                                                         </div>
                                                     }
                                                 </div>
@@ -253,7 +254,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         const id = params?.id as string;
         const response = await getWatchMovieContent(id);
         // const comment = await listCommentsByVideo(id);
-
+        console.log("comment.data",);
 
         return {
             props: {

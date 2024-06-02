@@ -12,6 +12,8 @@ interface MovieProps {
 }
 
 const Movie: NextPage<MovieProps> = (props) => {
+    console.log("casts",props);
+    
     return <ItemView {...props} media_type="movie" />;
 };
 
