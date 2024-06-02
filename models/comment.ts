@@ -1,9 +1,9 @@
 import { User } from "./user";
 
 export interface Comment{
-    _id?: string,
-    userId: User ,
-    movie_id: string,
+    id?: string,
+    user: User ,
+    movieId: string,
     desc: string,
     type: string,
     replies?:any,

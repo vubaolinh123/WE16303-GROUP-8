@@ -24,7 +24,7 @@ export const addComments = (data: Comment) => {
 }
 
 export const editComments = (data: any) => {
-    const url = `/comments/${data._id}`
+    const url = `/comments`
     return API_NodeJS.put(url,data)
 }
 

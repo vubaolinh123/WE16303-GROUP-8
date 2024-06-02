@@ -15,6 +15,9 @@ import { FormEvent, useEffect, useState } from "react";
 import { format } from 'date-fns-tz';
 import { addComments, editComments, listComments, listCommentsByVideo } from "../../../api/comment";
 import { Comment } from "../../../models/comment";
+import { toast } from "react-toastify";
+import { addComment, editComment, getDetailComments } from "../../../features/comment/comment.slice";
+import { useAppDispatch } from "../../../app/hook";
 
 
 interface WatchMovieProps {
@@ -24,69 +27,66 @@ interface WatchMovieProps {
 
 export const convertToVietnameseTime = (utcTimeString: string) => {
     const date = new Date(utcTimeString);
-    const vietnameseTime = format(date, 'dd-MM-yyyy', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const vietnameseTime = date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
     return vietnameseTime;
 }
 
 const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
     const user = useSelector((state: any) => state.auth.value)
+    const commentsData = useSelector((state: any) => state.comment.value)
     const currentTime = new Date();
 
-    const [commentsData, setCommentsData] = useState<Comment[]>([]);
     const [replies, setReplies] = useState<{ reply: string; check: boolean; }[]>([]);
     const [reply, setReply] = useState('');
     const [check, setCheck] = useState(false);
     const [searchInputValue, setSearchInputValue] = useState("");
     const [searchInputValueReply, setSearchInputValueReply] = useState("");
-    console.log("datadata", data);
-
+    const dispatch = useAppDispatch();
     const handleSearchFormSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const commentNew = {
-            movie_id: data.id,
-            userId: user.user._id,
+            user: user,
+            movieId: data.id,
             desc: searchInputValue,
-            type: "movie"
+            type: similar[0].media_type,
+            createdAt: currentTime.toISOString(),
+            replies: []
         }
-        const commentnew = await addComments(commentNew);
-        if (commentnew) {
-            setSearchInputValue("");
-            setCheck(true)
-        }
+        dispatch(addComment(commentNew));
+        setSearchInputValue("");
+        setCheck(true)
+        toast.success("Bình luận thành công")
     };
 
     const handleSearchUpdate = async (e: any) => {
         e.preventDefault();
-        const commentChange = commentsData.find((element) => element._id == reply)
+        const commentChange = commentsData.find((element: Comment) => element.id == reply)
 
         const commentReply = {
-            _id: commentChange?._id,
-            desc: commentChange?.desc,
-            movie_id: commentChange?.movie_id,
-            type: commentChange?.type,
-            userId: user.user,
+            ...commentChange,
+            user: user,
             replies: [...commentChange?.replies, {
-                userId: user.user,
+                user: user,
                 desc: searchInputValueReply,
                 updatedAt: currentTime.toISOString(),
             }],
         }
-        const commentnew = await editComments(commentReply);
+        const commentnew = await dispatch(editComment(commentReply))
         if (commentnew) {
             setSearchInputValueReply("");
             setCheck(true)
+            toast.success("Bình luận thành công")
         }
     };
 
     useEffect(() => {
         const getDataComment = async () => {
-            const dataComment = await listCommentsByVideo(data.id)
-            setCommentsData(dataComment.data)
+            const datanew = await dispatch(getDetailComments(data.id))
 
         }
         getDataComment()
         setCheck(false)
-    }, [check]);
+    }, []);
 
     // Hàm để xử lý sự kiện click vào nút "Trả lời"
     const handleReplyClick = (commentId: string, event: any) => {
@@ -154,19 +154,19 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                 </div>
 
                                 {commentsData &&
-                                    commentsData.map((comment: Comment, index) => (
+                                    commentsData.map((comment: Comment, index: number) => (
                                         <div key={index} className="flex mb-8 gap-3 w-full h-full">
                                             <Avatar shape="square" size="large" icon={<UserOutlined />} />
                                             <div className="h-auto">
                                                 <div>
-                                                    <div className="text-blue-500">{String(comment.userId?.name)}</div>
+                                                    <div className="text-blue-500">{String(comment.user?.name)}</div>
                                                     <div>{comment.desc}</div>
                                                     <div className="flex justify-between text-xs gap-4">
-                                                        <div className="flex items-center gap-1 my-auto hover:cursor-pointer" onClick={() => handleReplyClickReply(String(comment._id))}><FaRegComments /> trả lời </div>
-                                                        {/* <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment.createdAt))}</div> */}
+                                                        <div className="flex items-center gap-1 my-auto hover:cursor-pointer" onClick={() => handleReplyClickReply(String(comment.id))}><FaRegComments /> trả lời </div>
+                                                        <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment.createdAt))}</div>
                                                     </div>
                                                     {
-                                                        reply == comment._id &&
+                                                        reply == comment.id &&
                                                         <form action="" className="h-auto w-full" onSubmit={handleSearchUpdate}>
                                                             <Input
                                                                 placeholder="Nhập trả lời của bạn..."
@@ -181,18 +181,18 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                                     {
                                                         replies &&
                                                         replies.map((item: any, index: number) => (
-                                                            item.reply == comment._id &&
+                                                            item.reply == comment.id &&
                                                             <div key={index}>
                                                                 {comment.replies?.map((reply: Comment, index: number) => (
                                                                     <div key={index} className="flex mb-8 gap-3 w-full h-full my-3">
                                                                         <Avatar shape="square" size="default" icon={<UserOutlined />} />
                                                                         <div className="h-auto">
                                                                             <div>
-                                                                                <div className="text-blue-500">{reply.userId.name}</div>
+                                                                                <div className="text-blue-500">{reply.user.name}</div>
                                                                                 <div>{reply.desc}</div>
                                                                                 <div className="flex justify-between text-xs gap-8">
-                                                                                    <div className="flex items-center gap-1 my-auto" onClick={() => handleReplyClickReply(String(comment._id))}><FaRegComments /> trả lời </div>
-                                                                                    <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(comment?.createdAt))}</div>
+                                                                                    <div className="flex items-center gap-1 my-auto" onClick={() => (String(comment.id))}><FaRegComments /> trả lời </div>
+                                                                                    <div className="flex items-center gap-1 my-auto"><FaRegClock /> {convertToVietnameseTime(String(reply?.updatedAt))}</div>
                                                                                 </div>
                                                                             </div>
 
@@ -204,7 +204,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                                         ))
                                                     }
                                                     {comment.replies?.length > 0 &&
-                                                        < div key={index} className="flex py-2 items-center text-[10px] italic gap-1 cursor-pointer" onClick={(e) => handleReplyClick(String(comment._id), e)}  >
+                                                        < div key={index} className="flex py-2 items-center text-[10px] italic gap-1 cursor-pointer" onClick={(e) => handleReplyClick(String(comment.id), e)}  >
                                                             {comment.replies?.length} trả lời <FaChevronDown />
                                                         </div>
                                                     }
@@ -253,13 +253,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     try {
         const id = params?.id as string;
         const response = await getWatchMovieContent(id);
-        // const comment = await listCommentsByVideo(id);
-        console.log("comment.data",);
 
         return {
             props: {
                 ...response,
-                // commentsData: comment.data
 
             },
             revalidate: 3600,
