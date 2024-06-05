@@ -64,7 +64,6 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
 
         const commentReply = {
             ...commentChange,
-            user: user,
             replies: [...commentChange?.replies, {
                 user: user,
                 desc: searchInputValueReply,
@@ -140,7 +139,10 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                     <p>Bình luận</p>
                                 </div>
                                 <div className="flex justify-between mb-8 gap-3  h-full">
-                                    <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                                    <Image
+                                        src={user.image}
+                                        style={{ width: 40, height: 44, borderRadius: "10%" }}
+                                    ></Image>
                                     <form action="" className="h-auto w-full" onSubmit={handleSearchFormSubmit}>
                                         <Input
                                             placeholder="Nhập bình luận của bạn..."
@@ -156,7 +158,14 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                 {commentsData &&
                                     commentsData.map((comment: Comment, index: number) => (
                                         <div key={index} className="flex mb-8 gap-3 w-full h-full">
-                                            <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                                            {comment?.user.image ?
+                                                <Image
+                                                    src={comment.user.image}
+                                                    style={{ width: 40, height: 44, borderRadius: "10%" }}
+                                                ></Image>
+                                                :
+                                                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                                            }
                                             <div className="h-auto">
                                                 <div>
                                                     <div className="text-blue-500">{String(comment.user?.name)}</div>
@@ -185,7 +194,14 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                                             <div key={index}>
                                                                 {comment.replies?.map((reply: Comment, index: number) => (
                                                                     <div key={index} className="flex mb-8 gap-3 w-full h-full my-3">
-                                                                        <Avatar shape="square" size="default" icon={<UserOutlined />} />
+                                                                        {reply.user.image ?
+                                                                            <Image
+                                                                                src={reply.user.image}
+                                                                                style={{ width: 40, height: 44, borderRadius: "10%" }}
+                                                                            ></Image>
+                                                                            :
+                                                                            <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                                                                        }
                                                                         <div className="h-auto">
                                                                             <div>
                                                                                 <div className="text-blue-500">{reply.user.name}</div>
