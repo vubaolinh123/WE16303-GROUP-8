@@ -1,7 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { getCategoryData } from "../../api/category";
+import { getCategoryData, getPeopleData } from "../../api/category";
 import { useEffect, useState } from "react";
 import { store } from '../../app/store';
 import { Dropdown, Menu, Space, Avatar } from "antd";
@@ -50,6 +50,7 @@ const Navbar: NextPage = () => {
     useEffect(() => {
         const getCategory = async () => {
             const dataCategory = await getCategoryData()
+            await getPeopleData();
             SetDataCategory(dataCategory)
         }
         getCategory()
@@ -97,6 +98,11 @@ const Navbar: NextPage = () => {
                         </span>
                     </Link>
                 }
+                <Link href={`/category/people`}>
+                    <span className="h-full w-auto px-4 pt-[13px] cursor-pointer text-white hover:text-red-600 ">
+                        Diễn viên
+                    </span>
+                </Link>
             </div>
             <Link href="/search">
                 <a>
