@@ -192,6 +192,16 @@ export const search: (query: string, page?: number) => Promise<any> = async (
     };
 };
 
+export const searchPerson: (query: string, page?: number) => Promise<any> = async (
+    query,
+    page = 1
+) => {
+    const data = (await instance.get(`search/person?api_key=${API_KEY}&query=${query}&page=${page}&language=${language}`))
+        .data;
+    return {
+        ...data
+    };
+};
 
 export const detailMovie = async (id: number) => {
     const data =  await(await instance.get(`movie/${id}?api_key=${API_KEY}&language=${language}`)).data;

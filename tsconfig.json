@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Movieoviesrc/pages/api/auth/[...nextauth].tsauth].ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Movieoviesrc/pages/api/auth/[...nextauth].tsauth].ts", "pages/category/people/[id]"],
   "exclude": ["node_modules"]
 }

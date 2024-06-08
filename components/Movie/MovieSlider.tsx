@@ -6,11 +6,11 @@ import MovieCard from "./MovieCard";
 import type { NextPage } from "next";
 
 interface MovieSliderProps {
-    data: Item[];
+    data: any;
     loop?: boolean;
 }
 
-const MovieSlider: NextPage<MovieSliderProps> = ({ data, loop = true }) => {
+const MovieSlider: NextPage<MovieSliderProps> = ({ data, loop }) => {
 
     return (
         <Swiper
@@ -24,7 +24,7 @@ const MovieSlider: NextPage<MovieSliderProps> = ({ data, loop = true }) => {
             navigation
         >
             <div className="!flex">
-                {data.map((item) => (
+                {data.map((item:any) => (
                     <SwiperSlide key={item.id} className="!w-[200px] !flex">
                         <MovieCard item={item} width={200} height={300} />
                     </SwiperSlide>

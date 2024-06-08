@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { listComments,detailComments,addComments,editComments,removeComments } from '../../api/comment'
+import { listComments,detailComments,addComments,editComments,removeComments, listCommentsByVideo } from '../../api/comment'
 import { Comment } from '../../models/comment'
 
 
@@ -12,9 +12,9 @@ export const getListComments = createAsyncThunk(
 )
 
 export const getDetailComments = createAsyncThunk(
-    "comments/getDetailUser",
+    "comments/listCommentsByVideo",
     async (id: string) => {
-        const { data } = await detailComments(id)
+        const { data } = await listCommentsByVideo(id)
         return data
     }
 )
@@ -59,8 +59,8 @@ export const removeComment = createAsyncThunk(
 
 
 
-const userSlide = createSlice({
-    name: "users",
+const commentSlide = createSlice({
+    name: "comments",
     initialState: {
         value: [],
         detail: {},
@@ -75,15 +75,15 @@ const userSlide = createSlice({
         builder.addCase(getListComments.fulfilled, (state: any, action) => {
             state.value = action.payload
         })
-        builder.addCase(getDetailComments.fulfilled, (state, action) => {
-            state.detail = action.payload
+        builder.addCase(getDetailComments.fulfilled, (state:any, action) => {
+            state.value = action.payload
         })
         builder.addCase(addComment.fulfilled, (state: any, action) => {
             state.value = [...state.value, action.payload]
             
        })
         builder.addCase(editComment.fulfilled, (state: any, action) => {
-            state.value = state.value.map((item: Comment) => item._id === action.payload._id ? action.payload : item)
+            state.value = state.value.map((item: Comment) => item.id === action.payload.id ? action.payload : item)
         })
         builder.addCase(removeComment.fulfilled, (state: any, action: any) => {
             if (Array.isArray(action.payload)) {
@@ -103,7 +103,7 @@ const userSlide = createSlice({
     },
 })
 
-export const { changeBreadcrumb } = userSlide.actions
+export const { changeBreadcrumb } = commentSlide.actions
 
-export default userSlide.reducer
+export default commentSlide.reducer
 

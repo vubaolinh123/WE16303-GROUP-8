@@ -1,13 +1,13 @@
-import { NextPage } from 'next'
 import { Tabs } from 'antd';
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import Meta from '../../components/Shared/Meta'
-import { getlistfavorite, removefavorite } from '../../features/favorite/favorite.slice'
-import { getMovieDetails, getTVDetails } from "../../api/movies"
-import MovieCard from '../../components/Movie/MovieCard'
-import { Item } from '../../models/type'
+import { NextPage } from 'next';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { getMovieDetails, getTVDetails } from "../../api/movies";
+import MovieCard from '../../components/Movie/MovieCard';
+import Meta from '../../components/Shared/Meta';
+import { getlistfavorite, removefavorite } from '../../features/favorite/favorite.slice';
+import { Item } from '../../models/type';
 
 const FavoriteList: NextPage = () => {
   const { TabPane } = Tabs;

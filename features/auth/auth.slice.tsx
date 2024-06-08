@@ -93,7 +93,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     });
     builder.addCase(changeuserprofile.fulfilled, (state, action) => {
-      state.value.user = action.payload;
+      state.value = action.payload;
       state.isLoggedIn = true;
     });
     builder.addCase(changeuserprofile.rejected, (state, action) => {

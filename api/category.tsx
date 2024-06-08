@@ -33,6 +33,63 @@ export const getCategoryData: () => Promise<any> = async () => {
 
 }
 
+export const getPeopleData: () => Promise<any> = async () => {
+    const CategoryAPIRoutes: {
+        [key: string]: { url: string };
+    } = {
+        "PeopleData": { url: `/person/popular?api_key=${API_KEY}&language=${language}` },
+    };
+
+    const promises = await Promise.all(
+        Object.keys(CategoryAPIRoutes).map((item) => instance.get(CategoryAPIRoutes[item].url))
+    );
+
+    const data = promises.reduce((final, current, index) => {
+        final[Object.keys(CategoryAPIRoutes)[index]] = current.data.results.map(
+            (item: any) => ({
+                ...item
+            })
+        );
+
+        return final;
+    }, {} as any);
+
+    return data;
+
+}
+
+export const getDefaultPeople: (page?: number) => Promise<any> = async (page = 1) => {
+    const data = (await instance.get(`/person/popular?api_key=${API_KEY}&language=${language}&page=${page}`)).data;
+    return {
+        ...data
+    };
+};
+
+export const getPeopleDetail: (id: string) => Promise<any> = async (id) => {
+    const labels = ["data", "movie_credits"];
+
+    const result = (
+        await Promise.all([
+            instance.get(`/person/${id}?api_key=${API_KEY}&language=${language}`),
+            instance.get(`/person/${id}/movie_credits?api_key=${API_KEY}&language=${language}`)
+        ])
+    ).reduce((final, current, index) => {
+        console.log(current.data);
+        
+        if (labels[index] === "data") {
+            final[labels[index]] = current.data;
+        } else if (labels[index] === "movie_credits") {
+            final[labels[index]] = current.data;
+        }
+
+        return final;
+    }, {} as any);
+
+    return {
+        ...result
+    };
+};
+
 export const getDefaultMovie: (page?: number) => Promise<any> = async (page = 1) => {
     const data = (await instance.get(`/trending/movie/week?api_key=${API_KEY}&language=${language}&page=${page}`)).data;
     return {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Meta from "../../components/Shared/Meta";
 import { useRouter } from "next/router";
@@ -7,12 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeuserprofile } from "../../features/auth/auth.slice";
 import Link from "next/link";
 import { store } from "../../app/store";
+import { uploadImage } from "../../components/Display/UploadImage";
 
 
 type TypeInputs = {
   name: string;
   email: string;
   birthday: string;
+  image: any;
 };
 
 const ChangeUserProfilePage = () => {
@@ -25,7 +27,8 @@ const ChangeUserProfilePage = () => {
     formState: { errors },
   } = useForm<TypeInputs>({ mode: "onTouched" });
 
-  const user = useSelector((state: any) => state.auth.value.user)
+  const user = useSelector((state: any) => state.auth.value)
+  const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
     if (user) {
@@ -33,19 +36,31 @@ const ChangeUserProfilePage = () => {
     }
   }, [user])
 
+  const handlePreview = (e: any) => {
+    setPreview(URL.createObjectURL(e.target.files[0]));
+  }
   const onSubmit: SubmitHandler<TypeInputs> = async (data) => {
     const yearOfBirh = new Date(data.birthday).getFullYear();
     const currentYear = new Date().getFullYear();
     const age = currentYear - yearOfBirh;
-    const user = { ...data, age }
+
+
+
     try {
-      await dispatch(changeuserprofile(user) as any)
+      const imgPost = document.querySelector<any>("#file-upload");
+      // const imgLink = await uploadImage(imgPost);
+      const user = { ...data, age };
+      if (imgPost.files.length) {
+        const response = await uploadImage(imgPost);
+        user.image = String(response)
+      }
+      const newUser = await dispatch(changeuserprofile(user) as any)
       router.push("/account")
     } catch (error) {
       toast.success("Thay đổi thông tin thất bại")
     }
   };
-  
+
   return (
     <>
       <Meta
@@ -69,8 +84,8 @@ const ChangeUserProfilePage = () => {
               <input
                 className="appearance-none rounded w-full py-3 px-3 text-white leading-tight"
                 type="text"
+                value={user.email}
                 readOnly
-                {...register("email")}
               />
               {errors.name && (
                 <span className="errors">{errors.name.message}</span>
@@ -100,6 +115,23 @@ const ChangeUserProfilePage = () => {
                 type="Date"
                 {...register("birthday")}
               />
+              {errors.name && (
+                <span className="errors">{errors.name.message}</span>
+              )}
+            </div>
+
+            <div className="mb-4 relative w-[400px]">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Ảnh đại diện
+              </label>
+              <input
+                className="appearance-none rounded w-full py-3 px-3 text-white leading-tight"
+                type="file"
+                {...register("image")} onChange={e => handlePreview(e)}
+                id='file-upload'
+              />
+              <img
+                src={preview || user?.image} id='img-preview' alt="" width='100px' />
               {errors.name && (
                 <span className="errors">{errors.name.message}</span>
               )}

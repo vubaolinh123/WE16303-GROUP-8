@@ -1,12 +1,13 @@
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import type { NextPage } from "next";
-import { getCategoryData } from "../../api/category";
+import { getCategoryData, getPeopleData } from "../../api/category";
 import { useEffect, useState } from "react";
 import { store } from '../../app/store';
 import { Dropdown, Menu, Space, Avatar } from "antd";
 import { DownOutlined, UpOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector } from "react-redux";
+import Image from "../Shared/Image";
 
 const Navbar: NextPage = () => {
 
@@ -14,7 +15,7 @@ const Navbar: NextPage = () => {
     const [dataCategory, SetDataCategory] = useState<{}[]>([])
     // const isLoggedIn = store.getState().auth.isLoggedIn
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn)
-
+    const user = useSelector((state: any) => state.auth.value)
     const name = [
         { name: "Phim", value: "movie" },
         { name: "TV Show", value: "tv" }
@@ -49,6 +50,7 @@ const Navbar: NextPage = () => {
     useEffect(() => {
         const getCategory = async () => {
             const dataCategory = await getCategoryData()
+            await getPeopleData();
             SetDataCategory(dataCategory)
         }
         getCategory()
@@ -96,6 +98,11 @@ const Navbar: NextPage = () => {
                         </span>
                     </Link>
                 }
+                <Link href={`/category/people`}>
+                    <span className="h-full w-auto px-4 pt-[13px] cursor-pointer text-white hover:text-red-600 ">
+                        Diễn viên
+                    </span>
+                </Link>
             </div>
             <Link href="/search">
                 <a>
@@ -105,7 +112,15 @@ const Navbar: NextPage = () => {
             <div className="px-4">
                 {isLoggedIn &&
                     <Link href={'/account'}>
-                        <Avatar size="large" className="cursor-pointer" icon={<UserOutlined />} />
+                        {
+                            user.image ?
+                                <Image
+                                    src={user.image}
+                                    style={{ width: 40, height: 40, borderRadius: "100%", cursor: "pointer" }}
+                                ></Image>
+                                :
+                                <Avatar className="cursor-pointer" size="large" icon={<UserOutlined />} />
+                        }
                     </Link>
                 }
                 {isLoggedIn === false &&

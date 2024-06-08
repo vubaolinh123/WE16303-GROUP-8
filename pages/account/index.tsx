@@ -8,6 +8,8 @@ import { toast } from 'react-toastify'
 import LoadingPage from '../../components/Display/LoadingPage'
 import Meta from '../../components/Shared/Meta'
 import { signout } from "../../features/auth/auth.slice";
+import { Avatar } from 'antd'
+import { UserOutlined } from '@ant-design/icons';
 
 
 
@@ -68,6 +70,14 @@ const account = () => {
             </div>
             <div className="mt-5 md:mt-0 md:col-span-2">
               <div className='mt-1 text-[#333]'>
+                <p className=' text-[#666] flex gap-1'><span className='font-bold'>Image: </span>
+                  {
+                    valueUse.image ?
+                      <img src={valueUse?.image} alt="" className='w-28 rounded-xl' />
+                      :
+                      <Avatar shape="square" size="large" icon={<UserOutlined />}/>
+                  }
+                </p>
                 <p className=' text-[#666]'><span className='font-bold'>Email: </span>{valueUse?.email}</p>
                 <p className='mt-2 text-[#666]'><span className='font-bold'>Name: </span>{valueUse?.name}</p>
                 <p className='mt-2 text-[#666]'><span className='font-bold'>Ngày sinh: </span> {valueUse?.birthday ? valueUse?.birthday : 'Chưa cập nhật'}</p>

@@ -16,5 +16,5 @@ export const changepassword = (user: any) => {
 }
 
 export const changeprofile = (user: any) => {
-    return API_NodeJS.put(`changeprofile`, user)
+    return API_NodeJS.put(`users/changeprofile`, user)
 }
