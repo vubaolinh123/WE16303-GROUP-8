@@ -12,8 +12,8 @@ export const detailUsers = (id: string) => {
     return API_NodeJS.get(url)
 }
 
-export const editUsers = (data: User) => {
-    const url = `/users/${data._id}`
+export const editUsers = (data: any) => {
+    const url = `/users/${data.id}`
     return API_NodeJS.put(url,data)
 }
 

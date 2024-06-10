@@ -32,7 +32,6 @@ export const editRoleUser = createAsyncThunk(
     "users/editRoleUser",
     async (arr: any) => {
         if (Array.isArray(arr)) {
-
             let dataEdit: User[] = []
             for (let i = 0; i < arr.length; i++) {
                 // const { data } = await removeQuiz(arr[i].id)
@@ -84,7 +83,7 @@ const userSlide = createSlice({
                 console.log("state.value", state.value);
 
             } else {
-                state.value = state.value.map((item: User) => item._id === action.payload._id ? action.payload : item)
+                state.value = state.value.map((item: any) => item.id === action.payload.id ? action.payload : item)
             }
         })
     },

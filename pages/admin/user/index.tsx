@@ -20,7 +20,7 @@ import Meta from '../../../components/Shared/Meta';
 
 interface DataType {
     key: React.Key;
-    _id?: string,
+    id?: string,
     name: string,
     password?: string,
     email: string,
@@ -54,11 +54,10 @@ const AdminUser = (props: LayoutProps) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
-
-    const dataTable = users.map((item: User, index) => {
+    const dataTable = users.map((item: any, index) => {
         return {
             key: index + 1,
-            _id: item._id,
+            id: item.id,
             name: item.name,
             image: item.image,
             email: item.email,
@@ -145,7 +144,7 @@ const AdminUser = (props: LayoutProps) => {
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
         let rowSelected: { key: number, id: string | undefined }[] = []
         newSelectedRowKeys.map((item) => {
-            dataTable.map((item2) => item2.key === item ? rowSelected.push({ key: item2.key, id: item2._id }) : "")
+            dataTable.map((item2) => item2.key === item ? rowSelected.push({ key: item2.key, id: item2.id }) : "")
         })
         console.log('rowSelected', rowSelected);
         console.log('newSelectedRowKeys', newSelectedRowKeys);
@@ -239,10 +238,10 @@ const AdminUser = (props: LayoutProps) => {
         },
         {
             title: 'ID',
-            dataIndex: '_id',
-            key: "_id",
-            ...getColumnSearchProps('_id'),
-            sorter: (a: any, b: any) => a._id - b._id,
+            dataIndex: 'id',
+            key: "id",
+            ...getColumnSearchProps('id'),
+            sorter: (a: any, b: any) => a.id - b.id,
             sortDirections: ['descend'],
             ellipsis: {
                 showTitle: false,
@@ -363,12 +362,12 @@ const AdminUser = (props: LayoutProps) => {
             title: "Hành Động", key: "action", render: (text, record) => (
                 record.role === 0
                     ? <Space align="center" size="middle">
-                        <Button onClick={() => { dispatch(editRoleUser({ id: record._id, role: 1 })) }} style={{ background: "#198754" }} >
+                        <Button onClick={() => { dispatch(editRoleUser({ id: record.id, role: 1 })) }} style={{ background: "#198754" }} >
                             <span className="text-white"><UserAddOutlined /></span>
                         </Button>
                     </Space>
                     : <Space align="center" size="middle">
-                        <Button onClick={() => { dispatch(editRoleUser({ id: record._id, role: 0 })) }} style={{ background: "#FF7875" }} >
+                        <Button onClick={() => { dispatch(editRoleUser({ id: record.id, role: 0 })) }} style={{ background: "#FF7875" }} >
                             <span className="text-white"><UserDeleteOutlined /></span>
                         </Button>
                     </Space>
