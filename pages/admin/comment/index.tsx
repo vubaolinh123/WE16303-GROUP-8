@@ -82,10 +82,10 @@ const CommentList = ({ response, data }: CommentListProps) => {
 
   const childrenTable = comments.map((item: any, index) => {
     return {
-      key: item._id,
-      _id: item._id,
+      key: item.id,
+      _id: item.id,
       userId: item.user,
-      movie_id: item.movie,
+      movie_id: item.movieId,
       desc: item.desc,
       status: item.status,
       createdAt: item.createdAt,
@@ -388,7 +388,7 @@ const CommentList = ({ response, data }: CommentListProps) => {
         render: (record) => (
           <div className="">
             {users.map((item: any, index) => {
-              if (item._id === record.userId) {
+              if (item.id === record.userId) {
                 return <div className="flex justify-start gap-1 ">
                   <div className="basis-1/4">
                     <Image
@@ -445,7 +445,7 @@ const CommentList = ({ response, data }: CommentListProps) => {
     //   isCorrect: item.isCorrect
     // } : null)
 
-    let data: any = comments.filter((item: any) => item.movie_id === row.id).map((item2: any, index) => {
+    let data: any = comments.filter((item: any) => item.movieId == row.id).map((item2: any, index) => {
       return {
         // key: item2._id,
         // stt: index + 1,
@@ -453,11 +453,11 @@ const CommentList = ({ response, data }: CommentListProps) => {
         // answer: item2.answer,
         // quiz: item2.quiz,
         // isCorrect: item2.isCorrect
-        key: item2._id,
+        key: item2.id,
         stt: index + 1,
-        _id: item2._id,
-        userId: item2.userId,
-        movie_id: item2.movie_id,
+        _id: item2.id,
+        userId: item2.user?.id,
+        movie_id: item2.movieId,
         desc: item2.desc,
         status: item2.status,
       }

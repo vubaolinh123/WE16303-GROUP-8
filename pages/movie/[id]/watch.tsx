@@ -158,7 +158,7 @@ const WatchMovie: NextPage<WatchMovieProps> = ({ similar, data }) => {
                                 {commentsData &&
                                     commentsData.map((comment: Comment, index: number) => (
                                         <div key={index} className="flex mb-8 gap-3 w-full h-full">
-                                            {comment?.user.image ?
+                                            {comment?.user?.image ?
                                                 <Image
                                                     src={comment.user.image}
                                                     style={{ width: 40, height: 44, borderRadius: "10%" }}
