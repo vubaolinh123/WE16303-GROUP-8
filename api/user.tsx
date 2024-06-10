@@ -21,3 +21,8 @@ export const editRoleUsers = (id: string) => {
     const url = `/users/${id}`
     return API_NodeJS.put(url)
 }
+
+export const removeUser = (id: string) => {
+    const url = `/users/${id}`
+    return API_NodeJS.delete(url)
+}

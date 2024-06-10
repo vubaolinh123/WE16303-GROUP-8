@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AnyARecord } from 'dns'
-import { detailUsers, editUsers, listUsers } from '../../api/user'
+import { detailUsers, editUsers, listUsers, removeUser } from '../../api/user'
 import { User } from '../../models/user'
 
 
@@ -52,6 +52,14 @@ export const editRoleUser = createAsyncThunk(
     }
 )
 
+export const removeUserr = createAsyncThunk(
+    'users/removeUser',
+    async (id: any) => {
+        const { data } = await removeUser(id)
+        return data
+    }
+)
+
 const userSlide = createSlice({
     name: "users",
     initialState: {
@@ -85,6 +93,10 @@ const userSlide = createSlice({
             } else {
                 state.value = state.value.map((item: any) => item.id === action.payload.id ? action.payload : item)
             }
+        })
+        builder.addCase(removeUserr.fulfilled, (state: any, action: any) => {
+            state.value = state.value.filter((item: any) => item.id !== action.payload.id)
+
         })
     },
 })

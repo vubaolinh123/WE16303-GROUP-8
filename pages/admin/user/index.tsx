@@ -6,16 +6,18 @@ import type { FilterConfirmProps } from 'antd/es/table/interface';
 import type { InputRef } from 'antd';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
 import type { Key, TableRowSelection } from 'antd/es/table/interface';
-import { SearchOutlined, UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserAddOutlined, UserDeleteOutlined, DeleteOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import Link from 'next/link';
-import { changeBreadcrumb, editRoleUser, editUser, getListUser } from '../../../features/user/user.slice';
+import { changeBreadcrumb, editRoleUser, editUser, getListUser, removeUserr } from '../../../features/user/user.slice';
 import { LayoutProps } from '../../../models/layout';
 import LayoutAdmin from '../../../components/Layout/admin';
 import AdminPageHeader from '../../../components/Display/AdminPageHeader';
 
 import style from "../../../styles/admin.module.scss"
 import Meta from '../../../components/Shared/Meta';
+import { toast } from 'react-toastify';
+import { Router, useRouter } from 'next/router';
 
 
 interface DataType {
@@ -54,6 +56,8 @@ const AdminUser = (props: LayoutProps) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
+    const router = useRouter();
+
     const dataTable = users.map((item: any, index) => {
         return {
             key: index + 1,
@@ -70,6 +74,11 @@ const AdminUser = (props: LayoutProps) => {
         }
     })
 
+    const removeUsser = (id:any) => {
+        dispatch(removeUserr(id))
+        toast.success("Xóa thành công!")
+        router.reload();
+    }
 
     //------------------TABLE-DATA-------------------
 
@@ -293,14 +302,14 @@ const AdminUser = (props: LayoutProps) => {
             key: "birthday",
             ...getColumnSearchProps('birthday'),
         },
-        {
-            title: 'Age',
-            dataIndex: 'age',
-            key: "age",
-            ...getColumnSearchProps('age'),
-            sorter: (a: any, b: any) => a.age - b.age,
-            sortDirections: ['descend'],
-        },
+        // {
+        //     title: 'Age',
+        //     dataIndex: 'age',
+        //     key: "age",
+        //     ...getColumnSearchProps('age'),
+        //     sorter: (a: any, b: any) => a.age - b.age,
+        //     sortDirections: ['descend'],
+        // },
         {
             title: 'Role',
             key: "role",
@@ -316,20 +325,20 @@ const AdminUser = (props: LayoutProps) => {
                 </div>
             )
         },
-        {
-            title: 'Status',
-            key: "status",
-            sorter: (a: any, b: any) => a.status - b.status,
-            sortDirections: ['descend'],
-            render: (record) => (
-                <div className="">
-                    {record.status === 1
-                        ? <Tag color="green">Online</Tag>
-                        : <Tag color="red">Offline</Tag>
-                    }
-                </div>
-            )
-        },
+        // {
+        //     title: 'Status',
+        //     key: "status",
+        //     sorter: (a: any, b: any) => a.status - b.status,
+        //     sortDirections: ['descend'],
+        //     render: (record) => (
+        //         <div className="">
+        //             {record.status === 1
+        //                 ? <Tag color="green">Online</Tag>
+        //                 : <Tag color="red">Offline</Tag>
+        //             }
+        //         </div>
+        //     )
+        // },
 
         {
             title: 'Ngày Tạo',
@@ -365,10 +374,16 @@ const AdminUser = (props: LayoutProps) => {
                         <Button onClick={() => { dispatch(editRoleUser({ id: record.id, role: 1 })) }} style={{ background: "#198754" }} >
                             <span className="text-white"><UserAddOutlined /></span>
                         </Button>
+                        <Button onClick={() => {removeUsser(record.id) }} style={{ background: "red" }} >
+                            <span className="text-white"><DeleteOutlined /></span>
+                        </Button>
                     </Space>
                     : <Space align="center" size="middle">
                         <Button onClick={() => { dispatch(editRoleUser({ id: record.id, role: 0 })) }} style={{ background: "#FF7875" }} >
                             <span className="text-white"><UserDeleteOutlined /></span>
+                        </Button>
+                        <Button onClick={() => { removeUsser(record.id) }} style={{ background: "red" }} >
+                            <span className="text-white"><DeleteOutlined /></span>
                         </Button>
                     </Space>
             ),
