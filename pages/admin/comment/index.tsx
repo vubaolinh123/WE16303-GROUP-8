@@ -541,7 +541,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
     const result: any = await Promise.all(data.map(async (item: any, index: any) => {
       if (item.type === "movie") {
-        const abc = await detailMovie(item.movie_id)
+        const abc = await detailMovie(item.movieId)
         return {
           key: index + 1,
           id: abc.id,

@@ -8,7 +8,7 @@ type PrivateRouteProps = {
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-  const currentUser = useSelector((state: any) => state.auth.value.user);
+  const currentUser = useSelector((state: any) => state.auth.value);
   const router = useRouter();
 
   if (!isLoggedIn) {
