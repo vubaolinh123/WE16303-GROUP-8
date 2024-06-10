@@ -11,13 +11,13 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const currentUser = useSelector((state: any) => state.auth.value);
   const router = useRouter();
 
-  if (!isLoggedIn) {
-    router.push('/account/login');
-    return <LoadingPage/>
-  } else if (currentUser.role !== 1) {
-    router.push('/');
-    return <LoadingPage/>
-  }
+  // if (!isLoggedIn) {
+  //   router.push('/account/login');
+  //   return <LoadingPage/>
+  // } else if (currentUser.role !== 1) {
+  //   router.push('/');
+  //   return <LoadingPage/>
+  // }
   return children;
 };
 
